@@ -103,7 +103,9 @@
         <!-- Footer user info -->
         <div class="cp-sidebar-footer">
           <div class="cp-sidebar-user">
-            <div class="cp-sidebar-avatar">SA</div>
+            <div class="cp-sidebar-avatar" style="padding:0;overflow:hidden;">
+  <img src="assets/shobhit.png" alt="Shobhit" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"/>
+</div>
             <div>
               <div class="cp-sidebar-username">Shobhit Asthana</div>
               <div class="cp-sidebar-role">Level 4 · Null Pointer</div>
