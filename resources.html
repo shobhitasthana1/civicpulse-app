@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#060c14"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>CivicPulse — City Resources</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+    :root {
+        --teal: #00e5cc;
+        --bg-dark: #060c14;
+        --card-bg: rgba(11, 20, 34, 0.75);
+    }
+
+    body {
+        background: var(--bg-dark);
+        color: #f1f5f9;
+        font-family: 'DM Sans', sans-serif;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    /* Subtle Grid Background */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background-image: linear-gradient(rgba(0, 229, 204, 0.025) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(0, 229, 204, 0.025) 1px, transparent 1px);
+        background-size: 40px 40px;
+        mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 80%);
+    }
+
+    .syne-font { font-family: 'Syne', sans-serif; }
+    
+    /* Animation Utils */
+    .fu { opacity: 0; transform: translateY(16px); animation: fu 0.4s ease forwards; }
+    @keyframes fu { to { opacity: 1; transform: translateY(0); } }
+    .d1{animation-delay: 0.05s} .d2{animation-delay: 0.1s} .d3{animation-delay: 0.15s}
+
+    /* Hide Scrollbar for category chips */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Category Chips */
+    .cchip {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-family: 'Syne', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+        transition: all 0.2s;
+        white-space: nowrap;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .cchip.act { background: rgba(0, 229, 204, 0.1); border-color: var(--teal); color: var(--teal); }
+    .cchip:active { transform: scale(0.95); }
+
+    /* Resource Cards */
+    .res-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 20px;
+        padding: 20px;
+        transition: all 0.2s;
+        backdrop-filter: blur(12px);
+    }
+    @media(hover:hover) {
+        .res-card:hover { border-color: rgba(0, 229, 204, 0.3); transform: translateY(-2px); }
+    }
+
+    /* Action Buttons */
+    .btn-action {
+        flex: 1;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #f1f5f9;
+        transition: all 0.2s;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .btn-action:active { background: rgba(255, 255, 255, 0.1); transform: scale(0.96); }
+
+    /* Floating SOS Button */
+    .fab-sos {
+        position: fixed;
+        bottom: calc(24px + env(safe-area-inset-bottom));
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #ff4d6d, #ff1f4a);
+        color: white;
+        padding: 14px 24px;
+        border-radius: 50px;
+        font-weight: 800;
+        font-family: 'Syne', sans-serif;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 10px 30px rgba(255, 77, 109, 0.4);
+        z-index: 100;
+        width: calc(100% - 40px);
+        max-width: 300px;
+        justify-content: center;
+        text-decoration: none;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .fab-sos:active { transform: translateX(-50%) scale(0.95); box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4); }
+
+    /* Toast overlay (Simulated) */
+    #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(50px); background: #333; color: white; padding: 12px 24px; border-radius: 30px; font-size: 14px; transition: 0.3s; z-index: 1000; opacity: 0; pointer-events: none; }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+</head>
+<body class="pb-28">
+
+<div class="max-w-3xl mx-auto px-5">
+    
+    <header class="flex justify-between items-center py-5 sticky top-0 bg-[#060c14]/80 backdrop-blur-md z-50 pt-[calc(20px+env(safe-area-inset-top))] border-b border-white/5 mb-6">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-[#00e5cc] flex items-center justify-center text-black">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
+            <span class="syne-font font-bold text-lg">City Resources</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="text-[10px] font-black bg-[#00e5cc]/10 text-[#00e5cc] border border-[#00e5cc]/20 px-2 py-1 rounded-md flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#00e5cc] animate-pulse"></span> LIVE
+            </div>
+            <a href="dashboard.html" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-slate-300">SA</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="fu bg-gradient-to-br from-[#00e5cc]/10 to-transparent border border-[#00e5cc]/20 rounded-2xl p-5 mb-5 relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#00e5cc]/20 rounded-full blur-2xl"></div>
+            
+            <h2 class="syne-font font-bold text-lg mb-1 text-white relative z-10">🗺 Find Nearby Help</h2>
+            <p class="text-xs text-slate-400 mb-4 relative z-10">Locate hospitals, police stations, NGOs, and public services near you.</p>
+            
+            <div class="relative z-10">
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="search" class="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-sm text-white placeholder-slate-500 focus:border-[#00e5cc] focus:bg-[#00e5cc]/10 outline-none transition" placeholder="Search services, locations..." oninput="filterRes(this.value)" autocomplete="off"/>
+            </div>
+        </div>
+
+        <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-2 mb-6 fu d1 px-1">
+            <button class="cchip act" onclick="setCat('all', this)">🌐 All</button>
+            <button class="cchip" onclick="setCat('hospital', this)">🏥 Hospitals</button>
+            <button class="cchip" onclick="setCat('police', this)">🚔 Police</button>
+            <button class="cchip" onclick="setCat('fire', this)">🚒 Fire</button>
+            <button class="cchip" onclick="setCat('water', this)">💧 Water</button>
+            <button class="cchip" onclick="setCat('electric', this)">⚡ Electricity</button>
+            <button class="cchip" onclick="setCat('ngo', this)">🤝 NGOs</button>
+        </div>
+
+        <div id="resGrid" class="flex flex-col gap-4 fu d2">
+            </div>
+
+    </main>
+</div>
+
+<a href="emergency.html" class="fab-sos">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    Emergency SOS
+</a>
+
+<div id="toast"></div>
+
+<script>
+// Mock Data
+const RES = [
+    {id:1, cat:'hospital', icon:'🏥', name:'KGMU Hospital', desc:"King George's Medical University", dist:'1.2 km', tel:'0522-2257540', status:'open', rating:4.5, info:'Beds Available'},
+    {id:2, cat:'hospital', icon:'🏥', name:'Ram Manohar Lohia Hospital', desc:'State Government Hospital, Lucknow', dist:'2.8 km', tel:'0522-2288874', status:'open', rating:4.2, info:'Limited Beds'},
+    {id:3, cat:'police', icon:'🚔', name:'Hazratganj Police Station', desc:'District Police HQ, Civil Lines', dist:'0.9 km', tel:'0522-2614146', status:'open', rating:3.8, info:''},
+    {id:4, cat:'police', icon:'🚔', name:'Gomti Nagar Police Station', desc:'Sector 14, Gomti Nagar, Lucknow', dist:'1.7 km', tel:'0522-2308000', status:'open', rating:4.0, info:''},
+    {id:5, cat:'fire', icon:'🚒', name:'Fire Station – Alambagh', desc:'Near Alambagh Bus Stand', dist:'3.4 km', tel:'101', status:'open', rating:4.6, info:''},
+    {id:6, cat:'water', icon:'💧', name:'Jal Kal Vibhag', desc:'Water supply authority, Lucknow', dist:'2.2 km', tel:'0522-2286566', status:'open', rating:3.7, info:''},
+    {id:7, cat:'electric', icon:'⚡', name:'UPPCL Helpline', desc:'UP Power Corporation, Zone 3', dist:'1.8 km', tel:'1912', status:'open', rating:3.5, info:''},
+    {id:8, cat:'ngo', icon:'🤝', name:'Null Pointer Civic Team', desc:'CivicPulse Volunteer Network', dist:'0.2 km', tel:'+91 6388095158', status:'open', rating:5.0, info:'Active Now'}
+];
+
+let activeCat = 'all', searchQ = '';
+
+// Simulated Toast
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.innerText = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// Generate Star string based on rating
+function getStars(r) {
+    return '★'.repeat(Math.floor(r)) + (r % 1 ? '½' : '') + '☆'.repeat(5 - Math.ceil(r));
+}
+
+// Render the Resource Cards
+function renderRes() {
+    const grid = document.getElementById('resGrid');
+    
+    // Filter Data
+    const items = RES.filter(r => 
+        (activeCat === 'all' || r.cat === activeCat) && 
+        (r.name.toLowerCase().includes(searchQ) || r.desc.toLowerCase().includes(searchQ))
+    );
+    
+    // Empty State
+    if(!items.length) {
+        grid.innerHTML = `
+            <div class="text-center py-12 text-slate-500">
+                <div class="text-4xl mb-3 opacity-50">🔍</div>
+                <div class="syne-font font-bold text-lg text-white">No resources found</div>
+                <p class="text-xs mt-1">Try adjusting your filters or search query.</p>
+            </div>`;
+        return;
+    }
+    
+    // Render Cards using Tailwind CSS
+    grid.innerHTML = items.map(r => `
+        <div class="res-card">
+            <div class="flex items-start gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl flex-shrink-0 shadow-inner">
+                    ${r.icon}
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1 flex-wrap">
+                        <h3 class="syne-font font-bold text-base text-slate-100">${r.name}</h3>
+                        <span class="bg-[#00e5cc]/10 text-[#00e5cc] border border-[#00e5cc]/30 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 bg-[#00e5cc] rounded-full"></span> Open
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-2 truncate">${r.desc}</p>
+                    
+                    <div class="flex items-center gap-3 flex-wrap mt-1">
+                        <span class="bg-[#00cfff]/10 text-[#00cfff] border border-[#00cfff]/20 px-2 py-1 rounded-md text-[10px] font-bold">📍 ${r.dist}</span>
+                        <div class="flex items-center gap-1">
+                            <span class="text-amber-500 text-[10px]">${getStars(r.rating)}</span>
+                            <span class="text-[10px] text-slate-400 font-bold">${r.rating}</span>
+                        </div>
+                        ${r.info ? `<span class="text-[10px] text-slate-400 font-bold border-l border-white/10 pl-3">${r.info}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-4"></div>
+            
+            <div class="flex gap-3">
+                <a href="tel:${r.tel}" class="btn-action" onclick="showToast('📞 Calling ${r.name}...')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg> 
+                    Call
+                </a>
+                <button class="btn-action" onclick="showToast('🗺 Opening directions...')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg> 
+                    Directions
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Filter triggers
+function setCat(c, btn) {
+    activeCat = c;
+    document.querySelectorAll('.cchip').forEach(b => b.classList.remove('act'));
+    btn.classList.add('act');
+    renderRes();
+}
+
+function filterRes(v) {
+    searchQ = v.toLowerCase();
+    renderRes();
+}
+
+// Initial render
+renderRes();
+</script>
+</body>
+</html>

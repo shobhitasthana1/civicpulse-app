@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Contact — CivicPulse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    /* Responsive Variables & Base */
+    :root {
+      --teal: #0d9488;
+      --border: rgba(255, 255, 255, 0.1);
+      --glass-bg: rgba(11, 20, 34, 0.7);
+      --text-muted: #94a3b8;
+    }
+
+    /* Fix for the 2-column layout on Mobile */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr; /* Stack on mobile */
+      gap: 32px;
+    }
+
+    @media (min-width: 1024px) {
+      .contact-grid {
+        grid-template-columns: 1.8fr 1fr; /* Side-by-side on Desktop */
+      }
+    }
+
+    /* Form Grid Fix */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .form-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* FAQ Accordion Enhancements */
+    .faq-item { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 12px; transition: 0.3s; }
+    .faq-q {
+      padding: 18px 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      cursor: pointer; font-weight: 600; font-size: 14px;
+      background: var(--glass-bg); backdrop-filter: blur(12px);
+    }
+    .faq-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(13,148,136,0.1); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.3s;
+    }
+    .faq-item.open .faq-icon { background: var(--teal); transform: rotate(45deg); color: white; }
+    .faq-a {
+      max-height: 0; overflow: hidden; transition: all 0.35s ease;
+      padding: 0 20px; color: var(--text-muted); font-size: 14px; line-height: 1.6;
+    }
+    .faq-item.open .faq-a { max-height: 300px; padding: 16px 20px; border-top: 1px solid var(--border); }
+
+    /* Map Utility */
+    .map-container {
+      height: 240px;
+      background: linear-gradient(135deg, rgba(13,148,136,0.05), #060c14);
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    @media (min-width: 768px) { .map-container { height: 350px; } }
+
+    /* Helper Classes */
+    .glass-card { 
+      background: var(--glass-bg); 
+      backdrop-filter: blur(12px); 
+      border: 1px solid var(--border); 
+      border-radius: 20px;
+      padding: 24px;
+    }
+    @media (min-width: 768px) { .glass-card { padding: 40px; } }
+    
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .status-dot.green { background: #10b981; box-shadow: 0 0 8px #10b981; }
+
+    /* Utility to hide/show parts */
+    .mobile-only { display: block; }
+    @media (min-width: 768px) { .mobile-only { display: none; } }
+  </style>
+</head>
+<body class="bg-[#060c14] text-slate-200">
+
+  <nav class="navbar px-6 py-4 flex justify-between items-center border-b border-white/5">
+    <div class="flex items-center gap-2">
+      <div class="bg-teal-600 p-1.5 rounded-lg text-xs font-black">CP</div>
+      <span class="font-bold text-lg">Civic<span class="text-teal-500">Pulse</span></span>
+    </div>
+    <div class="hidden md:flex gap-6 text-sm font-medium">
+      <a href="index.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="contact.html" class="text-teal-400">Contact</a>
+    </div>
+    <button class="md:hidden text-2xl">☰</button>
+  </nav>
+
+  <header class="container mx-auto px-6 py-12 text-center">
+    <span class="bg-teal-500/10 text-teal-400 text-[10px] font-bold uppercase tracking-[2px] px-3 py-1 rounded-full border border-teal-500/20">📬 Get in Touch</span>
+    <h1 class="text-4xl md:text-5xl font-extrabold mt-4 mb-4 tracking-tight">We're Here to <span class="text-teal-500">Help</span></h1>
+    <p class="text-slate-400 max-w-xl mx-auto text-sm md:text-base">Have a question, suggestion, or need support? Our team responds within 24 hours.</p>
+  </header>
+
+  <main class="container mx-auto px-6 pb-20">
+    <div class="contact-grid">
+      
+      <div class="glass-card">
+        <h2 class="text-xl font-bold mb-2">Send a Message</h2>
+        <p class="text-slate-400 text-xs mb-8">Fill in the form and we'll get back to you as soon as possible.</p>
+
+        <form id="contact-form" class="flex flex-col gap-5">
+          <div class="form-row">
+            <div class="flex flex-col gap-2">
+              <label class="text-[11px] font-bold uppercase text-slate-500">Full Name *</label>
+              <input type="text" class="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500/50 outline-none" placeholder="John Doe" required />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-[11px] font-bold uppercase text-slate-500">Email Address *</label>
+              <input type="email" class="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500/50 outline-none" placeholder="john@example.com" required />
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-[11px] font-bold uppercase text-slate-500">Subject *</label>
+            <select class="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500/50 outline-none appearance-none">
+              <option class="bg-[#111]">Report a Bug</option>
+              <option class="bg-[#111]">Suggest a Feature</option>
+              <option class="bg-[#111]">General Question</option>
+            </select>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label class="text-[11px] font-bold uppercase text-slate-500">Message *</label>
+            <textarea class="bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-teal-500/50 outline-none min-h-[120px]" placeholder="How can we help?"></textarea>
+          </div>
+
+          <button type="submit" class="bg-teal-500 hover:bg-teal-400 text-[#060c14] font-bold py-3 px-8 rounded-xl transition-all self-start text-sm mt-2">
+            ✉️ Send Message
+          </button>
+        </form>
+      </div>
+
+      <div class="flex flex-col gap-6">
+        <div class="glass-card !py-6 !px-8">
+          <h3 class="text-sm font-bold flex items-center gap-2 mb-4"><span>🕐</span> Support Hours</h3>
+          <div class="flex flex-col gap-3 text-xs">
+            <div class="flex justify-between"><span class="text-slate-500">Mon – Fri</span><span>9 AM – 8 PM</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">Saturday</span><span>10 AM – 5 PM</span></div>
+            <div class="pt-3 border-t border-white/5 flex items-center gap-2 text-emerald-400 font-bold">
+              <span class="status-dot green"></span> Currently Open
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card !py-6 !px-8">
+          <div class="flex flex-col gap-6">
+            <div class="flex items-start gap-4">
+              <div class="text-xl bg-teal-500/10 p-2 rounded-lg">📧</div>
+              <div>
+                <p class="text-[10px] uppercase font-bold text-slate-500">Email</p>
+                <p class="text-sm font-medium text-teal-400">hello@civicpulse.in</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="text-xl bg-amber-500/10 p-2 rounded-lg">📞</div>
+              <div>
+                <p class="text-[10px] uppercase font-bold text-slate-500">Phone</p>
+                <p class="text-sm font-medium">+91 9876 543 210</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-20 rounded-3xl overflow-hidden border border-white/5">
+      <div class="bg-white/5 px-6 py-4 border-b border-white/5">
+        <h3 class="text-sm font-bold">Find Our Office</h3>
+      </div>
+      <div class="map-container">
+        <div class="relative z-10 flex flex-col items-center">
+          <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(20,184,166,0.5)]">📍</div>
+          <div class="mt-4 bg-[#060c14]/80 backdrop-blur px-4 py-2 rounded-lg border border-white/10 text-center">
+            <p class="text-xs font-bold">CivicPulse HQ</p>
+            <p class="text-[10px] text-slate-400">Lucknow, UP 226010</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-20 max-w-2xl mx-auto">
+      <div class="text-center mb-10">
+        <span class="text-teal-400 text-[10px] font-bold uppercase tracking-widest">❓ FAQ</span>
+        <h2 class="text-2xl font-bold mt-2">Common Questions</h2>
+      </div>
+
+      <div class="faq-container">
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+          <div class="faq-q">How do I report an issue? <div class="faq-icon">+</div></div>
+          <div class="faq-a">Navigate to the Dashboard and click "Report Issue." Fill in the details, and we'll route it to the right department.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+          <div class="faq-q">Is it free to use? <div class="faq-icon">+</div></div>
+          <div class="faq-a">Yes! CivicPulse is free for all citizens. We are supported by municipal partnerships.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-white/5 py-12 px-6">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div class="col-span-1 md:col-span-2">
+        <span class="font-bold text-lg italic">CivicPulse</span>
+        <p class="text-slate-500 text-xs mt-4 leading-relaxed max-w-xs">Building healthier, more responsive communities through technology.</p>
+      </div>
+      <div class="text-xs flex flex-col gap-3">
+        <p class="font-bold text-slate-300">Platform</p>
+        <a href="#" class="text-slate-500">Dashboard</a>
+        <a href="#" class="text-slate-500">Features</a>
+      </div>
+      <div class="text-xs flex flex-col gap-3">
+        <p class="font-bold text-slate-300">Legal</p>
+        <a href="#" class="text-slate-500">Privacy Policy</a>
+        <a href="#" class="text-slate-500">Terms of Use</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

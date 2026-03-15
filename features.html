@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#060c14" />
+  <title>Features — CivicPulse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --green-accent: #40916c;
+      --green-dark: #1b4332;
+      --green-pale: #74c69d;
+      --amber: #f4a261;
+      --amber-light: #e9c46a;
+      --amber-dark: #e76f51;
+      --bg-dark: #060c14;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #f1f5f9;
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .syne-font { font-family: 'Syne', sans-serif; }
+    .playfair { font-family: 'Playfair Display', serif; }
+
+    /* Background Pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(64, 145, 108, 0.03) 1px, transparent 1px), 
+                        linear-gradient(90deg, rgba(64, 145, 108, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse at 50% 0%, black 40%, transparent 80%);
+    }
+
+    /* Layout & Glass Cards */
+    .content-wrapper { position: relative; z-index: 1; }
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+    }
+
+    /* Section Labels */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .label-green { background: rgba(64,145,108,0.15); color: var(--green-pale); border: 1px solid rgba(64,145,108,0.3); }
+    .label-amber { background: rgba(231,111,81,0.15); color: var(--amber); border: 1px solid rgba(231,111,81,0.3); }
+
+    /* Table Styles for Mobile */
+    .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; min-width: 600px; border-collapse: collapse; }
+    th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--card-border); }
+    th { font-family: 'Syne', sans-serif; font-weight: 700; color: #94a3b8; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; }
+
+    /* Utils */
+    .status-badge { font-size: 0.7rem; font-weight: 700; padding: 4px 10px; border-radius: 50px; }
+    .status-open { background: rgba(244,162,97,0.2); color: var(--amber-light); border: 1px solid rgba(244,162,97,0.4); }
+    .status-progress { background: rgba(64,145,108,0.2); color: var(--green-pale); border: 1px solid rgba(64,145,108,0.4); }
+
+    @keyframes pulse-sos { 0%, 100% { box-shadow: 0 0 30px rgba(231,111,81,0.4); } 50% { box-shadow: 0 0 60px rgba(231,111,81,0.8); } }
+    .animate-sos { animation: pulse-sos 2s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+
+<div class="content-wrapper">
+  
+  <nav class="sticky top-0 z-50 bg-[#060c14]/80 backdrop-blur-md border-b border-white/5 pt-[env(safe-area-inset-top)]">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="bg-[#40916c] p-1.5 rounded-lg text-sm">🌿</div>
+        <span class="syne-font font-bold text-lg">Civic<span class="text-[#74c69d]">Pulse</span></span>
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="index.html" class="hover:text-white transition">Home</a>
+        <a href="features.html" class="text-[#74c69d]">Features</a>
+        <a href="dashboard.html" class="hover:text-white transition">Dashboard</a>
+        <a href="contact.html" class="hover:text-white transition">Contact</a>
+      </div>
+      <div class="hidden md:block">
+        <a href="dashboard.html" class="bg-[#40916c] hover:bg-[#2d6a4f] text-white px-5 py-2.5 rounded-full text-sm font-bold transition">Get Started</a>
+      </div>
+      <button class="md:hidden text-2xl text-slate-300">☰</button>
+    </div>
+  </nav>
+
+  <section class="container mx-auto px-6 py-20 md:py-32 text-center">
+    <div class="section-label label-green">🛠️ Platform Capabilities</div>
+    <h1 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
+      Powerful Features,<br>
+      <em class="playfair text-amber-200/90 font-bold">Built for Society</em>
+    </h1>
+    <p class="text-slate-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+      Every tool CivicPulse offers is designed to create a seamless bridge between citizens and civic resolution — fast, transparent, and accountable.
+    </p>
+  </section>
+
+  <section class="container mx-auto px-6 pb-24">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center mb-28">
+      <div class="order-2 lg:order-1">
+        <div class="section-label label-green">01 — Community Reporting</div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Report Any Civic Issue<br><em class="playfair text-[#74c69d]">In Under 60 Seconds</em></h2>
+        <p class="text-slate-400 leading-relaxed mb-6">Our smart reporting system lets citizens submit issues with just a title, location, category, and photo. The system auto-routes each report to the correct municipal department.</p>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center gap-3 text-sm"><span class="text-[#74c69d] text-lg">✓</span> Smart category auto-detection</li>
+          <li class="flex items-center gap-3 text-sm"><span class="text-[#74c69d] text-lg">✓</span> GPS location tagging</li>
+          <li class="flex items-center gap-3 text-sm"><span class="text-[#74c69d] text-lg">✓</span> Instant tracking ID</li>
+        </ul>
+        <a href="dashboard.html" class="inline-block bg-[#40916c] text-white px-6 py-3 rounded-xl font-bold text-sm">Try Reporting →</a>
+      </div>
+      
+      <div class="order-1 lg:order-2">
+        <div class="bg-gradient-to-br from-[#1b4332] to-[#081c15] rounded-3xl p-6 md:p-8 border border-[#40916c]/30 shadow-2xl">
+          <div class="glass-card p-4 mb-4">
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-bold text-sm">New Issue Report</span>
+              <span class="status-badge status-open">Open</span>
+            </div>
+            <div class="bg-white/5 rounded-lg p-3 mb-3">
+              <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Issue Title</div>
+              <div class="text-sm font-medium">Broken streetlight — MG Road</div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-white/5 rounded-lg p-3">
+                <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Category</div>
+                <div class="text-sm font-medium text-amber-200">⚡ Infrastructure</div>
+              </div>
+              <div class="bg-white/5 rounded-lg p-3">
+                <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Priority</div>
+                <div class="text-sm font-medium text-red-400">🔴 High</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-4 bg-[#40916c]/20 border border-[#40916c]/40 rounded-xl">
+            <span class="text-2xl">✅</span>
+            <div>
+              <p class="text-[#74c69d] font-bold text-sm">Report submitted!</p>
+              <p class="text-xs text-slate-400">Tracking ID: CP-0047 · Dept. notified</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center mb-28">
+      <div class="order-1 lg:order-1 glass-card overflow-hidden relative h-64 md:h-80 flex flex-col items-center justify-center border-amber-500/20 bg-gradient-to-b from-amber-500/5 to-transparent">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjQ0LDE2Miw5NywwLjE1KSIvPjwvc3ZnPg==')] opacity-50"></div>
+        <div class="relative z-10 text-center">
+          <div class="text-5xl mb-3 drop-shadow-lg">🗺️</div>
+          <p class="text-sm font-bold text-amber-200 mb-4">Interactive Resource Map</p>
+          <div class="flex flex-wrap gap-2 justify-center px-4">
+            <span class="bg-[#40916c]/20 border border-[#40916c]/50 text-[#74c69d] px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">🏥 3 hospitals</span>
+            <span class="bg-amber-500/20 border border-amber-500/50 text-amber-300 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">🩸 2 blood banks</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="order-2 lg:order-2">
+        <div class="section-label label-amber">02 — Resource Finder</div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Locate Any Civic<br><em class="playfair text-amber-400">Resource Near You</em></h2>
+        <p class="text-slate-400 leading-relaxed mb-8">Find nearby civic resources including blood banks, hospitals, shelters, public toilets, and government offices — all on a single searchable map.</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="glass-card !p-4 text-center hover:bg-white/5 transition"><div class="text-3xl mb-2">🏥</div><div class="text-xs font-bold">Hospitals</div></div>
+          <div class="glass-card !p-4 text-center hover:bg-white/5 transition"><div class="text-3xl mb-2">🩸</div><div class="text-xs font-bold">Blood Banks</div></div>
+          <div class="glass-card !p-4 text-center hover:bg-white/5 transition"><div class="text-3xl mb-2">🏠</div><div class="text-xs font-bold">Shelters</div></div>
+          <div class="glass-card !p-4 text-center hover:bg-white/5 transition"><div class="text-3xl mb-2">🗑️</div><div class="text-xs font-bold">Waste Points</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center mb-28">
+      <div class="order-2 lg:order-1">
+        <div class="section-label label-amber !border-red-500/30 !text-red-400">03 — Emergency System</div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">One Tap to<br><em class="playfair text-red-400">Activate Help</em></h2>
+        <p class="text-slate-400 leading-relaxed mb-6">When seconds count, CivicPulse's emergency system sends automated alerts to nearest police, fire, and medical services simultaneously with GPS coordinates.</p>
+        <ul class="space-y-3">
+          <li class="flex items-center gap-3 text-sm"><span class="text-red-400 text-lg">🚨</span> Police / Fire / Medical dispatch</li>
+          <li class="flex items-center gap-3 text-sm"><span class="text-red-400 text-lg">📍</span> Real-time GPS sharing</li>
+          <li class="flex items-center gap-3 text-sm"><span class="text-red-400 text-lg">📱</span> Auto-SMS to family contacts</li>
+        </ul>
+      </div>
+      
+      <div class="order-1 lg:order-2">
+        <div class="bg-gradient-to-br from-[#2d0f0f] to-[#1a0a0a] rounded-3xl p-8 text-center border border-red-500/20 relative overflow-hidden shadow-2xl">
+          <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(231,111,81,0.1)_0%,transparent_70%)]"></div>
+          <div class="relative z-10">
+            <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-red-500 to-red-800 flex items-center justify-center mx-auto mb-6 text-4xl md:text-5xl animate-sos cursor-pointer border-4 border-white/10">🆘</div>
+            <h3 class="playfair text-2xl font-bold mb-2">Emergency SOS</h3>
+            <p class="text-xs text-slate-400 mb-6 uppercase tracking-widest font-bold">Hold for 2 seconds to activate</p>
+            <div class="flex flex-wrap gap-2 justify-center">
+              <span class="bg-red-500/20 border border-red-500/30 text-red-300 px-3 py-1.5 rounded-full text-xs font-bold">🚔 Police notified</span>
+              <span class="bg-red-500/20 border border-red-500/30 text-red-300 px-3 py-1.5 rounded-full text-xs font-bold">🚑 Ambulance en route</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+      <div class="order-1 lg:order-1 glass-card p-6 md:p-8">
+        <div class="flex justify-between items-center mb-6">
+          <span class="font-bold">Issues This Week</span>
+          <span class="status-badge status-progress">↑ 12% vs last week</span>
+        </div>
+        
+        <div class="w-full h-[140px] relative">
+          <canvas id="featureChart" class="w-full h-full"></canvas>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4 mt-8 border-t border-white/10 pt-6">
+          <div class="text-center"><div class="playfair text-2xl text-amber-400 font-bold mb-1">18</div><div class="text-[10px] uppercase text-slate-400 font-bold">Open</div></div>
+          <div class="text-center"><div class="playfair text-2xl text-[#74c69d] font-bold mb-1">24</div><div class="text-[10px] uppercase text-slate-400 font-bold">In Progress</div></div>
+          <div class="text-center"><div class="playfair text-2xl text-white font-bold mb-1">47</div><div class="text-[10px] uppercase text-slate-400 font-bold">Resolved</div></div>
+        </div>
+      </div>
+
+      <div class="order-2 lg:order-2">
+        <div class="section-label label-green">04 — Data Dashboard</div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">See Every Issue,<br><em class="playfair text-[#74c69d]">Every Update</em></h2>
+        <p class="text-slate-400 leading-relaxed mb-6">The CivicPulse dashboard gives citizens and authorities a bird's-eye view of all resolution progress. Complete transparency, end-to-end.</p>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="glass-card !p-4"><div class="text-xl mb-2">📊</div><h4 class="font-bold text-sm mb-1">Live Analytics</h4><p class="text-[11px] text-slate-400">Real-time charts</p></div>
+          <div class="glass-card !p-4"><div class="text-xl mb-2">🔍</div><h4 class="font-bold text-sm mb-1">Smart Filters</h4><p class="text-[11px] text-slate-400">Sort by status & date</p></div>
+          <div class="glass-card !p-4"><div class="text-xl mb-2">📤</div><h4 class="font-bold text-sm mb-1">Exports</h4><p class="text-[11px] text-slate-400">PDF, CSV downloads</p></div>
+          <div class="glass-card !p-4"><div class="text-xl mb-2">🔔</div><h4 class="font-bold text-sm mb-1">Push Alerts</h4><p class="text-[11px] text-slate-400">SMS & app tracking</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-white/5 bg-white/[0.02] py-20">
+    <div class="container mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <div class="section-label label-green">🆚 Why CivicPulse?</div>
+        <h2 class="text-3xl md:text-4xl font-bold">Traditional vs<br><em class="playfair text-[#74c69d]">CivicPulse Approach</em></h2>
+      </div>
+      
+      <div class="glass-card !p-0 overflow-hidden">
+        <div class="table-container">
+          <table>
+            <thead class="bg-black/20">
+              <tr>
+                <th class="w-1/3">Aspect</th>
+                <th class="w-1/3">Traditional Method</th>
+                <th class="w-1/3 text-[#74c69d]">✨ CivicPulse</th>
+              </tr>
+            </thead>
+            <tbody class="text-sm">
+              <tr><td class="font-medium">Issue Reporting</td><td class="text-slate-500">Physical visit / phone call</td><td class="text-[#74c69d] font-bold">✅ 60-second online report</td></tr>
+              <tr><td class="font-medium">Resolution Tracking</td><td class="text-slate-500">Unknown / no updates</td><td class="text-[#74c69d] font-bold">✅ Real-time status board</td></tr>
+              <tr><td class="font-medium">Response Time</td><td class="text-slate-500">14–21 days average</td><td class="text-[#74c69d] font-bold">✅ 4.2 days average</td></tr>
+              <tr class="border-none"><td class="font-medium">Accountability</td><td class="text-slate-500">None / opaque</td><td class="text-[#74c69d] font-bold">✅ Full SLA tracking</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 text-center px-6 border-t border-white/5">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Start?</h2>
+    <p class="text-slate-400 max-w-md mx-auto mb-8 text-sm md:text-base">Use the dashboard to report your first issue and experience the difference CivicPulse makes.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="dashboard.html" class="bg-[#40916c] hover:bg-[#2d6a4f] text-white px-8 py-3.5 rounded-xl font-bold transition">🚀 Open Dashboard</a>
+      <a href="contact.html" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-3.5 rounded-xl font-bold transition">Contact Team</a>
+    </div>
+  </section>
+
+  <footer class="bg-black/40 border-t border-white/5 py-12 px-6">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+      <div class="col-span-1 md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="bg-[#40916c] p-1.5 rounded-lg text-sm">🌿</div>
+          <span class="syne-font font-bold text-lg">Civic<span class="text-[#74c69d]">Pulse</span></span>
+        </div>
+        <p class="text-slate-500 text-sm max-w-sm leading-relaxed">Building healthier, more responsive societies through citizen-driven civic technology.</p>
+      </div>
+      <div>
+        <h4 class="font-bold mb-4 text-white">Platform</h4>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li><a href="features.html" class="hover:text-[#74c69d] transition">Features</a></li>
+          <li><a href="dashboard.html" class="hover:text-[#74c69d] transition">Dashboard</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold mb-4 text-white">Contact</h4>
+        <ul class="space-y-3 text-sm text-slate-400">
+          <li>hello@civicpulse.in</li>
+          <li>+91 98765 43210</li>
+        </ul>
+      </div>
+    </div>
+    <div class="container mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between text-xs text-slate-600">
+      <span>© 2025 CivicPulse. Built with 💚</span>
+      <span class="mt-2 md:mt-0">Hackathon Project · Team Nexus</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Responsive Canvas Chart Logic
+  function drawChart() {
+    const canvas = document.getElementById('featureChart');
+    if (!canvas) return;
+    
+    // Fit canvas to parent container dynamically
+    const parent = canvas.parentElement;
+    canvas.width = parent.offsetWidth;
+    canvas.height = parent.offsetHeight;
+    
+    const ctx = canvas.getContext('2d');
+    const data = [8, 12, 6, 14, 9, 11, 16];
+    const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    
+    const w = canvas.width;
+    const h = canvas.height;
+    const max = Math.max(...data);
+    
+    // Calculate bar width based on available space
+    const totalBars = data.length;
+    const padding = 10;
+    const availableWidth = w - (padding * 2);
+    const barWidth = (availableWidth / totalBars) - 8; 
+
+    ctx.clearRect(0, 0, w, h);
+
+    data.forEach((v, i) => {
+      const x = padding + i * (availableWidth / totalBars) + 4;
+      const bh = (v / max) * (h - 25); // Leave space for text
+      const y = h - 20 - bh;
+      
+      const g = ctx.createLinearGradient(0, y, 0, h);
+      g.addColorStop(0, '#40916c');
+      g.addColorStop(1, 'rgba(64,145,108,0.1)');
+      
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      if(ctx.roundRect) {
+        ctx.roundRect(x, y, barWidth, bh, 4);
+      } else {
+        ctx.rect(x, y, barWidth, bh);
+      }
+      ctx.fill();
+      
+      // Draw Labels
+      ctx.fillStyle = 'rgba(148, 163, 184, 0.8)';
+      ctx.font = '600 10px DM Sans';
+      ctx.textAlign = 'center';
+      ctx.fillText(labels[i], x + barWidth / 2, h - 4);
+    });
+  }
+
+  // Draw on load and redraw on window resize
+  window.addEventListener('load', drawChart);
+  window.addEventListener('resize', drawChart);
+</script>
+</body>
+</html>

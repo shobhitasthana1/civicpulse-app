@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#060c14"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>CivicPulse — Community Activity</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+    :root {
+        --sg: 18px;
+        --accent: #00e5cc;
+        --bg-dark: #060c14;
+        --card-bg: rgba(11, 20, 34, 0.75);
+    }
+
+    /* Core Reset & Background */
+    body {
+        background-color: var(--bg-dark);
+        color: #f1f5f9;
+        font-family: 'DM Sans', sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(0, 229, 204, 0.025) 1px, transparent 1px), 
+                          linear-gradient(90deg, rgba(0, 229, 204, 0.025) 1px, transparent 1px);
+        background-size: 40px 40px;
+        mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 80%);
+    }
+
+    /* Layout Containers */
+    .app-layout {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 16px;
+        padding-bottom: 100px; /* Space for FAB */
+    }
+
+    /* Header Styling */
+    .app-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        position: sticky;
+        top: 0;
+        background: rgba(6, 12, 20, 0.8);
+        backdrop-filter: blur(12px);
+        z-index: 50;
+        margin-top: env(safe-area-inset-top);
+    }
+
+    .header-left, .header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Responsive Grid for Stats and Feed */
+    .main-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    @media (min-width: 1024px) {
+        .main-grid {
+            grid-template-columns: 2fr 1fr; /* Feed on left, Leaderboard on right */
+            align-items: start;
+        }
+    }
+
+    /* Common Components */
+    .slbl {
+        font-family: 'Syne', sans-serif;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        color: rgba(0, 229, 204, 0.65);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    .slbl::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(0, 229, 204, 0.2), transparent); }
+
+    .stat-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 24px;
+    }
+
+    .stat-pill {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 16px;
+        padding: 12px 4px;
+        text-align: center;
+    }
+
+    /* Chips Scrollable Area */
+    .filter-container {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin-bottom: 20px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .filter-container::-webkit-scrollbar { display: none; }
+
+    .achip {
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-family: 'Syne', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        background: rgba(11, 20, 34, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #94a3b8;
+        white-space: nowrap;
+        transition: 0.2s;
+    }
+    .achip.act { background: rgba(0, 229, 204, 0.15); color: var(--accent); border-color: var(--accent); }
+
+    /* Leaderboard & Feed List */
+    .lbrow {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 14px;
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        margin-bottom: 8px;
+    }
+
+    /* Timeline Styling */
+    .tli { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    .tldot { width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+    
+    /* FAB (Floating Action Button) for Mobile */
+    .fab-p {
+        position: fixed;
+        bottom: calc(24px + env(safe-area-inset-bottom));
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--accent);
+        color: #060c14;
+        padding: 14px 24px;
+        border-radius: 50px;
+        font-weight: 800;
+        font-family: 'Syne', sans-serif;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 10px 25px rgba(0, 229, 204, 0.3);
+        z-index: 100;
+        width: calc(100% - 40px);
+        max-width: 300px;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    /* Utils */
+    .fu { opacity: 0; transform: translateY(10px); animation: fu 0.4s ease forwards; }
+    @keyframes fu { to { opacity: 1; transform: translateY(0); } }
+    .notif-badge { position: absolute; top: 0; right: 0; width: 8px; height: 8px; background: #ff4d6d; border-radius: 50%; border: 2px solid #060c14; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; background: #a78bfa; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #060c14; }
+    .live-indicator { font-size: 0.65rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 4px; border: 1px solid rgba(0, 229, 204, 0.3); padding: 4px 8px; border-radius: 20px; }
+    .live-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+</style>
+</head>
+<body>
+
+<div class="app-layout">
+    <header class="app-header">
+        <div class="header-left">
+            <div class="logo-icon bg-[#00e5cc] p-1 rounded-lg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#060c14" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2"/></svg>
+            </div>
+            <span class="text-lg font-bold tracking-tight">CivicPulse</span>
+        </div>
+        <div class="header-right">
+            <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
+            <div class="relative">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span class="notif-badge"></span>
+            </div>
+            <div class="avatar">SA</div>
+        </div>
+    </header>
+
+    <main>
+        <div class="stat-row fu">
+            <div class="stat-pill">
+                <div class="text-xl">📡</div>
+                <div class="text-lg font-extrabold text-[#00e5cc]">248</div>
+                <div class="text-[10px] text-slate-500 uppercase font-bold">Today</div>
+            </div>
+            <div class="stat-pill">
+                <div class="text-xl">👥</div>
+                <div class="text-lg font-extrabold text-[#a78bfa]">37</div>
+                <div class="text-[10px] text-slate-500 uppercase font-bold">Volunteers</div>
+            </div>
+            <div class="stat-pill">
+                <div class="text-xl">✅</div>
+                <div class="text-lg font-extrabold text-[#fb923c]">89</div>
+                <div class="text-[10px] text-slate-500 uppercase font-bold">Resolved</div>
+            </div>
+        </div>
+
+        <div class="filter-container fu" style="animation-delay: 0.1s;">
+            <button class="achip act">All</button>
+            <button class="achip">✅ Resolved</button>
+            <button class="achip">👥 Volunteers</button>
+            <button class="achip">⚠️ Alerts</button>
+            <button class="achip">🌿 Drives</button>
+        </div>
+
+        <div class="main-grid">
+            <section class="fu" style="animation-delay: 0.2s;">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="slbl mb-0">Live Activity Feed</h2>
+                    <span class="text-[10px] font-bold text-[#00e5cc] opacity-70">● Auto-updating</span>
+                </div>
+                <div class="bg-[rgba(11,20,34,0.6)] border border-white/5 rounded-2xl p-4" id="feed">
+                    </div>
+            </section>
+
+            <section class="fu" style="animation-delay: 0.3s;">
+                <h2 class="slbl">Community Leaders</h2>
+                <div class="leaderboard-list">
+                    <div class="lbrow">
+                        <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-xs font-black text-black">1</div>
+                        <div class="flex-1">
+                            <div class="text-sm font-bold">Shobhit Asthana</div>
+                            <div class="text-[10px] text-slate-500">Null Pointer · 340 pts</div>
+                        </div>
+                        <div class="text-amber-500 font-bold text-xs">🥇</div>
+                    </div>
+                    <div class="lbrow">
+                        <div class="w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center text-xs font-black">2</div>
+                        <div class="flex-1">
+                            <div class="text-sm font-bold">Rahul Singh</div>
+                            <div class="text-[10px] text-slate-500">Gomti Nagar · 320 pts</div>
+                        </div>
+                        <div class="text-slate-400 font-bold text-xs">🥈</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<a href="#" class="fab-p">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    Report Issue
+</a>
+
+<script>
+    // Simplified Feed Render for Demo
+    const ACTS = [
+        {color: '#00e5cc', title: 'Pothole Fixed: Station Rd', sub: '30 min ago', icon: '✅'},
+        {color: '#a78bfa', title: 'New Volunteer: Priya S.', sub: '1h ago', icon: '👥'},
+        {color: '#fb923c', title: 'City Alert: Power Outage', sub: '2h ago', icon: '⚠️'}
+    ];
+
+    const feedEl = document.getElementById('feed');
+    feedEl.innerHTML = ACTS.map(a => `
+        <div class="tli">
+            <div class="tldot" style="background:${a.color}; box-shadow: 0 0 8px ${a.color}88"></div>
+            <div class="flex-1">
+                <div class="text-sm font-medium text-slate-200">${a.title}</div>
+                <div class="text-[11px] text-slate-500">${a.sub}</div>
+            </div>
+            <div class="text-lg">${a.icon}</div>
+        </div>
+    `).join('');
+</script>
+
+</body>
+</html>

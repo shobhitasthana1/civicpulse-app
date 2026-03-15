@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#060c14"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="description" content="CivicPulse — Report civic issues, track complaints and improve your city together."/>
+<title>CivicPulse — Fix Your City Together</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.css"/>
+
+<style>
+/* ══════════════════════════════════════
+   CivicPulse — Home Page Styles v4
+   Includes: Hero · How It Works · Dashboard
+══════════════════════════════════════ */
+:root {
+  --sg: 20px;
+  --teal:   #00e5cc;
+  --cyan:   #00cfff;
+  --purple: #a78bfa;
+  --orange: #fb923c;
+  --red:    #ff4d6d;
+}
+
+/* Grid overlay */
+body::before {
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,229,204,0.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,204,0.025) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);
+}
+
+/* ══ Section label ══ */
+.slbl{font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:rgba(0,229,204,0.65);display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.slbl::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(0,229,204,0.2),transparent);}
+.ghr{height:1px;background:linear-gradient(to right,transparent,rgba(0,229,204,0.3),transparent);margin:12px 0;}
+
+/* ══ Badges ══ */
+.bdg{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:0.62rem;font-weight:600;letter-spacing:0.3px;white-space:nowrap;}
+.bp{background:rgba(251,146,60,0.15);color:#fb923c;border:1px solid rgba(251,146,60,0.3);}
+.bi{background:rgba(0,207,255,0.1);color:#00cfff;border:1px solid rgba(0,207,255,0.25);}
+.br{background:rgba(0,229,204,0.1);color:#00e5cc;border:1px solid rgba(0,229,204,0.25);}
+.bc{background:rgba(255,77,109,0.12);color:#ff4d6d;border:1px solid rgba(255,77,109,0.25);}
+.ba{background:rgba(167,139,250,0.12);color:#a78bfa;border:1px solid rgba(167,139,250,0.25);}
+
+/* ══ Animations ══ */
+.fu{opacity:0;transform:translateY(18px);animation:fu 0.44s ease forwards;}
+@keyframes fu{to{opacity:1;transform:translateY(0)}}
+.d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
+.d4{animation-delay:.24s}.d5{animation-delay:.30s}.d6{animation-delay:.36s}
+.d7{animation-delay:.42s}.d8{animation-delay:.48s}
+@keyframes ripA{to{transform:translate(-50%,-50%) scale(4);opacity:0}}
+@keyframes sosPulse{0%,100%{box-shadow:0 0 14px rgba(251,146,60,0.22)}50%{box-shadow:0 0 28px rgba(251,146,60,0.52)}}
+@keyframes ablk{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.2;transform:scale(0.6)}}
+@keyframes spin-ring{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%,100%{opacity:0}50%{opacity:1}}
+@keyframes sgrow{from{height:0!important}}
+
+/* ══ Buttons ══ */
+.btn-teal{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--teal),var(--cyan));color:#060c14;font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;text-decoration:none;box-shadow:0 4px 20px rgba(0,229,204,0.28);transition:all 0.22s cubic-bezier(0.34,1.56,0.64,1);-webkit-tap-highlight-color:transparent;}
+.btn-teal:active{transform:scale(0.96);}
+@media(hover:hover){.btn-teal:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,229,204,0.45);}}
+.btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;border-radius:14px;border:1px solid rgba(0,229,204,0.3);cursor:pointer;background:rgba(0,229,204,0.06);color:var(--teal);font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;text-decoration:none;transition:all 0.22s;-webkit-tap-highlight-color:transparent;}
+.btn-outline:active{transform:scale(0.96);}
+@media(hover:hover){.btn-outline:hover{background:rgba(0,229,204,0.12);border-color:rgba(0,229,204,0.5);transform:translateY(-2px);}}
+
+/* ══ HERO SECTION ══ */
+.hero-section{
+  position:relative;overflow:hidden;
+  padding:28px 0 24px;
+  margin-bottom:var(--sg);
+}
+.hero-glow-1{position:absolute;top:-80px;right:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(0,229,204,0.1),transparent 65%);pointer-events:none;border-radius:50%;}
+.hero-glow-2{position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(0,207,255,0.07),transparent 65%);pointer-events:none;border-radius:50%;}
+.hero-glow-3{position:absolute;top:40%;right:20%;width:160px;height:160px;background:radial-gradient(circle,rgba(167,139,250,0.06),transparent 65%);pointer-events:none;border-radius:50%;}
+
+.hero-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:50px;
+  background:rgba(0,229,204,0.08);border:1px solid rgba(0,229,204,0.2);
+  font-family:'Syne',sans-serif;font-size:0.68rem;font-weight:700;
+  color:var(--teal);letter-spacing:0.4px;margin-bottom:16px;
+}
+.hero-chip-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:live-blink 1.8s ease-in-out infinite;}
+@keyframes live-blink{0%,100%{opacity:1}50%{opacity:0.25}}
+
+.hero-title{
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:clamp(1.55rem, 6vw, 2.4rem);
+  line-height:1.15;
+  color:#f1f5f9;
+  margin-bottom:14px;
+  letter-spacing:-0.5px;
+}
+.hero-title span{
+  background:linear-gradient(135deg,var(--teal) 0%,var(--cyan) 50%,var(--purple) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.hero-desc{
+  font-size:0.9rem;
+  color:#94a3b8;
+  line-height:1.7;
+  max-width:520px;
+  margin-bottom:22px;
+}
+
+.hero-stats{
+  display:flex;gap:20px;flex-wrap:wrap;
+  margin-bottom:22px;
+}
+.hero-stat{display:flex;flex-direction:column;gap:2px;}
+.hero-stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:#f1f5f9;}
+.hero-stat-lbl{font-size:0.65rem;color:#64748b;text-transform:uppercase;letter-spacing:0.6px;}
+
+.hero-btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+
+/* Issue type pills */
+.issue-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:50px;font-size:0.72rem;font-weight:600;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  color:#94a3b8;margin:3px;font-family:'Syne',sans-serif;
+  transition:all 0.2s;cursor:default;
+}
+@media(hover:hover){.issue-pill:hover{background:rgba(0,229,204,0.08);border-color:rgba(0,229,204,0.25);color:var(--teal);}}
+
+/* ══ HOW IT WORKS ══ */
+.hiw-card{
+  background:rgba(11,20,34,0.75);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:20px;padding:20px;
+  position:relative;overflow:hidden;
+  transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  -webkit-tap-highlight-color:transparent;
+}
+.hiw-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--hiw-color,rgba(0,229,204,0.5)),transparent);
+}
+.hiw-card::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:radial-gradient(circle at 50% 0%,var(--hiw-glow,rgba(0,229,204,0.06)),transparent 70%);
+  opacity:0;transition:opacity 0.25s;
+}
+@media(hover:hover){
+  .hiw-card:hover{transform:translateY(-5px);border-color:var(--hiw-border,rgba(0,229,204,0.25));box-shadow:0 12px 36px rgba(0,0,0,0.2);}
+  .hiw-card:hover::after{opacity:1;}
+}
+.hiw-card:active{transform:scale(0.97);}
+.hiw-icon{
+  width:52px;height:52px;border-radius:15px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;margin-bottom:14px;
+  background:var(--hiw-icon-bg,rgba(0,229,204,0.1));
+  box-shadow:var(--hiw-icon-glow,0 0 18px rgba(0,229,204,0.2));
+}
+.hiw-step{
+  font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:500;
+  color:var(--hiw-color,var(--teal));letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:6px;opacity:0.8;
+}
+.hiw-title{font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:#f1f5f9;margin-bottom:7px;}
+.hiw-desc{font-size:0.78rem;color:#64748b;line-height:1.6;}
+
+/* ══ Animated avatar ══ */
+.av-wrap{position:relative;width:52px;height:52px;flex-shrink:0;}
+.av-ring{position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(#00e5cc,#00cfff,#a78bfa,#00e5cc);animation:spin-ring 4s linear infinite;}
+.av-inner{position:relative;z-index:1;width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#00e5cc,#00cfff);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#060c14;border:3px solid #060c14;}
+
+/* ══ Impact bar ══ */
+.impact-bar{height:6px;border-radius:6px;background:rgba(255,255,255,0.07);overflow:hidden;position:relative;}
+.impact-fill{height:100%;border-radius:6px;width:0%;background:linear-gradient(90deg,#00e5cc,#00cfff);transition:width 1.4s cubic-bezier(0.4,0,0.2,1);box-shadow:0 0 8px rgba(0,229,204,0.5);}
+.impact-fill::after{content:'';position:absolute;top:0;right:0;bottom:0;width:28px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.28));animation:shimmer 2s ease-in-out infinite;}
+
+/* ══ Welcome card ══ */
+.welcome-card{background:linear-gradient(135deg,rgba(0,229,204,0.07) 0%,rgba(0,207,255,0.04) 60%,rgba(167,139,250,0.04) 100%);border:1px solid rgba(0,229,204,0.18);border-radius:22px;padding:20px;position:relative;overflow:hidden;}
+.w-orb1{position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,229,204,0.12),transparent 65%);pointer-events:none;}
+.w-orb2{position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(0,207,255,0.08),transparent 65%);pointer-events:none;}
+
+/* ══ Action tiles ══ */
+.atile{background:rgba(11,20,34,0.75);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;text-decoration:none;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1),border-color 0.18s,box-shadow 0.18s;-webkit-tap-highlight-color:transparent;min-height:110px;}
+.atile::before{content:'';position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity 0.22s;}
+@media(hover:hover){.atile:hover{transform:translateY(-5px);}.atile:hover::before{opacity:1;}}
+.atile:active{transform:scale(0.94);opacity:0.9;}
+.at-r::before{background:radial-gradient(circle at 50% 0%,rgba(255,77,109,0.12),transparent 70%);}
+.at-t::before{background:radial-gradient(circle at 50% 0%,rgba(0,229,204,0.1),transparent 70%);}
+.at-rs::before{background:radial-gradient(circle at 50% 0%,rgba(167,139,250,0.12),transparent 70%);}
+.at-s::before{background:radial-gradient(circle at 50% 0%,rgba(251,146,60,0.12),transparent 70%);}
+@media(hover:hover){
+  .at-r:hover{border-color:rgba(255,77,109,0.35);box-shadow:0 10px 32px rgba(255,77,109,0.1);}
+  .at-t:hover{border-color:rgba(0,229,204,0.35);box-shadow:0 10px 32px rgba(0,229,204,0.1);}
+  .at-rs:hover{border-color:rgba(167,139,250,0.35);box-shadow:0 10px 32px rgba(167,139,250,0.1);}
+  .at-s:hover{border-color:rgba(251,146,60,0.35);box-shadow:0 10px 32px rgba(251,146,60,0.1);}
+}
+.ticon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;position:relative;z-index:1;transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1);}
+@media(hover:hover){.atile:hover .ticon{transform:scale(1.12) rotate(-4deg);}}
+
+/* ══ Stat cards ══ */
+.scard{background:rgba(11,20,34,0.75);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:14px;position:relative;overflow:hidden;transition:transform 0.2s,border-color 0.18s;-webkit-tap-highlight-color:transparent;}
+@media(hover:hover){.scard:hover{transform:translateY(-3px);border-color:rgba(0,229,204,0.2);}}
+.scard:active{transform:scale(0.98);}
+.scard::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent,rgba(0,229,204,0.4)),transparent);}
+.sparkline{display:flex;align-items:flex-end;gap:2px;height:22px;margin-top:6px;}
+.sbar{flex:1;border-radius:2px 2px 0 0;animation:sgrow 0.7s ease backwards;}
+
+/* ══ Map card ══ */
+.map-card{background:rgba(6,12,20,0.9);border:1px solid rgba(0,229,204,0.12);border-radius:20px;overflow:hidden;}
+.map-bg{width:100%;height:180px;background:radial-gradient(circle at 30% 40%,rgba(0,229,204,0.06),transparent 50%),radial-gradient(circle at 70% 60%,rgba(0,207,255,0.05),transparent 50%),linear-gradient(135deg,#060c14,#0b1422);position:relative;}
+.map-bg::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,204,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,204,0.04) 1px,transparent 1px);background-size:28px 28px;}
+.mmarker{position:absolute;transform:translate(-50%,-50%);cursor:pointer;z-index:2;}
+.mdot{width:10px;height:10px;border-radius:50%;animation:mpulse 2.5s ease-in-out infinite;}
+.mring{position:absolute;inset:-5px;border-radius:50%;border:1.5px solid currentColor;opacity:0;animation:mring 2.5s ease-in-out infinite;}
+@keyframes mpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+@keyframes mring{0%{transform:scale(0.5);opacity:0.8}100%{transform:scale(2.3);opacity:0}}
+.mlabel{position:absolute;top:-22px;left:50%;transform:translateX(-50%);background:rgba(6,12,20,0.92);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:2px 7px;font-family:'Syne',sans-serif;font-size:0.58rem;font-weight:700;white-space:nowrap;color:#e2eaf4;opacity:0;transition:opacity 0.2s;pointer-events:none;}
+@media(hover:hover){.mmarker:hover .mlabel{opacity:1;}}
+
+/* ══ Alert cards ══ */
+.alert-item{background:rgba(255,77,109,0.06);border:1px solid rgba(255,77,109,0.18);border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:12px;transition:all 0.18s;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;cursor:pointer;}
+@media(hover:hover){.alert-item:hover{background:rgba(255,77,109,0.1);border-color:rgba(255,77,109,0.32);}}
+.alert-item:active{transform:scale(0.98);}
+.ablink{width:8px;height:8px;border-radius:50%;background:#ff4d6d;flex-shrink:0;box-shadow:0 0 8px #ff4d6d;animation:ablk 1.2s ease-in-out infinite;}
+
+/* ══ Report rows ══ */
+.rrow{background:rgba(11,20,34,0.75);border:1px solid rgba(255,255,255,0.07);border-radius:14px;overflow:hidden;transition:border-color 0.18s;-webkit-tap-highlight-color:transparent;}
+@media(hover:hover){.rrow:hover{border-color:rgba(0,229,204,0.2);}}
+.rtop{display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;transition:background 0.18s;}
+.rtop:active{background:rgba(255,255,255,0.03);}
+.rdetail{max-height:0;overflow:hidden;transition:max-height 0.32s cubic-bezier(0.4,0,0.2,1),padding 0.22s;padding:0 14px;}
+.rdetail.open{max-height:110px;padding:0 14px 13px;}
+.chevron{width:18px;height:18px;flex-shrink:0;color:#64748b;transition:transform 0.28s cubic-bezier(0.4,0,0.2,1);}
+.rrow.exp .chevron{transform:rotate(180deg);}
+
+/* ══ Timeline ══ */
+.tli{display:flex;gap:13px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);transition:opacity 0.15s;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.tli:last-child{border-bottom:none;padding-bottom:0;}
+.tli:active{opacity:0.7;}
+.tll{display:flex;flex-direction:column;align-items:center;}
+.tldot{width:10px;height:10px;border-radius:50%;flex-shrink:0;z-index:1;}
+.tlline{width:1px;flex:1;min-height:26px;background:linear-gradient(to bottom,rgba(0,229,204,0.25),transparent);}
+.tli:last-child .tlline{display:none;}
+
+/* ══ Leaderboard ══ */
+.lbrow{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:13px;background:rgba(11,20,34,0.65);border:1px solid rgba(255,255,255,0.06);transition:all 0.18s;-webkit-tap-highlight-color:transparent;}
+@media(hover:hover){.lbrow:hover{border-color:rgba(0,229,204,0.2);transform:translateX(3px);}}
+.lbrow:active{transform:scale(0.98);}
+.lbnum{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.75rem;flex-shrink:0;}
+
+/* ══ FAB premium ══ */
+.fab-p{position:fixed;bottom:calc(var(--tab-h,62px) + var(--safe-b,0px) + 16px);right:16px;z-index:45;display:flex;align-items:center;gap:9px;background:linear-gradient(135deg,#00e5cc 0%,#00cfff 100%);color:#060c14;font-family:'Syne',sans-serif;font-weight:800;font-size:0.82rem;padding:0 20px;height:50px;border-radius:25px;border:none;cursor:pointer;box-shadow:0 6px 28px rgba(0,229,204,0.4);animation:fp 3s ease-in-out infinite;transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1);text-decoration:none;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
+.fab-p:active{transform:scale(0.93);}
+@media(hover:hover){.fab-p:hover{transform:scale(1.05) translateY(-3px);box-shadow:0 0 0 6px rgba(0,229,204,0.1),0 12px 36px rgba(0,229,204,0.45);}}
+.fab-tt{position:absolute;bottom:calc(100% + 10px);right:0;background:rgba(11,20,34,0.95);border:1px solid rgba(0,229,204,0.22);border-radius:9px;padding:6px 12px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.72rem;color:#00e5cc;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.18s;}
+@media(hover:hover){.fab-p:hover .fab-tt{opacity:1;}}
+@keyframes fp{0%,100%{box-shadow:0 6px 28px rgba(0,229,204,0.4)}50%{box-shadow:0 6px 40px rgba(0,229,204,0.62)}}
+@media(min-width:768px){.fab-p{bottom:28px;right:24px;}}
+
+/* ══ Two-col layout ══ */
+@media(min-width:768px){
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;}
+}
+/* ══ HIW grid ══ */
+.hiw-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(min-width:640px){.hiw-grid{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:1024px){.hiw-grid{grid-template-columns:repeat(4,1fr);}}
+</style>
+</head>
+
+<body>
+<canvas id="bg-canvas"></canvas>
+
+<div class="app-layout">
+  <!-- Sidebar + Bottom bar injected by shared-ui.js -->
+
+  <div class="main-area">
+
+    <!-- ════ HEADER ════ -->
+    <header class="app-header">
+      <div class="header-left">
+        <!-- HAMBURGER — click opens sidebar drawer -->
+        <button class="hamburger" aria-label="Open navigation menu" type="button">
+          <span></span><span></span><span></span>
+        </button>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="logo-icon" style="width:28px;height:28px;border-radius:8px;flex-shrink:0;">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <span class="logo-text" id="mLogo">CivicPulse</span>
+          <span class="page-title" id="dTitle" style="display:none;">Dashboard</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
+        <div id="hClock" style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#64748b;letter-spacing:0.5px;display:none;"></div>
+        <button class="icon-btn" style="position:relative;" onclick="showToast('🔔 3 new notifications','info')" type="button" aria-label="Notifications">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-badge"></span>
+        </button>
+        <div class="avatar" role="button" aria-label="Profile" tabindex="0">SA</div>
+      </div>
+    </header>
+
+    <!-- ════ PAGE CONTENT ════ -->
+    <main class="page-content">
+
+      <!-- ══════════════════════════════════
+           SECTION 1 — HERO
+      ══════════════════════════════════ -->
+      <section class="hero-section fu" aria-label="Welcome to CivicPulse">
+        <div class="hero-glow-1"></div>
+        <div class="hero-glow-2"></div>
+        <div class="hero-glow-3"></div>
+
+        <!-- Status chip -->
+        <div style="position:relative;z-index:1;">
+          <div class="hero-chip">
+            <span class="hero-chip-dot"></span>
+            Active in Lucknow · 142 reports today
+          </div>
+
+          <!-- Headline -->
+          <h1 class="hero-title">
+            CivicPulse —<br>
+            <span>Fix Your City Together</span>
+          </h1>
+
+          <!-- Description -->
+          <p class="hero-desc">
+            CivicPulse helps citizens report civic issues like potholes, garbage overflow, water leakage, broken streetlights, and emergencies. The platform connects communities with local authorities to resolve problems faster and improve city life.
+          </p>
+
+          <!-- Issue type pills -->
+          <div style="margin-bottom:20px;line-height:2.2;">
+            <span class="issue-pill">🛣️ Potholes</span>
+            <span class="issue-pill">🗑️ Garbage</span>
+            <span class="issue-pill">💧 Water Leaks</span>
+            <span class="issue-pill">💡 Streetlights</span>
+            <span class="issue-pill">⚡ Power Outage</span>
+            <span class="issue-pill">🚨 Emergencies</span>
+          </div>
+
+          <!-- CTA buttons -->
+          <div class="hero-btn-row">
+            <a href="report.html" class="btn-teal" onclick="rippleEl(this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+              Report an Issue
+            </a>
+            <a href="reports.html" class="btn-outline" onclick="rippleEl(this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              Track Reports
+            </a>
+          </div>
+
+          <!-- Hero stats row -->
+          <div class="hero-stats" style="margin-top:22px;">
+            <div class="hero-stat">
+              <span class="hero-stat-num" data-counter="1240" style="color:var(--teal);">0</span>
+              <span class="hero-stat-lbl">Issues Resolved</span>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.07);"></div>
+            <div class="hero-stat">
+              <span class="hero-stat-num" data-counter="37" style="color:var(--purple);">0</span>
+              <span class="hero-stat-lbl">Active Volunteers</span>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,0.07);"></div>
+            <div class="hero-stat">
+              <span class="hero-stat-num" data-counter="94" style="color:var(--orange);">0</span>
+              <span class="hero-stat-lbl">Avg. Resolution %</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════
+           SECTION 2 — HOW IT WORKS
+      ══════════════════════════════════ -->
+      <section style="margin-bottom:var(--sg);" aria-label="How CivicPulse works">
+        <div style="margin-bottom:14px;" class="fu d1">
+          <div class="slbl">How It Works</div>
+          <div style="font-size:0.82rem;color:#64748b;max-width:480px;">From reporting a problem to watching it get resolved — here's the CivicPulse workflow.</div>
+        </div>
+        <div class="hiw-grid">
+
+          <!-- 1. Report -->
+          <div class="hiw-card fu d2" style="--hiw-color:rgba(255,77,109,0.8);--hiw-glow:rgba(255,77,109,0.06);--hiw-border:rgba(255,77,109,0.3);--hiw-icon-bg:rgba(255,77,109,0.12);--hiw-icon-glow:0 0 18px rgba(255,77,109,0.2);">
+            <div class="hiw-icon">📸</div>
+            <div class="hiw-step" style="color:#ff4d6d;">Step 01</div>
+            <div class="hiw-title">Report</div>
+            <div class="hiw-desc">Citizens photograph problems and submit reports with their GPS location. Takes under 60 seconds.</div>
+          </div>
+
+          <!-- 2. Track -->
+          <div class="hiw-card fu d3" style="--hiw-color:rgba(0,229,204,0.8);--hiw-glow:rgba(0,229,204,0.06);--hiw-border:rgba(0,229,204,0.3);--hiw-icon-bg:rgba(0,229,204,0.1);--hiw-icon-glow:0 0 18px rgba(0,229,204,0.2);">
+            <div class="hiw-icon">📡</div>
+            <div class="hiw-step">Step 02</div>
+            <div class="hiw-title">Track</div>
+            <div class="hiw-desc">Users monitor complaint progress in real time. Get notified when authorities respond or resolve issues.</div>
+          </div>
+
+          <!-- 3. Community -->
+          <div class="hiw-card fu d4" style="--hiw-color:rgba(167,139,250,0.8);--hiw-glow:rgba(167,139,250,0.06);--hiw-border:rgba(167,139,250,0.3);--hiw-icon-bg:rgba(167,139,250,0.12);--hiw-icon-glow:0 0 18px rgba(167,139,250,0.2);">
+            <div class="hiw-icon">👥</div>
+            <div class="hiw-step" style="color:#a78bfa;">Step 03</div>
+            <div class="hiw-title">Community</div>
+            <div class="hiw-desc">Volunteers and residents collaborate on cleanup drives, support each other and improve neighbourhoods.</div>
+          </div>
+
+          <!-- 4. Emergency -->
+          <div class="hiw-card fu d5" style="--hiw-color:rgba(251,146,60,0.8);--hiw-glow:rgba(251,146,60,0.06);--hiw-border:rgba(251,146,60,0.3);--hiw-icon-bg:rgba(251,146,60,0.12);--hiw-icon-glow:0 0 18px rgba(251,146,60,0.2);">
+            <div class="hiw-icon">⚡</div>
+            <div class="hiw-step" style="color:#fb923c;">Step 04</div>
+            <div class="hiw-title">Emergency</div>
+            <div class="hiw-desc">One-tap SOS alerts dispatch emergency services instantly and notify nearby volunteers for rapid response.</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════
+           SECTION 3 — DASHBOARD (existing)
+      ══════════════════════════════════ -->
+
+      <!-- WELCOME CARD -->
+      <div class="welcome-card fu d2" style="margin-bottom:var(--sg);">
+        <div class="w-orb1"></div><div class="w-orb2"></div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;position:relative;z-index:1;">
+          <div class="av-wrap">
+            <div class="av-ring"></div>
+            <div class="av-inner">SA</div>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:0.7rem;color:#64748b;font-weight:500;margin-bottom:2px;" id="greeting">Good morning 👋</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:#f1f5f9;line-height:1.2;">Shobhit Asthana</div>
+            <span class="bdg bi" style="margin-top:5px;display:inline-flex;">
+              <svg width="7" height="7" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" stroke="currentColor" stroke-width="1"/></svg>
+              Team: Null Pointer
+            </span>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div id="liveClock" style="font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:500;color:#f1f5f9;letter-spacing:1px;"></div>
+            <div id="liveDate" style="font-size:0.6rem;color:#64748b;margin-top:2px;"></div>
+          </div>
+        </div>
+        <div class="ghr"></div>
+        <div style="position:relative;z-index:1;margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem;color:#f1f5f9;">Community Impact</div>
+              <div style="font-size:0.63rem;color:#64748b;margin-top:1px;">Level 4 Civic Champion</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#00e5cc;">340</div>
+              <div style="font-size:0.6rem;color:#64748b;">/ 500 pts</div>
+            </div>
+          </div>
+          <div class="impact-bar"><div class="impact-fill" id="iFill"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+            <span style="font-size:0.58rem;color:#64748b;">Lv 4</span>
+            <span style="font-size:0.58rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;">68% to Lv 5</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;position:relative;z-index:1;">
+          <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:12px;padding:10px 6px;">
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:#00e5cc;" data-counter="7">0</div>
+            <div style="font-size:0.6rem;color:#64748b;margin-top:1px;">Active</div>
+          </div>
+          <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:12px;padding:10px 6px;">
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:#a78bfa;" data-counter="12">0</div>
+            <div style="font-size:0.6rem;color:#64748b;margin-top:1px;">Resolved</div>
+          </div>
+          <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:12px;padding:10px 6px;">
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:#fb923c;" data-counter="340">0</div>
+            <div style="font-size:0.6rem;color:#64748b;margin-top:1px;">Points</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TWO-COLUMN -->
+      <div class="two-col">
+      <div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="fu d3" style="margin-bottom:var(--sg);">
+          <div class="slbl">Quick Actions</div>
+          <div id="aGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <a href="report.html" class="atile at-r" onclick="rippleEl(this)">
+              <div class="ticon" style="background:rgba(255,77,109,0.15);">🚨</div>
+              <div style="position:relative;z-index:1;"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:#f1f5f9;">Report Issue</div><div style="font-size:0.63rem;color:#64748b;margin-top:2px;">File a complaint</div></div>
+            </a>
+            <a href="reports.html" class="atile at-t" onclick="rippleEl(this)">
+              <div class="ticon" style="background:rgba(0,229,204,0.12);">📡</div>
+              <div style="position:relative;z-index:1;"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:#f1f5f9;">Track Reports</div><div style="font-size:0.63rem;color:#64748b;margin-top:2px;">Monitor filings</div></div>
+            </a>
+            <a href="resources.html" class="atile at-rs" onclick="rippleEl(this)">
+              <div class="ticon" style="background:rgba(167,139,250,0.15);">🔍</div>
+              <div style="position:relative;z-index:1;"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:#f1f5f9;">Resources</div><div style="font-size:0.63rem;color:#64748b;margin-top:2px;">Find city services</div></div>
+            </a>
+            <a href="emergency.html" class="atile at-s" onclick="rippleEl(this)">
+              <div class="ticon" style="background:rgba(251,146,60,0.15);animation:sosPulse 2s ease-in-out infinite;">⚡</div>
+              <div style="position:relative;z-index:1;"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:#f1f5f9;">Emergency SOS</div><div style="font-size:0.63rem;color:#fb923c;margin-top:2px;">Critical alert</div></div>
+            </a>
+          </div>
+        </div>
+
+        <!-- LIVE CITY STATUS -->
+        <div class="fu d4" style="margin-bottom:var(--sg);">
+          <div class="slbl">Live City Status</div>
+          <div id="sGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+            <div class="scard" style="--accent:rgba(251,146,60,0.4);">
+              <div style="font-size:0.6rem;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">Reported Today</div>
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.55rem;color:#f1f5f9;line-height:1;" data-counter="142">0</div>
+              <div class="sparkline" id="sp1"></div>
+              <div style="font-size:0.6rem;color:#fb923c;margin-top:4px;">↑ +18 this hour</div>
+            </div>
+            <div class="scard" style="--accent:rgba(0,229,204,0.4);">
+              <div style="font-size:0.6rem;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">Resolved</div>
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.55rem;color:#00e5cc;line-height:1;" data-counter="89">0</div>
+              <div class="sparkline" id="sp2"></div>
+              <div style="font-size:0.6rem;color:#00e5cc;margin-top:4px;">↑ 62.6% rate</div>
+            </div>
+            <div class="scard" style="--accent:rgba(167,139,250,0.4);">
+              <div style="font-size:0.6rem;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">Volunteers</div>
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.55rem;color:#a78bfa;line-height:1;" data-counter="37">0</div>
+              <div class="sparkline" id="sp3"></div>
+              <div style="font-size:0.6rem;color:#a78bfa;margin-top:4px;">↑ 5 joined today</div>
+            </div>
+            <div class="scard" style="--accent:rgba(255,77,109,0.4);">
+              <div style="font-size:0.6rem;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;">Alerts</div>
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.55rem;color:#ff4d6d;line-height:1;" data-counter="3">0</div>
+              <div class="sparkline" id="sp4"></div>
+              <div style="font-size:0.6rem;color:#ff4d6d;margin-top:4px;">⚠ 2 unresolved</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CITY MAP -->
+        <div class="fu d5" style="margin-bottom:var(--sg);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div class="slbl" style="margin-bottom:0;flex:1;">City Map Preview</div>
+            <button style="font-size:0.7rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;background:none;border:none;cursor:pointer;padding:0;" onclick="showToast('🗺 Full map view coming soon','info')">Expand →</button>
+          </div>
+          <div class="map-card">
+            <div class="map-bg" id="mapBg"></div>
+            <div style="padding:10px 14px;display:flex;gap:12px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.05);">
+              <div style="display:flex;align-items:center;gap:5px;font-size:0.64rem;color:#64748b;"><span style="width:7px;height:7px;border-radius:50%;background:#ff4d6d;display:inline-block;box-shadow:0 0 6px #ff4d6d;"></span>Critical</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:0.64rem;color:#64748b;"><span style="width:7px;height:7px;border-radius:50%;background:#fb923c;display:inline-block;box-shadow:0 0 6px #fb923c;"></span>Pending</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:0.64rem;color:#64748b;"><span style="width:7px;height:7px;border-radius:50%;background:#00cfff;display:inline-block;box-shadow:0 0 6px #00cfff;"></span>Active</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:0.64rem;color:#64748b;"><span style="width:7px;height:7px;border-radius:50%;background:#00e5cc;display:inline-block;box-shadow:0 0 6px #00e5cc;"></span>Resolved</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /col1 -->
+      <div>
+
+        <!-- PRIORITY ALERTS -->
+        <div class="fu d4" style="margin-bottom:var(--sg);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <div class="slbl" style="margin-bottom:0;flex:1;">Priority Alerts</div>
+            <span class="bdg bc" style="animation:ablk 2s ease-in-out infinite;">3 active</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="alert-item" onclick="showToast('📋 Opening report…','info')">
+              <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,77,109,0.15);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">💧</div>
+              <div style="flex:1;min-width:0;"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.83rem;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Major water leakage – Gomti Nagar</div><div style="font-size:0.67rem;color:#64748b;margin-top:2px;">Utilities · 45 min ago · PWD Notified</div></div>
+              <div class="ablink"></div>
+            </div>
+            <div class="alert-item" onclick="showToast('📋 Opening report…','info')">
+              <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,77,109,0.15);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">⚡</div>
+              <div style="flex:1;min-width:0;"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.83rem;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Power outage – Aliganj</div><div style="font-size:0.67rem;color:#64748b;margin-top:2px;">Electricity · 1h 20m ago · UPPCL alerted</div></div>
+              <div class="ablink" style="animation-delay:0.4s;"></div>
+            </div>
+            <div class="alert-item" onclick="showToast('📋 Opening report…','info')">
+              <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,77,109,0.15);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🚗</div>
+              <div style="flex:1;min-width:0;"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.83rem;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Road accident – Ring Road</div><div style="font-size:0.67rem;color:#64748b;margin-top:2px;">Emergency · 2h ago · Police on site</div></div>
+              <div class="ablink" style="animation-delay:0.8s;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT REPORTS -->
+        <div class="fu d5" style="margin-bottom:var(--sg);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div class="slbl" style="margin-bottom:0;flex:1;">Recent Reports</div>
+            <a href="reports.html" style="font-size:0.7rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;">View all →</a>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="rrow" id="rr1" onclick="toggleRpt('rr1','rd1')">
+              <div class="rtop">
+                <div style="width:38px;height:38px;border-radius:11px;background:rgba(251,146,60,0.12);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">💡</div>
+                <div style="flex:1;min-width:0;"><div style="font-size:0.83rem;font-weight:500;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Broken streetlight – Sector 12</div><div style="font-size:0.67rem;color:#64748b;margin-top:1px;">Infrastructure · 2h ago</div></div>
+                <span class="bdg bp" style="flex-shrink:0;margin-right:6px;">Pending</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="rdetail" id="rd1"><div style="background:rgba(0,0,0,0.25);border-radius:10px;padding:10px 12px;font-size:0.75rem;color:#94a3b8;line-height:1.65;">📍 Sector 12, Gomti Nagar · Filed by Shobhit A.<br>🔧 Assigned: Municipal Corp, Zone 3<br>🕐 Expected resolution: 24–48 hours</div></div>
+            </div>
+            <div class="rrow" id="rr2" onclick="toggleRpt('rr2','rd2')">
+              <div class="rtop">
+                <div style="width:38px;height:38px;border-radius:11px;background:rgba(255,77,109,0.12);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🗑️</div>
+                <div style="flex:1;min-width:0;"><div style="font-size:0.83rem;font-weight:500;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Garbage overflow – Market Road</div><div style="font-size:0.67rem;color:#64748b;margin-top:1px;">Sanitation · 4h ago</div></div>
+                <span class="bdg bc" style="flex-shrink:0;margin-right:6px;">Critical</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="rdetail" id="rd2"><div style="background:rgba(0,0,0,0.25);border-radius:10px;padding:10px 12px;font-size:0.75rem;color:#94a3b8;line-height:1.65;">📍 Market Road, Hazratganj · Community report<br>🔧 Assigned: Nagar Nigam Sanitation<br>⚠️ Health hazard — priority escalated</div></div>
+            </div>
+            <div class="rrow" id="rr3" onclick="toggleRpt('rr3','rd3')">
+              <div class="rtop">
+                <div style="width:38px;height:38px;border-radius:11px;background:rgba(0,207,255,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">💧</div>
+                <div style="flex:1;min-width:0;"><div style="font-size:0.83rem;font-weight:500;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Water leakage – Civil Lines</div><div style="font-size:0.67rem;color:#64748b;margin-top:1px;">Utilities · 6h ago</div></div>
+                <span class="bdg bi" style="flex-shrink:0;margin-right:6px;">Active</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="rdetail" id="rd3"><div style="background:rgba(0,0,0,0.25);border-radius:10px;padding:10px 12px;font-size:0.75rem;color:#94a3b8;line-height:1.65;">📍 Civil Lines, Lucknow · Filed by Priya S.<br>🔧 Jal Kal Vibhag, Team B dispatched<br>🕐 Technician ETA: 1.5 hours</div></div>
+            </div>
+            <div class="rrow" id="rr4" onclick="toggleRpt('rr4','rd4')">
+              <div class="rtop">
+                <div style="width:38px;height:38px;border-radius:11px;background:rgba(0,229,204,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🛣️</div>
+                <div style="flex:1;min-width:0;"><div style="font-size:0.83rem;font-weight:500;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Pothole – Ring Road</div><div style="font-size:0.67rem;color:#64748b;margin-top:1px;">Roads · 1d ago</div></div>
+                <span class="bdg br" style="flex-shrink:0;margin-right:6px;">Resolved</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="rdetail" id="rd4"><div style="background:rgba(0,0,0,0.25);border-radius:10px;padding:10px 12px;font-size:0.75rem;color:#94a3b8;line-height:1.65;">📍 Ring Road, Aliganj · Filed by Aman V.<br>✅ Fixed by PWD — patching complete<br>⭐ Rated 4/5 by reporter</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMMUNITY ACTIVITY -->
+        <div class="fu d6" style="margin-bottom:var(--sg);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div class="slbl" style="margin-bottom:0;flex:1;">Community Activity</div>
+            <a href="activity.html" style="font-size:0.7rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;">View all →</a>
+          </div>
+          <div style="background:rgba(11,20,34,0.75);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:16px;">
+            <div style="display:flex;flex-direction:column;">
+              <div class="tli"><div class="tll"><div class="tldot" style="background:#00e5cc;box-shadow:0 0 7px #00e5cc;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;"><div style="font-size:0.82rem;font-weight:500;color:#f1f5f9;line-height:1.35;">Issue resolved: Pothole near Station Rd</div><div style="font-size:0.67rem;color:#64748b;margin-top:2px;">PWD Dept · 30 min ago</div></div></div>
+              <div class="tli"><div class="tll"><div class="tldot" style="background:#a78bfa;box-shadow:0 0 7px #a78bfa;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;"><div style="font-size:0.82rem;font-weight:500;color:#f1f5f9;line-height:1.35;">Volunteer joined: Priya Sharma</div><div style="font-size:0.67rem;color:#64748b;margin-top:2px;">Lucknow District · 1h ago</div></div></div>
+              <div class="tli"><div class="tll"><div class="tldot" style="background:#fb923c;box-shadow:0 0 7px #fb923c;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;"><div style="font-size:0.82rem;font-weight:500;color:#f1f5f9;line-height:1.35;">Alert: Power outage – Zone 5</div><div style="font-size:0.67rem;color:#64748b;margin-top:2px;">UPPCL · 2h ago</div></div></div>
+              <div class="tli"><div class="tll"><div class="tldot" style="background:#00cfff;box-shadow:0 0 7px #00cfff;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;"><div style="font-size:0.82rem;font-weight:500;color:#f1f5f9;line-height:1.35;">Cleanup drive: Hazratganj — 42 volunteers</div><div style="font-size:0.67rem;color:#64748b;margin-top:2px;">Community · 5h ago</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEADERBOARD -->
+        <div class="fu d7" style="margin-bottom:var(--sg);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div class="slbl" style="margin-bottom:0;flex:1;">Top Contributors</div>
+            <a href="activity.html" style="font-size:0.7rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;">All →</a>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="lbrow"><div class="lbnum" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#060c14;">🥇</div><div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#00e5cc,#00cfff);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.72rem;color:#060c14;flex-shrink:0;">SA</div><div style="flex:1;min-width:0;"><div style="font-size:0.83rem;font-weight:600;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Shobhit Asthana</div><div style="font-size:0.64rem;color:#64748b;">19 reports · Null Pointer</div></div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;color:#f59e0b;white-space:nowrap;">340 pts</div></div>
+            <div class="lbrow"><div class="lbnum" style="background:rgba(148,163,184,0.15);color:#94a3b8;">🥈</div><div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.72rem;color:#94a3b8;flex-shrink:0;">RK</div><div style="flex:1;min-width:0;"><div style="font-size:0.83rem;font-weight:600;color:#f1f5f9;">Rahul Singh</div><div style="font-size:0.64rem;color:#64748b;">22 reports · Gomti Nagar</div></div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;color:#94a3b8;white-space:nowrap;">320 pts</div></div>
+            <div class="lbrow"><div class="lbnum" style="background:rgba(167,139,250,0.15);color:#a78bfa;">🥉</div><div style="width:32px;height:32px;border-radius:50%;background:rgba(167,139,250,0.15);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.72rem;color:#a78bfa;flex-shrink:0;">PS</div><div style="flex:1;min-width:0;"><div style="font-size:0.83rem;font-weight:600;color:#f1f5f9;">Priya Sharma</div><div style="font-size:0.64rem;color:#64748b;">18 reports · Aliganj</div></div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;color:#a78bfa;white-space:nowrap;">290 pts</div></div>
+            <div class="lbrow"><div class="lbnum" style="background:rgba(255,255,255,0.05);color:#64748b;font-size:0.7rem;">4</div><div style="width:32px;height:32px;border-radius:50%;background:rgba(251,146,60,0.15);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.72rem;color:#fb923c;flex-shrink:0;">AV</div><div style="flex:1;min-width:0;"><div style="font-size:0.83rem;font-weight:600;color:#f1f5f9;">Aman Verma</div><div style="font-size:0.64rem;color:#64748b;">14 reports · Indira Nagar</div></div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;color:#fb923c;white-space:nowrap;">245 pts</div></div>
+          </div>
+        </div>
+
+      </div><!-- /col2 -->
+      </div><!-- /two-col -->
+
+      <!-- TEAM SECTION -->
+      <div class="fu d8" style="margin-bottom:var(--sg);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div class="slbl" style="margin-bottom:0;flex:1;">Hackathon Team</div>
+          <a href="team.html" style="font-size:0.7rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;">View →</a>
+        </div>
+        <div style="background:linear-gradient(135deg,rgba(147,51,234,0.08),rgba(0,207,255,0.05));border:1px solid rgba(147,51,234,0.2);border-radius:20px;padding:18px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(147,51,234,0.12),transparent 70%);pointer-events:none;"></div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:13px;">
+            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,rgba(147,51,234,0.3),rgba(0,207,255,0.2));display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;">⚡</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;background:linear-gradient(135deg,#a78bfa,#00cfff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Null Pointer</div>
+              <div style="font-size:0.65rem;color:#64748b;">CivicPulse · Hackathon 2025</div>
+            </div>
+            <span class="bdg bi">Active</span>
+          </div>
+          <div class="ghr" style="background:linear-gradient(to right,transparent,rgba(147,51,234,0.3),transparent);margin:0 0 12px;"></div>
+          <div id="teamGrid" style="display:flex;flex-direction:column;gap:9px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,0.22);border-radius:13px;">
+              <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#00e5cc,#00cfff);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.85rem;color:#060c14;box-shadow:0 0 14px rgba(0,229,204,0.25);flex-shrink:0;">SA</div>
+              <div style="flex:1;min-width:0;"><div style="font-size:0.84rem;font-weight:600;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Shobhit Asthana</div><div style="display:flex;align-items:center;gap:6px;margin-top:3px;"><span class="bdg bi" style="font-size:0.58rem;">Leader</span><span style="font-size:0.64rem;color:#64748b;">+91 63880 95158</span></div></div>
+              <a href="tel:+916388095158" style="width:34px;height:34px;border-radius:10px;background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.2);display:flex;align-items:center;justify-content:center;color:#00e5cc;text-decoration:none;flex-shrink:0;" onclick="showToast('📞 Calling Shobhit…','info')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg></a>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,0.22);border-radius:13px;">
+              <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#7c3aed);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.85rem;color:#fff;flex-shrink:0;">AD</div>
+              <div style="flex:1;min-width:0;"><div style="font-size:0.84rem;font-weight:600;color:#f1f5f9;">Anmol Dwivedi</div><div style="display:flex;align-items:center;gap:6px;margin-top:3px;"><span class="bdg br" style="font-size:0.58rem;">Member</span><span style="font-size:0.64rem;color:#64748b;">+91 75188 12885</span></div></div>
+              <a href="tel:+917518812885" style="width:34px;height:34px;border-radius:10px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.2);display:flex;align-items:center;justify-content:center;color:#a78bfa;text-decoration:none;flex-shrink:0;" onclick="showToast('📞 Calling Anmol…','info')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg></a>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,0.22);border-radius:13px;">
+              <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#fb923c,#f59e0b);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.85rem;color:#060c14;flex-shrink:0;">AS</div>
+              <div style="flex:1;min-width:0;"><div style="font-size:0.84rem;font-weight:600;color:#f1f5f9;">Amber Savita</div><div style="display:flex;align-items:center;gap:6px;margin-top:3px;"><span class="bdg bp" style="font-size:0.58rem;">Member</span><span style="font-size:0.64rem;color:#64748b;">+91 83039 95618</span></div></div>
+              <a href="tel:+918303995618" style="width:34px;height:34px;border-radius:10px;background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.2);display:flex;align-items:center;justify-content:center;color:#fb923c;text-decoration:none;flex-shrink:0;" onclick="showToast('📞 Calling Amber…','info')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- FAB -->
+<a href="report.html" class="fab-p">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+  Report Issue
+  <div class="fab-tt">⌘ R — Quick report</div>
+</a>
+
+<!-- ════ SCRIPTS ════ -->
+<!-- app.js FIRST — exposes initSidebar(), showToast(), etc. -->
+<script src="assets/js/app.js"></script>
+<!-- shared-ui.js SECOND — injects sidebar DOM then calls initSidebar() -->
+<script src="assets/js/shared-ui.js"></script>
+
+<script>
+/* ── CLOCK ── */
+function tick() {
+  const n=new Date(), pad=v=>String(v).padStart(2,'0');
+  const t=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const mths=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const lc=document.getElementById('liveClock'),ld=document.getElementById('liveDate'),hc=document.getElementById('hClock');
+  if(lc)lc.textContent=t;
+  if(ld)ld.textContent=`${days[n.getDay()]}, ${mths[n.getMonth()]} ${n.getDate()}`;
+  if(hc)hc.textContent=t.slice(0,5);
+  const gr=document.getElementById('greeting');
+  if(gr){const h=n.getHours();gr.textContent=h<12?'Good morning 👋':h<17?'Good afternoon 👋':'Good evening 👋';}
+}
+tick(); setInterval(tick,1000);
+
+/* ── IMPACT BAR ── */
+setTimeout(()=>{const f=document.getElementById('iFill');if(f)f.style.width='68%';},700);
+
+/* ── SPARKLINES ── */
+function mkSpark(id,vals,color){
+  const el=document.getElementById(id);if(!el)return;
+  const mx=Math.max(...vals);
+  el.innerHTML=vals.map((v,i)=>`<div class="sbar" style="height:${Math.round(v/mx*100)}%;background:${color};animation-delay:${i*0.07}s;"></div>`).join('');
+}
+setTimeout(()=>{
+  mkSpark('sp1',[80,95,110,88,120,105,142],'rgba(251,146,60,0.5)');
+  mkSpark('sp2',[40,55,62,70,75,81,89],   'rgba(0,229,204,0.45)');
+  mkSpark('sp3',[25,28,30,32,35,34,37],   'rgba(167,139,250,0.5)');
+  mkSpark('sp4',[1,2,3,2,4,3,3],          'rgba(255,77,109,0.5)');
+},800);
+
+/* ── MAP MARKERS ── */
+const MARKERS=[
+  {x:'22%',y:'36%',color:'#ff4d6d',label:'Garbage – Market Rd',d:0},
+  {x:'54%',y:'26%',color:'#fb923c',label:'Streetlight – Sec 12',d:0.3},
+  {x:'70%',y:'58%',color:'#00cfff',label:'Water – Civil Lines',d:0.6},
+  {x:'38%',y:'68%',color:'#00e5cc',label:'Pothole – Ring Rd ✓',d:0.9},
+  {x:'80%',y:'35%',color:'#ff4d6d',label:'Power – Aliganj',d:1.2},
+];
+document.addEventListener('DOMContentLoaded',()=>{
+  const mb=document.getElementById('mapBg');
+  if(mb) MARKERS.forEach(m=>{
+    const el=document.createElement('div');
+    el.className='mmarker';
+    el.style.cssText=`left:${m.x};top:${m.y};`;
+    el.innerHTML=`<div class="mlabel">${m.label}</div><div class="mdot" style="background:${m.color};animation-delay:${m.d}s;"></div><div class="mring" style="color:${m.color};animation-delay:${m.d}s;"></div>`;
+    mb.appendChild(el);
+  });
+});
+
+/* ── REPORT EXPAND ── */
+function toggleRpt(rowId,detailId){
+  const row=document.getElementById(rowId),det=document.getElementById(detailId);
+  if(!row||!det)return;
+  const open=row.classList.contains('exp');
+  document.querySelectorAll('.rrow').forEach(r=>{r.classList.remove('exp');const d=r.querySelector('.rdetail');if(d)d.classList.remove('open');});
+  if(!open){row.classList.add('exp');det.classList.add('open');}
+}
+
+/* ── RIPPLE ── */
+function rippleEl(el){
+  const r=document.createElement('span');
+  r.style.cssText='position:absolute;border-radius:50%;background:rgba(0,229,204,0.18);width:80px;height:80px;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);animation:ripA 0.5s ease forwards;pointer-events:none;z-index:10;';
+  if(getComputedStyle(el).position==='static')el.style.position='relative';
+  el.style.overflow='hidden';el.appendChild(r);setTimeout(()=>r.remove(),560);
+}
+
+/* ── RESPONSIVE ── */
+function applyRes(){
+  const w=window.innerWidth;
+  const ag=document.getElementById('aGrid'),sg=document.getElementById('sGrid'),tg=document.getElementById('teamGrid');
+  if(ag)ag.style.gridTemplateColumns=w>=1024?'repeat(4,1fr)':'1fr 1fr';
+  if(sg)sg.style.gridTemplateColumns=w>=1024?'repeat(4,1fr)':'1fr 1fr';
+  if(tg)tg.style.flexDirection=w>=768?'row':'column';
+  const ml=document.getElementById('mLogo'),dt=document.getElementById('dTitle'),hc=document.getElementById('hClock');
+  if(w>=768){if(ml)ml.style.display='none';if(dt)dt.style.display='block';if(hc)hc.style.display='block';}
+  else{if(ml)ml.style.display='block';if(dt)dt.style.display='none';if(hc)hc.style.display='none';}
+}
+applyRes(); window.addEventListener('resize',applyRes);
+</script>
+</body>
+</html>

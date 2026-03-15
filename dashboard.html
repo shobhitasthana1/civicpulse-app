@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#060c14" />
+  <title>Dashboard — CivicPulse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --teal: #0d9488;
+      --teal-light: #2dd4bf;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --bg-dark: #060c14;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #f1f5f9;
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Grid Background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-image: linear-gradient(rgba(13, 148, 136, 0.03) 1px, transparent 1px), 
+                        linear-gradient(90deg, rgba(13, 148, 136, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .syne-font { font-family: 'Syne', sans-serif; }
+
+    /* Glass Cards */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+    }
+
+    /* Table Adjustments */
+    .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; min-width: 600px; border-collapse: collapse; }
+    th { font-family: 'Syne', sans-serif; font-weight: 700; color: #94a3b8; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; padding: 16px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.08); white-space: nowrap; }
+    td { padding: 16px; font-size: 0.85rem; border-bottom: 1px solid rgba(255, 255, 255, 0.03); vertical-align: middle; }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+    /* Custom Scrollbar for Tabs/Tables */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade { animation: fadeIn 0.3s ease forwards; }
+
+    @keyframes sosGlow {
+      0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5), 0 10px 40px rgba(239,68,68,0.4); }
+      70% { box-shadow: 0 0 0 20px rgba(239,68,68,0), 0 10px 40px rgba(239,68,68,0.4); }
+      100% { box-shadow: 0 0 0 0 rgba(239,68,68,0), 0 10px 40px rgba(239,68,68,0.4); }
+    }
+    .sos-pulse { animation: sosGlow 2s ease infinite; }
+  </style>
+</head>
+<body class="antialiased">
+
+  <nav class="fixed top-0 left-0 right-0 h-16 bg-[#060c14]/90 backdrop-blur-md border-b border-white/10 z-50 flex items-center justify-between px-4 sm:px-6 pt-[env(safe-area-inset-top)]">
+    <div class="flex items-center gap-4">
+      <button onclick="toggleSidebar()" class="md:hidden text-2xl text-slate-300">☰</button>
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="bg-teal-600 p-1.5 rounded-lg text-xs font-black">CP</div>
+        <span class="syne-font font-bold text-lg hidden sm:block">Civic<span class="text-teal-400">Pulse</span></span>
+      </a>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="index.html" class="hidden sm:block text-sm font-medium text-slate-400 hover:text-white transition">Home</a>
+      <a href="features.html" class="hidden sm:block text-sm font-medium text-slate-400 hover:text-white transition">Features</a>
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center text-sm font-bold shadow-lg">C</div>
+    </div>
+  </nav>
+
+  <div class="flex pt-16 min-h-screen">
+    
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 pt-20 pb-10 bg-[#0b1628]/95 backdrop-blur-xl border-r border-white/10 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto">
+      
+      <div class="px-4 mb-6">
+        <div class="flex items-center gap-3 p-3 bg-teal-500/10 border border-teal-500/20 rounded-xl">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center font-bold">C</div>
+          <div>
+            <div class="text-sm font-bold">Citizen User</div>
+            <div class="text-[10px] text-teal-400 font-bold uppercase tracking-wider flex items-center gap-1">
+              <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full shadow-[0_0_5px_#10b981]"></span> Verified
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 space-y-1 mb-8">
+        <div class="text-[10px] font-bold uppercase text-slate-500 tracking-widest px-2 mb-2">Main Menu</div>
+        
+        <button onclick="switchTab('tab-overview', this)" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium bg-teal-500/15 text-teal-400 border border-teal-500/20 transition sidebar-btn">
+          <span>📊</span> Overview
+        </button>
+        <button onclick="switchTab('tab-report', this)" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition sidebar-btn">
+          <div class="flex items-center gap-3"><span>📝</span> New Report</div>
+          <span class="bg-teal-500 text-black text-[10px] px-1.5 py-0.5 rounded-md font-bold">+</span>
+        </button>
+        <button onclick="switchTab('tab-tracker', this)" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition sidebar-btn">
+          <div class="flex items-center gap-3"><span>📋</span> My Reports</div>
+          <span class="bg-amber-500 text-black text-[10px] px-1.5 py-0.5 rounded-md font-bold">3</span>
+        </button>
+        <button onclick="switchTab('tab-resources', this)" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition sidebar-btn">
+          <span>🗺️</span> Resources
+        </button>
+        <button onclick="switchTab('tab-sos', this)" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition sidebar-btn">
+          <span>🚨</span> Emergency SOS
+        </button>
+      </div>
+
+      <div class="px-4">
+        <div class="bg-black/30 border border-white/5 rounded-xl p-4">
+          <div class="text-[10px] font-bold uppercase text-slate-500 tracking-widest mb-3">My Activity</div>
+          <div class="flex justify-between text-xs mb-2 text-slate-300"><span>Reports Filed</span><span class="font-bold text-white">3</span></div>
+          <div class="flex justify-between text-xs mb-2 text-slate-300"><span>Resolved</span><span class="font-bold text-emerald-400">1</span></div>
+          <div class="flex justify-between text-xs text-slate-300"><span>Points Earned</span><span class="font-bold text-amber-400">240 🏅</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden backdrop-blur-sm"></div>
+
+    <main class="flex-1 md:ml-64 p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 class="syne-font text-2xl sm:text-3xl font-bold mb-1">Community Dashboard</h1>
+          <p class="text-xs sm:text-sm text-slate-400 flex items-center gap-2">
+            <span class="w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_5px_#10b981]"></span> Live · Lucknow, UP
+          </p>
+        </div>
+        <button onclick="switchTab('tab-report', document.querySelectorAll('.sidebar-btn')[1])" class="bg-teal-500 hover:bg-teal-400 text-black font-bold py-2 px-4 rounded-xl text-sm w-full sm:w-auto shadow-lg shadow-teal-500/20">
+          + New Report
+        </button>
+      </div>
+
+      <div class="flex gap-2 overflow-x-auto hide-scrollbar bg-[#0b1628]/60 border border-white/10 rounded-xl p-1.5 mb-8">
+        <button onclick="switchTab('tab-overview', document.querySelectorAll('.sidebar-btn')[0])" class="tab-btn active whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-md">📊 Overview</button>
+        <button onclick="switchTab('tab-report', document.querySelectorAll('.sidebar-btn')[1])" class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold text-slate-400 hover:text-white hover:bg-white/5 transition">📝 Report Issue</button>
+        <button onclick="switchTab('tab-tracker', document.querySelectorAll('.sidebar-btn')[2])" class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold text-slate-400 hover:text-white hover:bg-white/5 transition">📋 Track Reports</button>
+        <button onclick="switchTab('tab-resources', document.querySelectorAll('.sidebar-btn')[3])" class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold text-slate-400 hover:text-white hover:bg-white/5 transition">🗺️ Resources</button>
+        <button onclick="switchTab('tab-sos', document.querySelectorAll('.sidebar-btn')[4])" class="tab-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold text-slate-400 hover:text-white hover:bg-white/5 transition">🚨 Emergency</button>
+      </div>
+
+      <div id="tab-overview" class="tab-panel animate-fade block">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+          <div class="glass-card p-4 sm:p-5">
+            <div class="flex justify-between items-start mb-2 sm:mb-4">
+              <div class="text-xl sm:text-2xl bg-teal-500/20 p-2 rounded-lg">📋</div>
+              <span class="text-[10px] sm:text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">↑ 12%</span>
+            </div>
+            <div class="syne-font text-2xl sm:text-3xl font-bold text-teal-400">1,284</div>
+            <div class="text-[10px] sm:text-xs text-slate-400 mt-1 uppercase font-bold">Total Reports</div>
+          </div>
+          <div class="glass-card p-4 sm:p-5">
+            <div class="flex justify-between items-start mb-2 sm:mb-4">
+              <div class="text-xl sm:text-2xl bg-emerald-500/20 p-2 rounded-lg">✅</div>
+              <span class="text-[10px] sm:text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">↑ 8%</span>
+            </div>
+            <div class="syne-font text-2xl sm:text-3xl font-bold text-emerald-400">847</div>
+            <div class="text-[10px] sm:text-xs text-slate-400 mt-1 uppercase font-bold">Resolved</div>
+          </div>
+          <div class="glass-card p-4 sm:p-5">
+            <div class="flex justify-between items-start mb-2 sm:mb-4">
+              <div class="text-xl sm:text-2xl bg-amber-500/20 p-2 rounded-lg">⏳</div>
+              <span class="text-[10px] sm:text-xs font-bold text-red-400 bg-red-400/10 px-2 py-0.5 rounded-full">↑ 2%</span>
+            </div>
+            <div class="syne-font text-2xl sm:text-3xl font-bold text-amber-400">437</div>
+            <div class="text-[10px] sm:text-xs text-slate-400 mt-1 uppercase font-bold">Pending</div>
+          </div>
+          <div class="glass-card p-4 sm:p-5">
+            <div class="flex justify-between items-start mb-2 sm:mb-4">
+              <div class="text-xl sm:text-2xl bg-purple-500/20 p-2 rounded-lg">🤝</div>
+              <span class="text-[10px] sm:text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">↑ 5%</span>
+            </div>
+            <div class="syne-font text-2xl sm:text-3xl font-bold text-purple-400">320</div>
+            <div class="text-[10px] sm:text-xs text-slate-400 mt-1 uppercase font-bold">Volunteers</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div class="glass-card p-5 sm:p-6">
+            <h3 class="syne-font font-bold text-base mb-4">City Hotspots</h3>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between p-3 bg-red-500/10 rounded-xl border border-red-500/20">
+                <div><div class="font-bold text-sm">Hazratganj</div><div class="text-[10px] text-slate-400">Central zone</div></div>
+                <div class="text-right"><div class="font-bold text-red-400 text-sm">124 issues</div><span class="text-[9px] uppercase font-bold text-red-400">High</span></div>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-amber-500/10 rounded-xl border border-amber-500/20">
+                <div><div class="font-bold text-sm">Aliganj</div><div class="text-[10px] text-slate-400">North zone</div></div>
+                <div class="text-right"><div class="font-bold text-amber-400 text-sm">89 issues</div><span class="text-[9px] uppercase font-bold text-amber-400">Medium</span></div>
+              </div>
+              <div class="flex items-center justify-between p-3 bg-teal-500/10 rounded-xl border border-teal-500/20">
+                <div><div class="font-bold text-sm">Gomti Nagar</div><div class="text-[10px] text-slate-400">East zone</div></div>
+                <div class="text-right"><div class="font-bold text-teal-400 text-sm">56 issues</div><span class="text-[9px] uppercase font-bold text-teal-400">Low</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card p-0 overflow-hidden flex flex-col">
+            <div class="p-5 sm:p-6 border-b border-white/10 flex justify-between items-center">
+              <h3 class="syne-font font-bold text-base">Recent Activity</h3>
+              <button onclick="switchTab('tab-tracker', document.querySelectorAll('.sidebar-btn')[2])" class="text-xs text-teal-400 font-bold hover:underline">View All →</button>
+            </div>
+            <div class="table-container flex-1 p-2">
+              <table>
+                <thead><tr><th>Issue</th><th>Category</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="font-medium text-sm text-slate-200">Pothole on Hazratganj Rd</div>
+                      <div class="text-[10px] text-slate-500">CP-1021 · Hazratganj</div>
+                    </td>
+                    <td><span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 px-2 py-1 rounded-md text-[10px] font-bold">Roads</span></td>
+                    <td><span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-1 rounded-md text-[10px] font-bold">Pending</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="font-medium text-sm text-slate-200">Broken streetlight</div>
+                      <div class="text-[10px] text-slate-500">CP-1020 · Sector 7</div>
+                    </td>
+                    <td><span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-1 rounded-md text-[10px] font-bold">Electric</span></td>
+                    <td><span class="bg-teal-500/20 text-teal-400 border border-teal-500/30 px-2 py-1 rounded-md text-[10px] font-bold">In Progress</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="font-medium text-sm text-slate-200">Open sewage near park</div>
+                      <div class="text-[10px] text-slate-500">CP-1019 · Gomti Nagar</div>
+                    </td>
+                    <td><span class="bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2 py-1 rounded-md text-[10px] font-bold">Water</span></td>
+                    <td><span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-1 rounded-md text-[10px] font-bold">Resolved</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-report" class="tab-panel hidden animate-fade">
+        <div class="max-w-2xl">
+          <h2 class="syne-font text-2xl font-bold mb-2">Report a Community Issue</h2>
+          <p class="text-sm text-slate-400 mb-6">Your report will be routed to the appropriate civic authority within minutes.</p>
+
+          <form class="glass-card p-5 sm:p-8 space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-[10px] font-bold uppercase text-slate-500 mb-2">Issue Title *</label>
+                <input type="text" class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500 outline-none transition" placeholder="Large pothole..." required>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase text-slate-500 mb-2">Category *</label>
+                <select class="w-full bg-[#0b1422] border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500 outline-none transition appearance-none" required>
+                  <option value="">Select category...</option>
+                  <option>🚧 Road & Infrastructure</option>
+                  <option>🚰 Water & Sanitation</option>
+                  <option>💡 Electricity</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-[10px] font-bold uppercase text-slate-500 mb-2">Location *</label>
+                <input type="text" class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500 outline-none transition" placeholder="e.g. Hazratganj" required>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase text-slate-500 mb-2">Priority *</label>
+                <select class="w-full bg-[#0b1422] border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500 outline-none transition appearance-none" required>
+                  <option value="">Select priority...</option>
+                  <option>🔴 High — Safety risk</option>
+                  <option>🟡 Medium — Inconvenience</option>
+                  <option>🟢 Low — Minor issue</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[10px] font-bold uppercase text-slate-500 mb-2">Description *</label>
+              <textarea class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500 outline-none transition min-h-[100px]" placeholder="Detailed description..." required></textarea>
+            </div>
+
+            <button type="button" onclick="alert('Submitted! Tracking ID: CP-0048')" class="w-full sm:w-auto bg-teal-500 hover:bg-teal-400 text-black font-bold px-8 py-3.5 rounded-xl transition">
+              🚀 Submit Report
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div id="tab-tracker" class="tab-panel hidden animate-fade">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <h2 class="syne-font text-2xl font-bold">My Submitted Reports</h2>
+          <select class="bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-sm outline-none appearance-none">
+            <option>All Statuses</option>
+            <option>Pending</option>
+            <option>In Progress</option>
+            <option>Resolved</option>
+          </select>
+        </div>
+
+        <div class="glass-card p-0 overflow-hidden">
+          <div class="table-container p-2">
+            <table>
+              <thead><tr><th>ID</th><th>Issue</th><th>Category</th><th>Priority</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td class="text-slate-400 text-xs">CP-1021</td>
+                  <td class="font-medium text-sm">Pothole on MG Road</td>
+                  <td><span class="bg-teal-500/20 text-teal-300 border border-teal-500/30 px-2 py-1 rounded-md text-[10px] font-bold">Roads</span></td>
+                  <td><span class="text-red-400 font-bold text-xs">High</span></td>
+                  <td><span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-1 rounded-md text-[10px] font-bold">Pending</span></td>
+                  <td class="text-slate-400 text-xs">12 Mar</td>
+                </tr>
+                <tr>
+                  <td class="text-slate-400 text-xs">CP-1018</td>
+                  <td class="font-medium text-sm">Broken Streetlight</td>
+                  <td><span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-1 rounded-md text-[10px] font-bold">Electric</span></td>
+                  <td><span class="text-amber-400 font-bold text-xs">Medium</span></td>
+                  <td><span class="bg-teal-500/20 text-teal-400 border border-teal-500/30 px-2 py-1 rounded-md text-[10px] font-bold">In Progress</span></td>
+                  <td class="text-slate-400 text-xs">10 Mar</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-resources" class="tab-panel hidden animate-fade">
+        <h2 class="syne-font text-2xl font-bold mb-6">Nearby Resources</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
+          <div class="glass-card p-4 sm:p-5 text-center">
+            <div class="text-3xl mb-2">🏥</div>
+            <div class="text-sm font-bold mb-1">Hospitals</div>
+            <div class="syne-font text-2xl font-bold text-teal-400">12</div>
+          </div>
+          <div class="glass-card p-4 sm:p-5 text-center">
+            <div class="text-3xl mb-2">🩸</div>
+            <div class="text-sm font-bold mb-1">Blood Banks</div>
+            <div class="syne-font text-2xl font-bold text-red-400">5</div>
+          </div>
+          <div class="glass-card p-4 sm:p-5 text-center">
+            <div class="text-3xl mb-2">🚒</div>
+            <div class="text-sm font-bold mb-1">Fire Stations</div>
+            <div class="syne-font text-2xl font-bold text-amber-400">3</div>
+          </div>
+          <div class="glass-card p-4 sm:p-5 text-center">
+            <div class="text-3xl mb-2">👮</div>
+            <div class="text-sm font-bold mb-1">Police</div>
+            <div class="syne-font text-2xl font-bold text-purple-400">6</div>
+          </div>
+        </div>
+
+        <div class="glass-card p-0 overflow-hidden border-amber-500/20">
+          <div class="p-4 border-b border-white/10"><h3 class="font-bold text-sm">Live Resource Map</h3></div>
+          <div class="h-64 sm:h-80 bg-gradient-to-b from-teal-500/10 to-[#0b1422] flex flex-col items-center justify-center text-center relative">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(13,148,136,0.15)_0%,transparent_70%)]"></div>
+            <div class="text-5xl mb-3 relative z-10">🗺️</div>
+            <p class="text-sm font-bold text-slate-200 relative z-10">Enable location for live pins</p>
+            <button class="mt-4 bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold relative z-10 hover:bg-white/20 transition">📍 Grant Access</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-sos" class="tab-panel hidden animate-fade">
+        <div class="max-w-lg mx-auto text-center py-10">
+          <div class="text-6xl mb-4 animate-pulse">🚨</div>
+          <h2 class="syne-font text-3xl font-bold mb-3">Emergency SOS</h2>
+          <p class="text-slate-400 text-sm mb-12 px-4">Instantly alert police, fire, and 3 emergency contacts with your live GPS location.</p>
+
+          <button id="sos-btn" onclick="triggerSOS()" class="w-48 h-48 rounded-full bg-gradient-to-br from-red-500 to-red-700 text-white font-black text-2xl shadow-2xl flex flex-col items-center justify-center gap-2 mx-auto sos-pulse active:scale-95 transition-transform mb-12 border-4 border-white/10">
+            <span class="text-4xl">🆘</span>
+            <span class="syne-font tracking-widest text-sm">SEND SOS</span>
+          </button>
+
+          <div class="grid grid-cols-3 gap-3">
+            <a href="tel:100" class="glass-card p-3 text-center hover:border-red-500/50 transition">
+              <div class="text-3xl mb-1">👮</div>
+              <div class="text-[10px] uppercase font-bold text-slate-400">Police</div>
+              <div class="syne-font font-bold text-lg text-white">100</div>
+            </a>
+            <a href="tel:108" class="glass-card p-3 text-center hover:border-red-500/50 transition">
+              <div class="text-3xl mb-1">🚑</div>
+              <div class="text-[10px] uppercase font-bold text-slate-400">Med</div>
+              <div class="syne-font font-bold text-lg text-white">108</div>
+            </a>
+            <a href="tel:101" class="glass-card p-3 text-center hover:border-red-500/50 transition">
+              <div class="text-3xl mb-1">🚒</div>
+              <div class="text-[10px] uppercase font-bold text-slate-400">Fire</div>
+              <div class="syne-font font-bold text-lg text-white">101</div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Mobile Sidebar Toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    // Custom Tab Switcher Logic
+    function switchTab(tabId, clickedBtn) {
+      // Hide all panels
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('block');
+        panel.classList.add('hidden');
+      });
+      
+      // Show targeted panel
+      document.getElementById(tabId).classList.remove('hidden');
+      document.getElementById(tabId).classList.add('block');
+
+      // Update Top Nav Buttons (Horizontal Scroll)
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.className = "tab-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold text-slate-400 hover:text-white hover:bg-white/5 transition";
+      });
+      
+      // Find the corresponding top tab button and make it active
+      const topBtnMap = {
+        'tab-overview': 0, 'tab-report': 1, 'tab-tracker': 2, 'tab-resources': 3, 'tab-sos': 4
+      };
+      const activeTopBtn = document.querySelectorAll('.tab-btn')[topBtnMap[tabId]];
+      if(activeTopBtn) {
+         activeTopBtn.className = "tab-btn active whitespace-nowrap px-4 py-2 rounded-lg text-sm font-bold bg-gradient-to-r from-teal-500 to-emerald-500 text-white shadow-md";
+      }
+
+      // Update Sidebar Links
+      document.querySelectorAll('.sidebar-btn').forEach(btn => {
+        btn.className = "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition sidebar-btn";
+      });
+      clickedBtn.className = "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium bg-teal-500/15 text-teal-400 border border-teal-500/20 transition sidebar-btn";
+
+      // Close mobile sidebar if open
+      if(window.innerWidth < 768) {
+         document.getElementById('sidebar').classList.add('-translate-x-full');
+         document.getElementById('sidebar-overlay').classList.add('hidden');
+      }
+    }
+
+    // SOS Button Logic
+    function triggerSOS() {
+      const btn = document.getElementById('sos-btn');
+      btn.innerHTML = '<span class="text-3xl">⏳</span><span class="syne-font tracking-widest text-sm">SENDING...</span>';
+      
+      setTimeout(() => {
+        btn.innerHTML = '<span class="text-4xl text-emerald-400">✅</span><span class="syne-font tracking-widest text-sm text-emerald-400">SENT!</span>';
+        btn.classList.remove('from-red-500', 'to-red-700', 'sos-pulse', 'border-white/10');
+        btn.classList.add('from-black', 'to-gray-900', 'border-emerald-500');
+        
+        alert("🚨 SOS Alert sent! Police, Ambulance, and your 3 contacts have been notified.");
+        
+        // Reset after a few seconds
+        setTimeout(() => {
+          btn.innerHTML = '<span class="text-4xl">🆘</span><span class="syne-font tracking-widest text-sm">SEND SOS</span>';
+          btn.classList.add('from-red-500', 'to-red-700', 'sos-pulse', 'border-white/10');
+          btn.classList.remove('from-black', 'to-gray-900', 'border-emerald-500');
+        }, 4000);
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

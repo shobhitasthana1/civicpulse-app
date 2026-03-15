@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#1a0009"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>CivicPulse — Emergency SOS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+    :root {
+        --sg: 20px;
+        --emergency: #ff4d6d;
+        --emergency-dark: #cc0033;
+    }
+
+    body {
+        background: #0a0309;
+        color: #f1f5f9;
+        font-family: 'DM Sans', sans-serif;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+    /* Grid Background */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        background-image: linear-gradient(rgba(255, 77, 109, 0.03) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(255, 77, 109, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 80%);
+    }
+
+    /* Layout */
+    .app-layout {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Header */
+    .app-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        margin-top: env(safe-area-inset-top);
+        border-bottom: 1px solid rgba(255, 77, 109, 0.15);
+    }
+
+    /* SOS Button System */
+    .sos-container {
+        padding: 60px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sos-wrap {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sos-btn {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--emergency), var(--emergency-dark));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 4px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 50px rgba(255, 77, 109, 0.4);
+        cursor: pointer;
+        z-index: 5;
+        transition: transform 0.2s, box-shadow 0.2s;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .sos-btn:active { transform: scale(0.9); box-shadow: 0 0 20px rgba(255, 77, 109, 0.8); }
+
+    /* Pulse Animations */
+    .pulse-ring {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 2px solid var(--emergency);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+        opacity: 0;
+    }
+    .ring-2 { animation-delay: 0.5s; }
+    .ring-3 { animation-delay: 1s; }
+
+    @keyframes pulse {
+        0% { transform: scale(0.8); opacity: 0.5; }
+        100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* Dial List */
+    .qdial-card {
+        background: rgba(255, 77, 109, 0.05);
+        border: 1px solid rgba(255, 77, 109, 0.15);
+        border-radius: 20px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 12px;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+    .qdial-card:active { background: rgba(255, 77, 109, 0.15); transform: scale(0.98); }
+
+    /* Action Grid */
+    .action-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .action-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 20px 10px;
+        text-align: center;
+        transition: 0.2s;
+    }
+    .action-item:active { background: rgba(255, 77, 109, 0.1); border-color: var(--emergency); }
+
+    /* Sections Labels */
+    .slbl {
+        font-family: 'Syne', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: var(--emergency);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .slbl::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(255, 77, 109, 0.3), transparent); }
+
+    .countdown-text {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 4rem;
+        color: var(--emergency);
+        font-weight: 800;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="app-layout">
+    <header class="app-header">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#ff4d6d] to-[#ff1f4a] flex items-center justify-center shadow-lg shadow-rose-900/40">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M12 2v20M2 12h20"/></svg>
+            </div>
+            <span class="font-bold text-rose-500 tracking-tight">CivicPulse</span>
+        </div>
+        <div class="flex items-center gap-3">
+             <div class="text-[10px] font-black bg-rose-500/10 text-rose-500 border border-rose-500/20 px-2 py-1 rounded-md">SOS ACTIVE</div>
+             <div class="w-8 h-8 rounded-full bg-rose-500/20 flex items-center justify-center text-xs font-bold">SA</div>
+        </div>
+    </header>
+
+    <main class="pb-10">
+        <div class="mt-6 bg-rose-500/10 border border-rose-500/20 p-4 rounded-2xl flex gap-3 items-start animate-pulse">
+            <span class="text-xl">🚨</span>
+            <div>
+                <h3 class="text-sm font-bold text-rose-500">Emergency Dispatch Ready</h3>
+                <p class="text-[11px] text-slate-400 leading-tight">Your location is being tracked for faster emergency response.</p>
+            </div>
+        </div>
+
+        <section class="sos-container">
+            <div class="sos-wrap">
+                <div class="pulse-ring ring-1"></div>
+                <div class="pulse-ring ring-2"></div>
+                <div class="pulse-ring ring-3"></div>
+                <button class="sos-btn" id="sosMainBtn" onclick="startEmergencyCountdown()">
+                    <span class="text-3xl mb-1">🆘</span>
+                    <span class="font-black text-xl tracking-widest text-white">SOS</span>
+                </button>
+            </div>
+            
+            <div id="countdownArea" class="hidden text-center mt-4">
+                <div class="countdown-text" id="cdNumber">3</div>
+                <p class="text-rose-500 font-bold text-xs uppercase tracking-widest">Dispatching Helpers...</p>
+                <button onclick="cancelSOS()" class="mt-4 text-slate-500 text-[10px] underline uppercase font-bold">Cancel</button>
+            </div>
+
+            <div id="instructionText" class="text-center mt-6">
+                <p class="text-sm font-bold">Press and hold for 3 seconds</p>
+                <p class="text-[11px] text-slate-500">Notifies local police, ambulance, and 37 nearby volunteers</p>
+            </div>
+        </section>
+
+        <section class="mt-4">
+            <h2 class="slbl">Direct Helplines</h2>
+            <div class="space-y-3">
+                <a href="tel:112" class="qdial-card">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/20 flex items-center justify-center text-2xl">🚔</div>
+                    <div class="flex-1">
+                        <p class="font-bold text-sm">Police Dispatch</p>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">National Helpline</p>
+                    </div>
+                    <div class="font-mono font-black text-xl text-rose-500">112</div>
+                </a>
+                <a href="tel:102" class="qdial-card">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/20 flex items-center justify-center text-2xl">🚑</div>
+                    <div class="flex-1">
+                        <p class="font-bold text-sm">Ambulance</p>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">Medical Emergency</p>
+                    </div>
+                    <div class="font-mono font-black text-xl text-rose-500">102</div>
+                </a>
+            </div>
+        </section>
+
+        <section class="mt-10">
+            <h2 class="slbl">Immediate Actions</h2>
+            <div class="action-grid">
+                <button class="action-item" onclick="showToast('📍 GPS Location Synced')">
+                    <div class="text-2xl mb-2">📍</div>
+                    <p class="text-[11px] font-bold text-slate-300">Share Live Location</p>
+                </button>
+                <button class="action-item" onclick="showToast('🎙 Recording Audio Evidence')">
+                    <div class="text-2xl mb-2">🎙</div>
+                    <p class="text-[11px] font-bold text-slate-300">Record Evidence</p>
+                </button>
+                <button class="action-item" onclick="showToast('📨 Emergency SMS Sent')">
+                    <div class="text-2xl mb-2">📨</div>
+                    <p class="text-[11px] font-bold text-slate-300">Notify Family</p>
+                </button>
+                <button class="action-item">
+                    <div class="text-2xl mb-2">🔦</div>
+                    <p class="text-[11px] font-bold text-slate-300">Flash Signal</p>
+                </button>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    let timer = null;
+    let count = 3;
+
+    function startEmergencyCountdown() {
+        const btn = document.getElementById('sosMainBtn');
+        const area = document.getElementById('countdownArea');
+        const instruction = document.getElementById('instructionText');
+        const cdNum = document.getElementById('cdNumber');
+
+        btn.style.display = 'none';
+        instruction.style.display = 'none';
+        area.classList.remove('hidden');
+        
+        count = 3;
+        cdNum.innerText = count;
+
+        timer = setInterval(() => {
+            count--;
+            cdNum.innerText = count;
+            if (count <= 0) {
+                clearInterval(timer);
+                completeDispatch();
+            }
+        }, 1000);
+    }
+
+    function cancelSOS() {
+        clearInterval(timer);
+        document.getElementById('sosMainBtn').style.display = 'flex';
+        document.getElementById('instructionText').style.display = 'block';
+        document.getElementById('countdownArea').classList.add('hidden');
+    }
+
+    function completeDispatch() {
+        alert("🆘 EMERGENCY DISPATCHED\n\nAuthorities and nearby volunteers have been notified of your location.");
+        cancelSOS();
+    }
+
+    function showToast(msg) {
+        // Simple alert for demo, replace with your toast function
+        alert(msg);
+    }
+</script>
+
+</body>
+</html>
