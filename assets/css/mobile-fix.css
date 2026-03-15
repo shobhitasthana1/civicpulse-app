@@ -42,6 +42,48 @@ body {
   .main-area { margin-left: 260px !important; }
 }
 
+/* ── HAMBURGER BUTTON — size fix (was injected too large by shared-ui.js) ── */
+.hamburger {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  width: 22px !important;
+  height: 16px !important;
+  min-width: 22px !important;
+  max-width: 22px !important;
+  min-height: 16px !important;
+  max-height: 16px !important;
+  cursor: pointer !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+  z-index: 201 !important; /* above sidebar overlay */
+}
+
+.hamburger span {
+  display: block !important;
+  width: 100% !important;
+  height: 2px !important;
+  background: #94a3b8 !important;
+  border-radius: 2px !important;
+  transition: background 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+/* Middle bar slightly shorter for classic hamburger look */
+.hamburger span:nth-child(2) {
+  width: 75% !important;
+}
+
+.hamburger:hover span,
+.hamburger[aria-expanded="true"] span {
+  background: #00e5cc !important;
+}
+
 /* ── 3. HEADER FIX — avatar was cut off on right ── */
 .app-header {
   display: flex !important;
