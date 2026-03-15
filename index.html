@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<!-- ✅ CORRECT viewport — no maximum-scale which blocks user zoom,
+     viewport-fit=cover handles notched phones -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="theme-color" content="#060c14"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -10,14 +12,19 @@
 <title>CivicPulse — Fix Your City Together</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+<!-- 1. Base design system -->
 <link rel="stylesheet" href="assets/css/style.css"/>
+<!-- 2. Mobile fix — MUST come after style.css to override it -->
+<link rel="stylesheet" href="assets/css/mobile-fix.css"/>
+
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
 
 <style>
 /* ══════════════════════════════════════
-   CivicPulse — Mobile-First Responsive
-   FIXED: zoom, overflow, layout bugs
+   CivicPulse — Page Styles
+   (mobile-fix.css handles responsiveness)
 ══════════════════════════════════════ */
 
 /* ── RESET & BASE ── */
@@ -25,13 +32,11 @@
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
-
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
-
 html, body {
   width: 100%;
   max-width: 100%;
@@ -39,11 +44,7 @@ html, body {
   margin: 0;
   padding: 0;
 }
-
-img, svg, canvas {
-  max-width: 100%;
-  display: block;
-}
+img, svg, canvas { max-width: 100%; display: block; }
 
 /* ── CSS VARIABLES ── */
 :root {
@@ -53,13 +54,12 @@ img, svg, canvas {
   --purple: #a78bfa;
   --orange: #fb923c;
   --red:    #ff4d6d;
-
-  /* Safe area insets for notched phones */
-  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-top:    env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-left: env(safe-area-inset-left, 0px);
-  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-left:   env(safe-area-inset-left, 0px);
+  --safe-right:  env(safe-area-inset-right, 0px);
 }
+@media (min-width: 768px) { :root { --sg: 20px; } }
 
 /* ── GRID OVERLAY ── */
 body::before {
@@ -89,31 +89,11 @@ body::before {
   gap: 8px;
   margin-bottom: 12px;
 }
-.slbl::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(to right, rgba(0,229,204,0.2), transparent);
-}
-.ghr {
-  height: 1px;
-  background: linear-gradient(to right, transparent, rgba(0,229,204,0.3), transparent);
-  margin: 12px 0;
-}
+.slbl::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(0,229,204,0.2), transparent); }
+.ghr { height: 1px; background: linear-gradient(to right, transparent, rgba(0,229,204,0.3), transparent); margin: 12px 0; }
 
 /* ══ Badges ══ */
-.bdg {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 9px;
-  border-radius: 20px;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  white-space: nowrap;
-  max-width: 100%;
-}
+.bdg { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 20px; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.3px; white-space: nowrap; flex-shrink: 0; }
 .bp { background: rgba(251,146,60,0.15);  color: #fb923c; border: 1px solid rgba(251,146,60,0.3); }
 .bi { background: rgba(0,207,255,0.1);    color: #00cfff; border: 1px solid rgba(0,207,255,0.25); }
 .br { background: rgba(0,229,204,0.1);    color: #00e5cc; border: 1px solid rgba(0,229,204,0.25); }
@@ -123,476 +103,217 @@ body::before {
 /* ══ Animations ══ */
 .fu { opacity: 0; transform: translateY(18px); animation: fu 0.44s ease forwards; }
 @keyframes fu { to { opacity: 1; transform: translateY(0); } }
-.d1 { animation-delay: .06s } .d2 { animation-delay: .12s } .d3 { animation-delay: .18s }
-.d4 { animation-delay: .24s } .d5 { animation-delay: .30s } .d6 { animation-delay: .36s }
-.d7 { animation-delay: .42s } .d8 { animation-delay: .48s }
-
+.d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
+.d4{animation-delay:.24s}.d5{animation-delay:.30s}.d6{animation-delay:.36s}
+.d7{animation-delay:.42s}.d8{animation-delay:.48s}
 @keyframes ripA    { to { transform: translate(-50%,-50%) scale(4); opacity: 0; } }
-@keyframes sosPulse{ 0%,100% { box-shadow: 0 0 14px rgba(251,146,60,0.22); } 50% { box-shadow: 0 0 28px rgba(251,146,60,0.52); } }
-@keyframes ablk    { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.2; transform: scale(0.6); } }
+@keyframes sosPulse{ 0%,100%{box-shadow:0 0 14px rgba(251,146,60,0.22)} 50%{box-shadow:0 0 28px rgba(251,146,60,0.52)} }
+@keyframes ablk    { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.2;transform:scale(0.6)} }
 @keyframes spin-ring { to { transform: rotate(360deg); } }
-@keyframes shimmer { 0%,100% { opacity: 0; } 50% { opacity: 1; } }
+@keyframes shimmer { 0%,100%{opacity:0} 50%{opacity:1} }
 @keyframes sgrow   { from { height: 0 !important; } }
-@keyframes live-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
-@keyframes mpulse  { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-@keyframes mring   { 0% { transform: scale(0.5); opacity: 0.8; } 100% { transform: scale(2.3); opacity: 0; } }
-@keyframes fp      { 0%,100% { box-shadow: 0 6px 28px rgba(0,229,204,0.4); } 50% { box-shadow: 0 6px 40px rgba(0,229,204,0.62); } }
+@keyframes live-blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+@keyframes mpulse  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+@keyframes mring   { 0%{transform:scale(0.5);opacity:0.8} 100%{transform:scale(2.3);opacity:0} }
+@keyframes fp      { 0%,100%{box-shadow:0 6px 28px rgba(0,229,204,0.4)} 50%{box-shadow:0 6px 40px rgba(0,229,204,0.62)} }
 
 /* ══ Buttons ══ */
 .btn-teal {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 46px;
-  padding: 0 20px;
-  border-radius: 14px;
-  border: none;
-  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  height: 44px; padding: 0 18px; border-radius: 13px; border: none; cursor: pointer;
   background: linear-gradient(135deg, var(--teal), var(--cyan));
-  color: #060c14;
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 0.85rem;
-  text-decoration: none;
+  color: #060c14; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.82rem;
+  text-decoration: none; white-space: nowrap;
   box-shadow: 0 4px 20px rgba(0,229,204,0.28);
   transition: all 0.22s cubic-bezier(0.34,1.56,0.64,1);
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 .btn-teal:active { transform: scale(0.96); }
-@media (hover: hover) {
-  .btn-teal:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,229,204,0.45); }
-}
-
 .btn-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 46px;
-  padding: 0 20px;
-  border-radius: 14px;
-  border: 1px solid rgba(0,229,204,0.3);
-  cursor: pointer;
-  background: rgba(0,229,204,0.06);
-  color: var(--teal);
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 0.85rem;
-  text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  height: 44px; padding: 0 18px; border-radius: 13px;
+  border: 1px solid rgba(0,229,204,0.3); cursor: pointer;
+  background: rgba(0,229,204,0.06); color: var(--teal);
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.82rem;
+  text-decoration: none; white-space: nowrap;
   transition: all 0.22s;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 .btn-outline:active { transform: scale(0.96); }
-@media (hover: hover) {
-  .btn-outline:hover { background: rgba(0,229,204,0.12); border-color: rgba(0,229,204,0.5); transform: translateY(-2px); }
-}
 
-/* ══ HERO SECTION ══ */
-.hero-section {
-  position: relative;
-  overflow: hidden;
-  padding: 20px 0 20px;
-  margin-bottom: var(--sg);
-}
-.hero-glow-1 { position: absolute; top: -80px; right: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(0,229,204,0.1), transparent 65%); pointer-events: none; border-radius: 50%; }
-.hero-glow-2 { position: absolute; bottom: -60px; left: -60px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(0,207,255,0.07), transparent 65%); pointer-events: none; border-radius: 50%; }
-.hero-glow-3 { position: absolute; top: 40%; right: 20%; width: 120px; height: 120px; background: radial-gradient(circle, rgba(167,139,250,0.06), transparent 65%); pointer-events: none; border-radius: 50%; }
-
+/* ══ Hero ══ */
+.hero-section { position: relative; overflow: hidden; padding: 16px 0; margin-bottom: var(--sg); }
+.hero-glow-1 { position: absolute; top: -80px; right: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,229,204,0.1), transparent 65%); pointer-events: none; border-radius: 50%; }
+.hero-glow-2 { position: absolute; bottom: -60px; left: -40px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(0,207,255,0.07), transparent 65%); pointer-events: none; border-radius: 50%; }
 .hero-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 50px;
-  background: rgba(0,229,204,0.08);
-  border: 1px solid rgba(0,229,204,0.2);
-  font-family: 'Syne', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--teal);
-  letter-spacing: 0.4px;
-  margin-bottom: 14px;
-  max-width: 100%;
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 50px;
+  background: rgba(0,229,204,0.08); border: 1px solid rgba(0,229,204,0.2);
+  font-family: 'Syne', sans-serif; font-size: 0.63rem; font-weight: 700;
+  color: var(--teal); letter-spacing: 0.3px; margin-bottom: 14px;
+  max-width: 100%; word-break: break-word;
 }
-.hero-chip-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--teal);
-  box-shadow: 0 0 6px var(--teal);
-  animation: live-blink 1.8s ease-in-out infinite;
-  flex-shrink: 0;
-}
+.hero-chip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 6px var(--teal); animation: live-blink 1.8s ease-in-out infinite; flex-shrink: 0; }
+.hero-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.3rem, 5vw, 2.2rem); line-height: 1.15; color: #f1f5f9; margin-bottom: 12px; letter-spacing: -0.5px; word-break: break-word; }
+.hero-title span { background: linear-gradient(135deg, var(--teal) 0%, var(--cyan) 50%, var(--purple) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-desc { font-size: 0.83rem; color: #94a3b8; line-height: 1.65; width: 100%; margin-bottom: 16px; word-wrap: break-word; overflow-wrap: break-word; }
 
-.hero-title {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  /* FIXED: no vw units that cause zoom — pure rem-based clamp */
-  font-size: clamp(1.4rem, 5.5vw, 2.4rem);
-  line-height: 1.15;
-  color: #f1f5f9;
-  margin-bottom: 12px;
-  letter-spacing: -0.5px;
-  word-break: break-word;
-}
-.hero-title span {
-  background: linear-gradient(135deg, var(--teal) 0%, var(--cyan) 50%, var(--purple) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+/* ── Pills ── */
+.pills-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px; width: 100%; }
+.issue-pill { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 50px; font-size: 0.65rem; font-weight: 600; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #94a3b8; font-family: 'Syne', sans-serif; white-space: nowrap; }
 
-.hero-desc {
-  font-size: 0.875rem;
-  color: #94a3b8;
-  line-height: 1.65;
-  max-width: 100%;
-  margin-bottom: 18px;
-}
+/* ── Hero buttons ── */
+.hero-btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.hero-btn-row .btn-teal,
+.hero-btn-row .btn-outline { flex: 0 0 auto; }
 
-.hero-stats {
-  display: flex;
-  gap: 16px;
-  flex-wrap: nowrap;
-  margin-bottom: 0;
-  overflow: hidden;
-}
-.hero-stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.hero-stat-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: #f1f5f9; }
-.hero-stat-lbl { font-size: 0.6rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.6px; white-space: nowrap; }
+/* ── Hero stats ── */
+.hero-stats { display: flex; gap: 12px; margin-top: 14px; overflow: hidden; }
+.hero-stat { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.hero-stat-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; }
+.hero-stat-lbl { font-size: 0.55rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-.hero-btn-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: nowrap;
-  margin-bottom: 18px;
-}
-/* On very small phones, stack buttons */
-@media (max-width: 360px) {
-  .hero-btn-row { flex-wrap: wrap; }
-  .hero-btn-row .btn-teal,
-  .hero-btn-row .btn-outline { width: 100%; }
-}
-
-/* Issue type pills */
-.issue-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
-  border-radius: 50px;
-  font-size: 0.68rem;
-  font-weight: 600;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #94a3b8;
-  margin: 2px;
-  font-family: 'Syne', sans-serif;
-}
-
-/* ══ HOW IT WORKS ══ */
-.hiw-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
+/* ══ HIW ══ */
+.hiw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
 @media (min-width: 1024px) { .hiw-grid { grid-template-columns: repeat(4, 1fr); } }
+.hiw-card { background: rgba(11,20,34,0.75); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 14px; position: relative; overflow: hidden; transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1); width: 100%; min-width: 0; }
+.hiw-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--hiw-color,rgba(0,229,204,0.5)),transparent); }
+.hiw-icon { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; margin-bottom:10px; background:var(--hiw-icon-bg,rgba(0,229,204,0.1)); flex-shrink:0; }
+.hiw-step { font-family:'JetBrains Mono',monospace; font-size:0.56rem; font-weight:500; color:var(--hiw-color,var(--teal)); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; opacity:0.8; }
+.hiw-title { font-family:'Syne',sans-serif; font-weight:800; font-size:0.88rem; color:#f1f5f9; margin-bottom:5px; }
+.hiw-desc  { font-size:0.7rem; color:#64748b; line-height:1.5; }
 
-.hiw-card {
-  background: rgba(11,20,34,0.75);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 18px;
-  padding: 16px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
-}
-.hiw-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--hiw-color, rgba(0,229,204,0.5)), transparent);
-}
-.hiw-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(circle at 50% 0%, var(--hiw-glow, rgba(0,229,204,0.06)), transparent 70%);
-  opacity: 0;
-  transition: opacity 0.25s;
-}
-@media (hover: hover) {
-  .hiw-card:hover { transform: translateY(-4px); border-color: var(--hiw-border, rgba(0,229,204,0.25)); }
-  .hiw-card:hover::after { opacity: 1; }
-}
-.hiw-card:active { transform: scale(0.97); }
-
-.hiw-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  margin-bottom: 12px;
-  background: var(--hiw-icon-bg, rgba(0,229,204,0.1));
-  box-shadow: var(--hiw-icon-glow, 0 0 18px rgba(0,229,204,0.2));
-}
-.hiw-step {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  font-weight: 500;
-  color: var(--hiw-color, var(--teal));
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-  opacity: 0.8;
-}
-.hiw-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.9rem; color: #f1f5f9; margin-bottom: 6px; }
-.hiw-desc  { font-size: 0.74rem; color: #64748b; line-height: 1.55; }
-
-/* ══ Animated avatar ══ */
-.av-wrap  { position: relative; width: 48px; height: 48px; flex-shrink: 0; }
-.av-ring  { position: absolute; inset: -4px; border-radius: 50%; background: conic-gradient(#00e5cc,#00cfff,#a78bfa,#00e5cc); animation: spin-ring 4s linear infinite; }
-.av-inner { position: relative; z-index: 1; width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg,#00e5cc,#00cfff); display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-weight: 800; font-size: 0.9rem; color: #060c14; border: 3px solid #060c14; }
+/* ══ Avatar ══ */
+.av-wrap  { position:relative; width:46px; height:46px; flex-shrink:0; }
+.av-ring  { position:absolute; inset:-3px; border-radius:50%; background:conic-gradient(#00e5cc,#00cfff,#a78bfa,#00e5cc); animation:spin-ring 4s linear infinite; }
+.av-inner { position:relative; z-index:1; width:100%; height:100%; border-radius:50%; background:linear-gradient(135deg,#00e5cc,#00cfff); display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:0.85rem; color:#060c14; border:3px solid #060c14; }
 
 /* ══ Impact bar ══ */
-.impact-bar  { height: 6px; border-radius: 6px; background: rgba(255,255,255,0.07); overflow: hidden; position: relative; }
-.impact-fill { height: 100%; border-radius: 6px; width: 0%; background: linear-gradient(90deg,#00e5cc,#00cfff); transition: width 1.4s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 8px rgba(0,229,204,0.5); }
-.impact-fill::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 28px; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.28)); animation: shimmer 2s ease-in-out infinite; }
+.impact-bar  { height:5px; border-radius:5px; background:rgba(255,255,255,0.07); overflow:hidden; position:relative; }
+.impact-fill { height:100%; border-radius:5px; width:0%; background:linear-gradient(90deg,#00e5cc,#00cfff); transition:width 1.4s cubic-bezier(0.4,0,0.2,1); }
 
 /* ══ Welcome card ══ */
-.welcome-card {
-  background: linear-gradient(135deg,rgba(0,229,204,0.07) 0%,rgba(0,207,255,0.04) 60%,rgba(167,139,250,0.04) 100%);
-  border: 1px solid rgba(0,229,204,0.18);
-  border-radius: 20px;
-  padding: 16px;
-  position: relative;
-  overflow: hidden;
-}
-.w-orb1 { position: absolute; top: -60px; right: -60px; width: 180px; height: 180px; background: radial-gradient(circle,rgba(0,229,204,0.12),transparent 65%); pointer-events: none; }
-.w-orb2 { position: absolute; bottom: -40px; left: -40px; width: 140px; height: 140px; background: radial-gradient(circle,rgba(0,207,255,0.08),transparent 65%); pointer-events: none; }
-
-/* Welcome card inner clock — hide on very small screens */
-.welcome-clock { text-align: right; flex-shrink: 0; }
-@media (max-width: 360px) { .welcome-clock { display: none; } }
+.welcome-card { background:linear-gradient(135deg,rgba(0,229,204,0.07) 0%,rgba(0,207,255,0.04) 60%,rgba(167,139,250,0.04) 100%); border:1px solid rgba(0,229,204,0.18); border-radius:18px; padding:14px; position:relative; overflow:hidden; width:100%; box-sizing:border-box; }
+.w-orb1 { position:absolute; top:-60px; right:-50px; width:160px; height:160px; background:radial-gradient(circle,rgba(0,229,204,0.12),transparent 65%); pointer-events:none; }
+.w-orb2 { position:absolute; bottom:-40px; left:-40px; width:130px; height:130px; background:radial-gradient(circle,rgba(0,207,255,0.08),transparent 65%); pointer-events:none; }
+.welcome-clock { text-align:right; flex-shrink:0; }
+@media (max-width:360px) { .welcome-clock { display:none; } }
 
 /* ══ Action tiles ══ */
-.atile {
-  background: rgba(11,20,34,0.75);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 16px;
-  padding: 16px 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), border-color 0.18s, box-shadow 0.18s;
-  min-height: 100px;
-}
-.atile::before { content: ''; position: absolute; inset: 0; border-radius: inherit; opacity: 0; transition: opacity 0.22s; }
-@media (hover: hover) { .atile:hover { transform: translateY(-4px); } .atile:hover::before { opacity: 1; } }
-.atile:active { transform: scale(0.94); opacity: 0.9; }
-
-.at-r::before { background: radial-gradient(circle at 50% 0%,rgba(255,77,109,0.12),transparent 70%); }
-.at-t::before { background: radial-gradient(circle at 50% 0%,rgba(0,229,204,0.1),transparent 70%); }
-.at-rs::before{ background: radial-gradient(circle at 50% 0%,rgba(167,139,250,0.12),transparent 70%); }
-.at-s::before { background: radial-gradient(circle at 50% 0%,rgba(251,146,60,0.12),transparent 70%); }
-@media (hover: hover) {
-  .at-r:hover  { border-color: rgba(255,77,109,0.35);   box-shadow: 0 10px 32px rgba(255,77,109,0.1); }
-  .at-t:hover  { border-color: rgba(0,229,204,0.35);    box-shadow: 0 10px 32px rgba(0,229,204,0.1); }
-  .at-rs:hover { border-color: rgba(167,139,250,0.35);  box-shadow: 0 10px 32px rgba(167,139,250,0.1); }
-  .at-s:hover  { border-color: rgba(251,146,60,0.35);   box-shadow: 0 10px 32px rgba(251,146,60,0.1); }
-}
-
-.ticon {
-  width: 42px; height: 42px;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.15rem;
-  position: relative; z-index: 1;
-  flex-shrink: 0;
-}
-
-.atile-label { position: relative; z-index: 1; }
-.atile-title { font-family: 'Syne',sans-serif; font-weight: 700; font-size: 0.8rem; color: #f1f5f9; }
-.atile-sub   { font-size: 0.6rem; color: #64748b; margin-top: 2px; }
+.atile { background:rgba(11,20,34,0.75); border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:14px 10px; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; text-decoration:none; cursor:pointer; position:relative; overflow:hidden; transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1); min-height:95px; width:100%; box-sizing:border-box; }
+.atile::before { content:''; position:absolute; inset:0; border-radius:inherit; opacity:0; transition:opacity 0.22s; }
+.atile:active { transform:scale(0.94); opacity:0.9; }
+.at-r::before{background:radial-gradient(circle at 50% 0%,rgba(255,77,109,0.12),transparent 70%);}
+.at-t::before{background:radial-gradient(circle at 50% 0%,rgba(0,229,204,0.1),transparent 70%);}
+.at-rs::before{background:radial-gradient(circle at 50% 0%,rgba(167,139,250,0.12),transparent 70%);}
+.at-s::before{background:radial-gradient(circle at 50% 0%,rgba(251,146,60,0.12),transparent 70%);}
+.ticon { width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; position:relative; z-index:1; flex-shrink:0; }
+.atile-label { position:relative; z-index:1; width:100%; }
+.atile-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.75rem; color:#f1f5f9; word-break:break-word; }
+.atile-sub   { font-size:0.58rem; color:#64748b; margin-top:2px; }
 
 /* ══ Stat cards ══ */
-.scard {
-  background: rgba(11,20,34,0.75);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 14px;
-  padding: 12px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s, border-color 0.18s;
-}
-@media (hover: hover) { .scard:hover { transform: translateY(-3px); border-color: rgba(0,229,204,0.2); } }
-.scard:active { transform: scale(0.98); }
-.scard::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg,transparent,var(--accent,rgba(0,229,204,0.4)),transparent); }
-.scard-label { font-size: 0.58rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-.scard-num   { font-family: 'Syne',sans-serif; font-weight: 800; font-size: 1.4rem; line-height: 1; }
-.scard-note  { font-size: 0.58rem; margin-top: 4px; }
+.scard { background:rgba(11,20,34,0.75); border:1px solid rgba(255,255,255,0.07); border-radius:13px; padding:10px; position:relative; overflow:hidden; transition:transform 0.2s; width:100%; box-sizing:border-box; }
+.scard::after { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--accent,rgba(0,229,204,0.4)),transparent); }
+.scard-label { font-size:0.56rem; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; }
+.scard-num   { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; line-height:1; }
+.scard-note  { font-size:0.56rem; margin-top:3px; }
+.sparkline { display:flex; align-items:flex-end; gap:2px; height:18px; margin-top:5px; }
+.sbar { flex:1; border-radius:2px 2px 0 0; animation:sgrow 0.7s ease backwards; }
 
-.sparkline { display: flex; align-items: flex-end; gap: 2px; height: 20px; margin-top: 6px; }
-.sbar { flex: 1; border-radius: 2px 2px 0 0; animation: sgrow 0.7s ease backwards; }
-
-/* ══ Map card ══ */
-.map-card { background: rgba(6,12,20,0.9); border: 1px solid rgba(0,229,204,0.12); border-radius: 18px; overflow: hidden; }
-.map-bg {
-  width: 100%; height: 160px;
-  background: radial-gradient(circle at 30% 40%,rgba(0,229,204,0.06),transparent 50%),
-              radial-gradient(circle at 70% 60%,rgba(0,207,255,0.05),transparent 50%),
-              linear-gradient(135deg,#060c14,#0b1422);
-  position: relative;
-}
+/* ══ Map ══ */
+.map-card { background:rgba(6,12,20,0.9); border:1px solid rgba(0,229,204,0.12); border-radius:16px; overflow:hidden; width:100%; }
+.map-bg { width:100%; height:150px; background:radial-gradient(circle at 30% 40%,rgba(0,229,204,0.06),transparent 50%),radial-gradient(circle at 70% 60%,rgba(0,207,255,0.05),transparent 50%),linear-gradient(135deg,#060c14,#0b1422); position:relative; overflow:hidden; }
 .map-bg::before { content:''; position:absolute; inset:0; background-image:linear-gradient(rgba(0,229,204,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,204,0.04) 1px,transparent 1px); background-size:28px 28px; }
 .mmarker { position:absolute; transform:translate(-50%,-50%); cursor:pointer; z-index:2; }
-.mdot    { width:10px; height:10px; border-radius:50%; animation:mpulse 2.5s ease-in-out infinite; }
-.mring   { position:absolute; inset:-5px; border-radius:50%; border:1.5px solid currentColor; opacity:0; animation:mring 2.5s ease-in-out infinite; }
-.mlabel  { position:absolute; top:-22px; left:50%; transform:translateX(-50%); background:rgba(6,12,20,0.92); border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:2px 7px; font-family:'Syne',sans-serif; font-size:0.55rem; font-weight:700; white-space:nowrap; color:#e2eaf4; opacity:0; transition:opacity 0.2s; pointer-events:none; }
-@media (hover: hover) { .mmarker:hover .mlabel { opacity: 1; } }
+.mdot    { width:9px; height:9px; border-radius:50%; animation:mpulse 2.5s ease-in-out infinite; }
+.mring   { position:absolute; inset:-4px; border-radius:50%; border:1.5px solid currentColor; opacity:0; animation:mring 2.5s ease-in-out infinite; }
+.mlabel  { position:absolute; top:-20px; left:50%; transform:translateX(-50%); background:rgba(6,12,20,0.92); border:1px solid rgba(255,255,255,0.1); border-radius:5px; padding:1px 5px; font-family:'Syne',sans-serif; font-size:0.52rem; font-weight:700; white-space:nowrap; color:#e2eaf4; opacity:0; transition:opacity 0.2s; pointer-events:none; }
 
-/* ══ Alert cards ══ */
-.alert-item {
-  background: rgba(255,77,109,0.06);
-  border: 1px solid rgba(255,77,109,0.18);
-  border-radius: 13px;
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.18s;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-@media (hover: hover) { .alert-item:hover { background: rgba(255,77,109,0.1); border-color: rgba(255,77,109,0.32); } }
-.alert-item:active { transform: scale(0.98); }
-.alert-icon { width: 34px; height: 34px; border-radius: 9px; background: rgba(255,77,109,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
-.alert-text { flex: 1; min-width: 0; }
-.alert-title { font-family: 'Syne',sans-serif; font-weight: 700; font-size: 0.78rem; color: #f1f5f9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.alert-meta  { font-size: 0.62rem; color: #64748b; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ablink { width: 8px; height: 8px; border-radius: 50%; background: #ff4d6d; flex-shrink: 0; box-shadow: 0 0 8px #ff4d6d; animation: ablk 1.2s ease-in-out infinite; }
+/* ══ Alerts ══ */
+.alert-item { background:rgba(255,77,109,0.06); border:1px solid rgba(255,77,109,0.18); border-radius:12px; padding:11px 10px; display:flex; align-items:center; gap:9px; cursor:pointer; width:100%; box-sizing:border-box; overflow:hidden; }
+.alert-item:active { transform:scale(0.98); }
+.alert-icon { width:32px; height:32px; border-radius:8px; background:rgba(255,77,109,0.15); display:flex; align-items:center; justify-content:center; font-size:0.85rem; flex-shrink:0; }
+.alert-text { flex:1; min-width:0; overflow:hidden; }
+.alert-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.75rem; color:#f1f5f9; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.alert-meta  { font-size:0.6rem; color:#64748b; margin-top:1px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ablink { width:7px; height:7px; border-radius:50%; background:#ff4d6d; flex-shrink:0; box-shadow:0 0 7px #ff4d6d; animation:ablk 1.2s ease-in-out infinite; }
 
-/* ══ Report rows ══ */
-.rrow { background: rgba(11,20,34,0.75); border: 1px solid rgba(255,255,255,0.07); border-radius: 13px; overflow: hidden; transition: border-color 0.18s; }
-@media (hover: hover) { .rrow:hover { border-color: rgba(0,229,204,0.2); } }
-.rtop { display: flex; align-items: center; gap: 10px; padding: 12px; cursor: pointer; transition: background 0.18s; }
-.rtop:active { background: rgba(255,255,255,0.03); }
-.rtop-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; }
-.rtop-info { flex: 1; min-width: 0; }
-.rtop-title { font-size: 0.8rem; font-weight: 500; color: #f1f5f9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rtop-meta  { font-size: 0.62rem; color: #64748b; margin-top: 1px; }
-.rtop-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-.rdetail { max-height: 0; overflow: hidden; transition: max-height 0.32s cubic-bezier(0.4,0,0.2,1), padding 0.22s; padding: 0 12px; }
-.rdetail.open { max-height: 120px; padding: 0 12px 12px; }
-.rdetail-inner { background: rgba(0,0,0,0.25); border-radius: 9px; padding: 9px 11px; font-size: 0.72rem; color: #94a3b8; line-height: 1.65; }
-.chevron { width: 16px; height: 16px; flex-shrink: 0; color: #64748b; transition: transform 0.28s cubic-bezier(0.4,0,0.2,1); }
-.rrow.exp .chevron { transform: rotate(180deg); }
+/* ══ Reports ══ */
+.rrow { background:rgba(11,20,34,0.75); border:1px solid rgba(255,255,255,0.07); border-radius:12px; overflow:hidden; transition:border-color 0.18s; width:100%; }
+.rtop { display:flex; align-items:center; gap:9px; padding:11px; cursor:pointer; }
+.rtop:active { background:rgba(255,255,255,0.03); }
+.rtop-icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:0.9rem; flex-shrink:0; }
+.rtop-info { flex:1; min-width:0; overflow:hidden; }
+.rtop-title { font-size:0.78rem; font-weight:500; color:#f1f5f9; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.rtop-meta  { font-size:0.6rem; color:#64748b; margin-top:1px; }
+.rtop-right { display:flex; align-items:center; gap:4px; flex-shrink:0; }
+.rdetail { max-height:0; overflow:hidden; transition:max-height 0.32s cubic-bezier(0.4,0,0.2,1), padding 0.22s; padding:0 11px; }
+.rdetail.open { max-height:120px; padding:0 11px 11px; }
+.rdetail-inner { background:rgba(0,0,0,0.25); border-radius:8px; padding:8px 10px; font-size:0.7rem; color:#94a3b8; line-height:1.6; }
+.chevron { width:15px; height:15px; flex-shrink:0; color:#64748b; transition:transform 0.28s cubic-bezier(0.4,0,0.2,1); }
+.rrow.exp .chevron { transform:rotate(180deg); }
 
 /* ══ Timeline ══ */
-.tli { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.04); cursor: pointer; }
-.tli:last-child { border-bottom: none; padding-bottom: 0; }
-.tli:active { opacity: 0.7; }
-.tll { display: flex; flex-direction: column; align-items: center; }
-.tldot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; z-index: 1; }
-.tlline { width: 1px; flex: 1; min-height: 24px; background: linear-gradient(to bottom,rgba(0,229,204,0.25),transparent); }
-.tli:last-child .tlline { display: none; }
-.tl-title { font-size: 0.8rem; font-weight: 500; color: #f1f5f9; line-height: 1.35; }
-.tl-meta  { font-size: 0.62rem; color: #64748b; margin-top: 2px; }
+.tli { display:flex; gap:11px; align-items:flex-start; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.04); cursor:pointer; }
+.tli:last-child { border-bottom:none; padding-bottom:0; }
+.tli:active { opacity:0.7; }
+.tll { display:flex; flex-direction:column; align-items:center; }
+.tldot  { width:9px; height:9px; border-radius:50%; flex-shrink:0; z-index:1; }
+.tlline { width:1px; flex:1; min-height:22px; background:linear-gradient(to bottom,rgba(0,229,204,0.25),transparent); }
+.tli:last-child .tlline { display:none; }
+.tl-title { font-size:0.78rem; font-weight:500; color:#f1f5f9; line-height:1.35; word-break:break-word; }
+.tl-meta  { font-size:0.6rem; color:#64748b; margin-top:2px; }
 
 /* ══ Leaderboard ══ */
-.lbrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: rgba(11,20,34,0.65);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: all 0.18s;
-}
-@media (hover: hover) { .lbrow:hover { border-color: rgba(0,229,204,0.2); transform: translateX(3px); } }
-.lbrow:active { transform: scale(0.98); }
-.lbnum { width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-weight: 800; font-size: 0.72rem; flex-shrink: 0; }
-.lb-av { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-weight: 800; font-size: 0.68rem; flex-shrink: 0; }
-.lb-name  { font-size: 0.8rem; font-weight: 600; color: #f1f5f9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.lb-meta  { font-size: 0.6rem; color: #64748b; }
-.lb-pts   { font-family: 'Syne',sans-serif; font-weight: 800; font-size: 0.85rem; white-space: nowrap; }
+.lbrow { display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:11px; background:rgba(11,20,34,0.65); border:1px solid rgba(255,255,255,0.06); transition:all 0.18s; width:100%; box-sizing:border-box; }
+.lbrow:active { transform:scale(0.98); }
+.lbnum { width:24px; height:24px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:0.68rem; flex-shrink:0; }
+.lb-av { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:0.65rem; flex-shrink:0; }
+.lb-name  { font-size:0.78rem; font-weight:600; color:#f1f5f9; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.lb-meta  { font-size:0.58rem; color:#64748b; }
+.lb-pts   { font-family:'Syne',sans-serif; font-weight:800; font-size:0.8rem; white-space:nowrap; flex-shrink:0; }
 
 /* ══ FAB ══ */
 .fab-p {
   position: fixed;
-  bottom: calc(var(--tab-h, 62px) + var(--safe-bottom, 0px) + 14px);
-  right: 14px;
+  /* Above bottom nav + safe area */
+  bottom: calc(var(--tab-h, 62px) + env(safe-area-inset-bottom, 0px) + 14px);
+  right: max(14px, env(safe-area-inset-right, 14px));
   z-index: 45;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: flex; align-items: center; gap: 7px;
   background: linear-gradient(135deg,#00e5cc 0%,#00cfff 100%);
   color: #060c14;
-  font-family: 'Syne',sans-serif;
-  font-weight: 800;
-  font-size: 0.8rem;
-  padding: 0 18px;
-  height: 48px;
-  border-radius: 24px;
-  border: none;
+  font-family: 'Syne',sans-serif; font-weight: 800; font-size: 0.78rem;
+  padding: 0 16px; height: 46px; border-radius: 23px; border: none;
   cursor: pointer;
   box-shadow: 0 6px 28px rgba(0,229,204,0.4);
   animation: fp 3s ease-in-out infinite;
   transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
-  text-decoration: none;
-  white-space: nowrap;
+  text-decoration: none; white-space: nowrap;
 }
 .fab-p:active { transform: scale(0.93); }
-@media (hover: hover) { .fab-p:hover { transform: scale(1.05) translateY(-3px); } }
 @media (min-width: 768px) { .fab-p { bottom: 28px; right: 24px; } }
 
-/* ══ TWO-COLUMN layout (tablet+) ══ */
+/* ══ Layout ══ */
+.two-col { display: block; width: 100%; }
 @media (min-width: 768px) {
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
-  :root { --sg: 20px; }
+}
+#aGrid, #sGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+#teamGrid { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+@media (min-width: 768px) {
+  #teamGrid { flex-direction: row; flex-wrap: wrap; }
+  #teamGrid > div { flex: 1; min-width: 220px; }
 }
 
-/* ══ GRID OVERRIDES for action & stat grids on mobile ══ */
-#aGrid, #sGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-/* ══ Team grid ══ */
-#teamGrid { display: flex; flex-direction: column; gap: 9px; }
-@media (min-width: 768px) { #teamGrid { flex-direction: row; flex-wrap: wrap; } #teamGrid > div { flex: 1; min-width: 240px; } }
-
-/* ══ Scrollable pills row ══ */
-.pills-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: 16px;
-}
-
-/* ══ PHONE — prevent any element from breaking out ══ */
-@media (max-width: 480px) {
-  .hiw-desc { font-size: 0.7rem; }
-  .hiw-title { font-size: 0.85rem; }
-  .welcome-card { padding: 14px; }
-  .hero-section { padding: 16px 0 16px; }
+/* ══ 320px ══ */
+@media (max-width: 320px) {
+  .page-content { padding: 10px !important; }
+  .hero-title    { font-size: 1.2rem !important; }
+  .hiw-card      { padding: 10px; }
+  .hiw-desc      { font-size: 0.64rem; }
+  .welcome-card  { padding: 11px; }
+  .atile         { padding: 10px 8px; min-height: 85px; }
+  .scard-num     { font-size: 1.1rem; }
+  .fab-p         { font-size: 0.7rem; padding: 0 12px; height: 42px; }
 }
 </style>
 </head>
@@ -609,28 +330,27 @@ body::before {
         <button class="hamburger" aria-label="Open navigation menu" type="button">
           <span></span><span></span><span></span>
         </button>
-        <div style="display:flex;align-items:center;gap:8px;min-width:0;">
-          <div class="logo-icon" style="width:28px;height:28px;border-radius:8px;flex-shrink:0;">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+        <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;">
+          <div class="logo-icon" style="width:26px;height:26px;border-radius:7px;flex-shrink:0;">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <circle cx="8" cy="8" r="3" fill="#060c14"/>
               <path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </div>
-          <span class="logo-text" id="mLogo" style="white-space:nowrap;">CivicPulse</span>
+          <span class="logo-text" id="mLogo" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">CivicPulse</span>
           <span class="page-title" id="dTitle" style="display:none;">Dashboard</span>
         </div>
       </div>
-      <div class="header-right">
+      <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
         <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
-        <div id="hClock" style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:#64748b;letter-spacing:0.5px;display:none;"></div>
-        <button class="icon-btn" style="position:relative;" onclick="showToast('🔔 3 new notifications','info')" type="button" aria-label="Notifications">
+        <button class="icon-btn" style="position:relative;flex-shrink:0;" onclick="showToast('🔔 3 new notifications','info')" type="button" aria-label="Notifications">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
           </svg>
           <span class="notif-badge"></span>
         </button>
-        <div class="avatar" role="button" aria-label="Profile" tabindex="0">SA</div>
+        <div class="avatar" role="button" aria-label="Profile" tabindex="0" style="flex-shrink:0;">SA</div>
       </div>
     </header>
 
@@ -641,7 +361,6 @@ body::before {
       <section class="hero-section fu" aria-label="Welcome to CivicPulse">
         <div class="hero-glow-1"></div>
         <div class="hero-glow-2"></div>
-        <div class="hero-glow-3"></div>
 
         <div style="position:relative;z-index:1;">
           <div class="hero-chip">
@@ -658,7 +377,6 @@ body::before {
             CivicPulse helps citizens report civic issues like potholes, garbage overflow, water leakage, broken streetlights, and emergencies — connecting communities with local authorities.
           </p>
 
-          <!-- Pills -->
           <div class="pills-row">
             <span class="issue-pill">🛣️ Potholes</span>
             <span class="issue-pill">🗑️ Garbage</span>
@@ -668,30 +386,28 @@ body::before {
             <span class="issue-pill">🚨 Emergencies</span>
           </div>
 
-          <!-- CTA -->
           <div class="hero-btn-row">
             <a href="report.html" class="btn-teal" onclick="rippleEl(this)">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
               Report Issue
             </a>
             <a href="reports.html" class="btn-outline" onclick="rippleEl(this)">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
               Track Reports
             </a>
           </div>
 
-          <!-- Stats -->
-          <div class="hero-stats" style="margin-top:16px;">
+          <div class="hero-stats">
             <div class="hero-stat">
               <span class="hero-stat-num" data-counter="1240" style="color:var(--teal);">0</span>
               <span class="hero-stat-lbl">Resolved</span>
             </div>
-            <div style="width:1px;background:rgba(255,255,255,0.07);"></div>
+            <div style="width:1px;background:rgba(255,255,255,0.07);flex-shrink:0;"></div>
             <div class="hero-stat">
               <span class="hero-stat-num" data-counter="37" style="color:var(--purple);">0</span>
               <span class="hero-stat-lbl">Volunteers</span>
             </div>
-            <div style="width:1px;background:rgba(255,255,255,0.07);"></div>
+            <div style="width:1px;background:rgba(255,255,255,0.07);flex-shrink:0;"></div>
             <div class="hero-stat">
               <span class="hero-stat-num" data-counter="94" style="color:var(--orange);">0</span>
               <span class="hero-stat-lbl">Res. Rate %</span>
@@ -702,34 +418,34 @@ body::before {
 
       <!-- ══ HOW IT WORKS ══ -->
       <section style="margin-bottom:var(--sg);" aria-label="How CivicPulse works">
-        <div style="margin-bottom:12px;" class="fu d1">
+        <div style="margin-bottom:10px;" class="fu d1">
           <div class="slbl">How It Works</div>
-          <div style="font-size:0.78rem;color:#64748b;">From reporting to resolution — the CivicPulse workflow.</div>
+          <div style="font-size:0.75rem;color:#64748b;">From reporting to resolution — the CivicPulse workflow.</div>
         </div>
         <div class="hiw-grid">
-          <div class="hiw-card fu d2" style="--hiw-color:rgba(255,77,109,0.8);--hiw-glow:rgba(255,77,109,0.06);--hiw-border:rgba(255,77,109,0.3);--hiw-icon-bg:rgba(255,77,109,0.12);--hiw-icon-glow:0 0 18px rgba(255,77,109,0.2);">
+          <div class="hiw-card fu d2" style="--hiw-color:rgba(255,77,109,0.8);--hiw-icon-bg:rgba(255,77,109,0.12);">
             <div class="hiw-icon">📸</div>
             <div class="hiw-step" style="color:#ff4d6d;">Step 01</div>
             <div class="hiw-title">Report</div>
-            <div class="hiw-desc">Photograph & submit with GPS. Takes under 60 seconds.</div>
+            <div class="hiw-desc">Photo & GPS submit. Under 60 seconds.</div>
           </div>
-          <div class="hiw-card fu d3" style="--hiw-color:rgba(0,229,204,0.8);--hiw-glow:rgba(0,229,204,0.06);--hiw-border:rgba(0,229,204,0.3);--hiw-icon-bg:rgba(0,229,204,0.1);--hiw-icon-glow:0 0 18px rgba(0,229,204,0.2);">
+          <div class="hiw-card fu d3" style="--hiw-color:rgba(0,229,204,0.8);--hiw-icon-bg:rgba(0,229,204,0.1);">
             <div class="hiw-icon">📡</div>
             <div class="hiw-step">Step 02</div>
             <div class="hiw-title">Track</div>
-            <div class="hiw-desc">Monitor progress in real time. Get notified when resolved.</div>
+            <div class="hiw-desc">Real-time updates. Get notified on resolution.</div>
           </div>
-          <div class="hiw-card fu d4" style="--hiw-color:rgba(167,139,250,0.8);--hiw-glow:rgba(167,139,250,0.06);--hiw-border:rgba(167,139,250,0.3);--hiw-icon-bg:rgba(167,139,250,0.12);--hiw-icon-glow:0 0 18px rgba(167,139,250,0.2);">
+          <div class="hiw-card fu d4" style="--hiw-color:rgba(167,139,250,0.8);--hiw-icon-bg:rgba(167,139,250,0.12);">
             <div class="hiw-icon">👥</div>
             <div class="hiw-step" style="color:#a78bfa;">Step 03</div>
             <div class="hiw-title">Community</div>
-            <div class="hiw-desc">Volunteers collaborate on drives & improve neighbourhoods.</div>
+            <div class="hiw-desc">Volunteers collaborate & improve neighbourhoods.</div>
           </div>
-          <div class="hiw-card fu d5" style="--hiw-color:rgba(251,146,60,0.8);--hiw-glow:rgba(251,146,60,0.06);--hiw-border:rgba(251,146,60,0.3);--hiw-icon-bg:rgba(251,146,60,0.12);--hiw-icon-glow:0 0 18px rgba(251,146,60,0.2);">
+          <div class="hiw-card fu d5" style="--hiw-color:rgba(251,146,60,0.8);--hiw-icon-bg:rgba(251,146,60,0.12);">
             <div class="hiw-icon">⚡</div>
             <div class="hiw-step" style="color:#fb923c;">Step 04</div>
             <div class="hiw-title">Emergency</div>
-            <div class="hiw-desc">One-tap SOS dispatches emergency services instantly.</div>
+            <div class="hiw-desc">One-tap SOS dispatches services instantly.</div>
           </div>
         </div>
       </section>
@@ -737,54 +453,54 @@ body::before {
       <!-- ══ WELCOME CARD ══ -->
       <div class="welcome-card fu d2" style="margin-bottom:var(--sg);">
         <div class="w-orb1"></div><div class="w-orb2"></div>
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative;z-index:1;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;position:relative;z-index:1;">
           <div class="av-wrap">
             <div class="av-ring"></div>
             <div class="av-inner">SA</div>
           </div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:0.68rem;color:#64748b;font-weight:500;margin-bottom:2px;" id="greeting">Good morning 👋</div>
-            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:#f1f5f9;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Shobhit Asthana</div>
-            <span class="bdg bi" style="margin-top:4px;display:inline-flex;font-size:0.58rem;">
-              <svg width="7" height="7" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" stroke="currentColor" stroke-width="1"/></svg>
+          <div style="flex:1;min-width:0;overflow:hidden;">
+            <div style="font-size:0.65rem;color:#64748b;font-weight:500;margin-bottom:2px;" id="greeting">Good morning 👋</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#f1f5f9;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Shobhit Asthana</div>
+            <span class="bdg bi" style="margin-top:4px;display:inline-flex;">
+              <svg width="6" height="6" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" stroke="currentColor" stroke-width="1"/></svg>
               Team: Null Pointer
             </span>
           </div>
           <div class="welcome-clock">
-            <div id="liveClock" style="font-family:'JetBrains Mono',monospace;font-size:0.9rem;font-weight:500;color:#f1f5f9;letter-spacing:1px;"></div>
-            <div id="liveDate" style="font-size:0.58rem;color:#64748b;margin-top:2px;white-space:nowrap;"></div>
+            <div id="liveClock" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:500;color:#f1f5f9;letter-spacing:0.8px;white-space:nowrap;"></div>
+            <div id="liveDate"  style="font-size:0.55rem;color:#64748b;margin-top:2px;white-space:nowrap;"></div>
           </div>
         </div>
         <div class="ghr"></div>
-        <div style="position:relative;z-index:1;margin-bottom:12px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div style="position:relative;z-index:1;margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
             <div>
-              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;color:#f1f5f9;">Community Impact</div>
-              <div style="font-size:0.6rem;color:#64748b;margin-top:1px;">Level 4 Civic Champion</div>
+              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.73rem;color:#f1f5f9;">Community Impact</div>
+              <div style="font-size:0.58rem;color:#64748b;margin-top:1px;">Level 4 Civic Champion</div>
             </div>
-            <div style="text-align:right;">
-              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:#00e5cc;">340</div>
-              <div style="font-size:0.58rem;color:#64748b;">/ 500 pts</div>
+            <div style="text-align:right;flex-shrink:0;">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;color:#00e5cc;">340</div>
+              <div style="font-size:0.55rem;color:#64748b;">/ 500 pts</div>
             </div>
           </div>
           <div class="impact-bar"><div class="impact-fill" id="iFill"></div></div>
-          <div style="display:flex;justify-content:space-between;margin-top:4px;">
-            <span style="font-size:0.56rem;color:#64748b;">Lv 4</span>
-            <span style="font-size:0.56rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;">68% to Lv 5</span>
+          <div style="display:flex;justify-content:space-between;margin-top:3px;">
+            <span style="font-size:0.54rem;color:#64748b;">Lv 4</span>
+            <span style="font-size:0.54rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;">68% to Lv 5</span>
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;position:relative;z-index:1;">
-          <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:11px;padding:10px 4px;">
-            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:#00e5cc;" data-counter="7">0</div>
-            <div style="font-size:0.58rem;color:#64748b;margin-top:1px;">Active</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;position:relative;z-index:1;">
+          <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;">
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:#00e5cc;" data-counter="7">0</div>
+            <div style="font-size:0.56rem;color:#64748b;margin-top:1px;">Active</div>
           </div>
-          <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:11px;padding:10px 4px;">
-            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:#a78bfa;" data-counter="12">0</div>
-            <div style="font-size:0.58rem;color:#64748b;margin-top:1px;">Resolved</div>
+          <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;">
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:#a78bfa;" data-counter="12">0</div>
+            <div style="font-size:0.56rem;color:#64748b;margin-top:1px;">Resolved</div>
           </div>
-          <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:11px;padding:10px 4px;">
-            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:#fb923c;" data-counter="340">0</div>
-            <div style="font-size:0.58rem;color:#64748b;margin-top:1px;">Points</div>
+          <div style="text-align:center;background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;">
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:#fb923c;" data-counter="340">0</div>
+            <div style="font-size:0.56rem;color:#64748b;margin-top:1px;">Points</div>
           </div>
         </div>
       </div>
@@ -849,17 +565,17 @@ body::before {
 
         <!-- CITY MAP -->
         <div class="fu d5" style="margin-bottom:var(--sg);">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div class="slbl" style="margin-bottom:0;flex:1;">City Map Preview</div>
-            <button style="font-size:0.68rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;background:none;border:none;cursor:pointer;padding:0;white-space:nowrap;" onclick="showToast('🗺 Full map view coming soon','info')">Expand →</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
+            <div class="slbl" style="margin-bottom:0;flex:1;min-width:0;">City Map Preview</div>
+            <button style="font-size:0.65rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;background:none;border:none;cursor:pointer;padding:0;white-space:nowrap;flex-shrink:0;margin-left:8px;" onclick="showToast('🗺 Full map view coming soon','info')">Expand →</button>
           </div>
           <div class="map-card">
             <div class="map-bg" id="mapBg"></div>
-            <div style="padding:9px 12px;display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.05);">
-              <div style="display:flex;align-items:center;gap:4px;font-size:0.6rem;color:#64748b;"><span style="width:6px;height:6px;border-radius:50%;background:#ff4d6d;display:inline-block;flex-shrink:0;"></span>Critical</div>
-              <div style="display:flex;align-items:center;gap:4px;font-size:0.6rem;color:#64748b;"><span style="width:6px;height:6px;border-radius:50%;background:#fb923c;display:inline-block;flex-shrink:0;"></span>Pending</div>
-              <div style="display:flex;align-items:center;gap:4px;font-size:0.6rem;color:#64748b;"><span style="width:6px;height:6px;border-radius:50%;background:#00cfff;display:inline-block;flex-shrink:0;"></span>Active</div>
-              <div style="display:flex;align-items:center;gap:4px;font-size:0.6rem;color:#64748b;"><span style="width:6px;height:6px;border-radius:50%;background:#00e5cc;display:inline-block;flex-shrink:0;"></span>Resolved</div>
+            <div style="padding:8px 10px;display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.05);">
+              <div style="display:flex;align-items:center;gap:4px;font-size:0.58rem;color:#64748b;"><span style="width:6px;height:6px;border-radius:50%;background:#ff4d6d;display:inline-block;flex-shrink:0;"></span>Critical</div>
+              <div style="display:flex;align-items:center;gap:4px;font-size:0.58rem;color:#64748b;"><span style="width:6px;height:6px;border-radius:50%;background:#fb923c;display:inline-block;flex-shrink:0;"></span>Pending</div>
+              <div style="display:flex;align-items:center;gap:4px;font-size:0.58rem;color:#64748b;"><span style="width:6px;height:6px;border-radius:50%;background:#00cfff;display:inline-block;flex-shrink:0;"></span>Active</div>
+              <div style="display:flex;align-items:center;gap:4px;font-size:0.58rem;color:#64748b;"><span style="width:6px;height:6px;border-radius:50%;background:#00e5cc;display:inline-block;flex-shrink:0;"></span>Resolved</div>
             </div>
           </div>
         </div>
@@ -869,14 +585,14 @@ body::before {
 
         <!-- PRIORITY ALERTS -->
         <div class="fu d4" style="margin-bottom:var(--sg);">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-            <div class="slbl" style="margin-bottom:0;flex:1;">Priority Alerts</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;gap:8px;">
+            <div class="slbl" style="margin-bottom:0;flex:1;min-width:0;">Priority Alerts</div>
             <span class="bdg bc" style="animation:ablk 2s ease-in-out infinite;flex-shrink:0;">3 active</span>
           </div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;flex-direction:column;gap:7px;">
             <div class="alert-item" onclick="showToast('📋 Opening report…','info')">
               <div class="alert-icon">💧</div>
-              <div class="alert-text"><div class="alert-title">Major water leakage – Gomti Nagar</div><div class="alert-meta">Utilities · 45 min ago · PWD Notified</div></div>
+              <div class="alert-text"><div class="alert-title">Water leakage – Gomti Nagar</div><div class="alert-meta">Utilities · 45 min ago · PWD Notified</div></div>
               <div class="ablink"></div>
             </div>
             <div class="alert-item" onclick="showToast('📋 Opening report…','info')">
@@ -894,98 +610,73 @@ body::before {
 
         <!-- RECENT REPORTS -->
         <div class="fu d5" style="margin-bottom:var(--sg);">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div class="slbl" style="margin-bottom:0;flex:1;">Recent Reports</div>
-            <a href="reports.html" style="font-size:0.68rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;white-space:nowrap;">View all →</a>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
+            <div class="slbl" style="margin-bottom:0;flex:1;min-width:0;">Recent Reports</div>
+            <a href="reports.html" style="font-size:0.65rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;margin-left:8px;">View all →</a>
           </div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-
+          <div style="display:flex;flex-direction:column;gap:7px;">
             <div class="rrow" id="rr1" onclick="toggleRpt('rr1','rd1')">
               <div class="rtop">
                 <div class="rtop-icon" style="background:rgba(251,146,60,0.12);">💡</div>
                 <div class="rtop-info"><div class="rtop-title">Broken streetlight – Sector 12</div><div class="rtop-meta">Infrastructure · 2h ago</div></div>
                 <div class="rtop-right"><span class="bdg bp">Pending</span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
               </div>
-              <div class="rdetail" id="rd1"><div class="rdetail-inner">📍 Sector 12, Gomti Nagar · Filed by Shobhit A.<br>🔧 Municipal Corp, Zone 3<br>🕐 Resolution: 24–48 hours</div></div>
+              <div class="rdetail" id="rd1"><div class="rdetail-inner">📍 Sector 12, Gomti Nagar · Shobhit A.<br>🔧 Municipal Corp, Zone 3<br>🕐 24–48 hours</div></div>
             </div>
-
             <div class="rrow" id="rr2" onclick="toggleRpt('rr2','rd2')">
               <div class="rtop">
                 <div class="rtop-icon" style="background:rgba(255,77,109,0.12);">🗑️</div>
                 <div class="rtop-info"><div class="rtop-title">Garbage overflow – Market Road</div><div class="rtop-meta">Sanitation · 4h ago</div></div>
                 <div class="rtop-right"><span class="bdg bc">Critical</span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
               </div>
-              <div class="rdetail" id="rd2"><div class="rdetail-inner">📍 Market Road, Hazratganj · Community report<br>🔧 Nagar Nigam Sanitation<br>⚠️ Health hazard — priority escalated</div></div>
+              <div class="rdetail" id="rd2"><div class="rdetail-inner">📍 Market Road, Hazratganj<br>🔧 Nagar Nigam Sanitation<br>⚠️ Health hazard escalated</div></div>
             </div>
-
             <div class="rrow" id="rr3" onclick="toggleRpt('rr3','rd3')">
               <div class="rtop">
                 <div class="rtop-icon" style="background:rgba(0,207,255,0.1);">💧</div>
                 <div class="rtop-info"><div class="rtop-title">Water leakage – Civil Lines</div><div class="rtop-meta">Utilities · 6h ago</div></div>
                 <div class="rtop-right"><span class="bdg bi">Active</span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
               </div>
-              <div class="rdetail" id="rd3"><div class="rdetail-inner">📍 Civil Lines, Lucknow · Filed by Priya S.<br>🔧 Jal Kal Vibhag, Team B<br>🕐 Technician ETA: 1.5 hours</div></div>
+              <div class="rdetail" id="rd3"><div class="rdetail-inner">📍 Civil Lines, Lucknow · Priya S.<br>🔧 Jal Kal Vibhag, Team B<br>🕐 ETA: 1.5 hours</div></div>
             </div>
-
             <div class="rrow" id="rr4" onclick="toggleRpt('rr4','rd4')">
               <div class="rtop">
                 <div class="rtop-icon" style="background:rgba(0,229,204,0.1);">🛣️</div>
                 <div class="rtop-info"><div class="rtop-title">Pothole – Ring Road</div><div class="rtop-meta">Roads · 1d ago</div></div>
                 <div class="rtop-right"><span class="bdg br">Resolved</span><svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
               </div>
-              <div class="rdetail" id="rd4"><div class="rdetail-inner">📍 Ring Road, Aliganj · Filed by Aman V.<br>✅ Fixed by PWD — patching complete<br>⭐ Rated 4/5 by reporter</div></div>
+              <div class="rdetail" id="rd4"><div class="rdetail-inner">📍 Ring Road, Aliganj · Aman V.<br>✅ Fixed by PWD — complete<br>⭐ Rated 4/5</div></div>
             </div>
-
           </div>
         </div>
 
         <!-- COMMUNITY ACTIVITY -->
         <div class="fu d6" style="margin-bottom:var(--sg);">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div class="slbl" style="margin-bottom:0;flex:1;">Community Activity</div>
-            <a href="activity.html" style="font-size:0.68rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;white-space:nowrap;">View all →</a>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
+            <div class="slbl" style="margin-bottom:0;flex:1;min-width:0;">Community Activity</div>
+            <a href="activity.html" style="font-size:0.65rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;margin-left:8px;">View all →</a>
           </div>
-          <div style="background:rgba(11,20,34,0.75);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:14px;">
+          <div style="background:rgba(11,20,34,0.75);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:12px;width:100%;box-sizing:border-box;">
             <div style="display:flex;flex-direction:column;">
-              <div class="tli"><div class="tll"><div class="tldot" style="background:#00e5cc;box-shadow:0 0 7px #00e5cc;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;min-width:0;"><div class="tl-title">Issue resolved: Pothole near Station Rd</div><div class="tl-meta">PWD Dept · 30 min ago</div></div></div>
-              <div class="tli"><div class="tll"><div class="tldot" style="background:#a78bfa;box-shadow:0 0 7px #a78bfa;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;min-width:0;"><div class="tl-title">Volunteer joined: Priya Sharma</div><div class="tl-meta">Lucknow District · 1h ago</div></div></div>
-              <div class="tli"><div class="tll"><div class="tldot" style="background:#fb923c;box-shadow:0 0 7px #fb923c;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;min-width:0;"><div class="tl-title">Alert: Power outage – Zone 5</div><div class="tl-meta">UPPCL · 2h ago</div></div></div>
-              <div class="tli"><div class="tll"><div class="tldot" style="background:#00cfff;box-shadow:0 0 7px #00cfff;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;min-width:0;"><div class="tl-title">Cleanup drive: Hazratganj — 42 volunteers</div><div class="tl-meta">Community · 5h ago</div></div></div>
+              <div class="tli"><div class="tll"><div class="tldot" style="background:#00e5cc;box-shadow:0 0 6px #00e5cc;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;min-width:0;overflow:hidden;"><div class="tl-title">Issue resolved: Pothole near Station Rd</div><div class="tl-meta">PWD Dept · 30 min ago</div></div></div>
+              <div class="tli"><div class="tll"><div class="tldot" style="background:#a78bfa;box-shadow:0 0 6px #a78bfa;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;min-width:0;overflow:hidden;"><div class="tl-title">Volunteer joined: Priya Sharma</div><div class="tl-meta">Lucknow District · 1h ago</div></div></div>
+              <div class="tli"><div class="tll"><div class="tldot" style="background:#fb923c;box-shadow:0 0 6px #fb923c;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;min-width:0;overflow:hidden;"><div class="tl-title">Alert: Power outage – Zone 5</div><div class="tl-meta">UPPCL · 2h ago</div></div></div>
+              <div class="tli"><div class="tll"><div class="tldot" style="background:#00cfff;box-shadow:0 0 6px #00cfff;"></div><div class="tlline"></div></div><div style="padding-top:1px;flex:1;min-width:0;overflow:hidden;"><div class="tl-title">Cleanup: Hazratganj — 42 volunteers</div><div class="tl-meta">Community · 5h ago</div></div></div>
             </div>
           </div>
         </div>
 
         <!-- LEADERBOARD -->
         <div class="fu d7" style="margin-bottom:var(--sg);">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div class="slbl" style="margin-bottom:0;flex:1;">Top Contributors</div>
-            <a href="activity.html" style="font-size:0.68rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;">All →</a>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
+            <div class="slbl" style="margin-bottom:0;flex:1;min-width:0;">Top Contributors</div>
+            <a href="activity.html" style="font-size:0.65rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;margin-left:8px;">All →</a>
           </div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div class="lbrow">
-              <div class="lbnum" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#060c14;">🥇</div>
-              <div class="lb-av" style="background:linear-gradient(135deg,#00e5cc,#00cfff);color:#060c14;">SA</div>
-              <div style="flex:1;min-width:0;"><div class="lb-name">Shobhit Asthana</div><div class="lb-meta">19 reports · Null Pointer</div></div>
-              <div class="lb-pts" style="color:#f59e0b;">340 pts</div>
-            </div>
-            <div class="lbrow">
-              <div class="lbnum" style="background:rgba(148,163,184,0.15);color:#94a3b8;">🥈</div>
-              <div class="lb-av" style="background:rgba(255,255,255,0.08);color:#94a3b8;">RK</div>
-              <div style="flex:1;min-width:0;"><div class="lb-name">Rahul Singh</div><div class="lb-meta">22 reports · Gomti Nagar</div></div>
-              <div class="lb-pts" style="color:#94a3b8;">320 pts</div>
-            </div>
-            <div class="lbrow">
-              <div class="lbnum" style="background:rgba(167,139,250,0.15);color:#a78bfa;">🥉</div>
-              <div class="lb-av" style="background:rgba(167,139,250,0.15);color:#a78bfa;">PS</div>
-              <div style="flex:1;min-width:0;"><div class="lb-name">Priya Sharma</div><div class="lb-meta">18 reports · Aliganj</div></div>
-              <div class="lb-pts" style="color:#a78bfa;">290 pts</div>
-            </div>
-            <div class="lbrow">
-              <div class="lbnum" style="background:rgba(255,255,255,0.05);color:#64748b;font-size:0.7rem;">4</div>
-              <div class="lb-av" style="background:rgba(251,146,60,0.15);color:#fb923c;">AV</div>
-              <div style="flex:1;min-width:0;"><div class="lb-name">Aman Verma</div><div class="lb-meta">14 reports · Indira Nagar</div></div>
-              <div class="lb-pts" style="color:#fb923c;">245 pts</div>
-            </div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div class="lbrow"><div class="lbnum" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#060c14;">🥇</div><div class="lb-av" style="background:linear-gradient(135deg,#00e5cc,#00cfff);color:#060c14;">SA</div><div style="flex:1;min-width:0;overflow:hidden;"><div class="lb-name">Shobhit Asthana</div><div class="lb-meta">19 reports · Null Pointer</div></div><div class="lb-pts" style="color:#f59e0b;">340 pts</div></div>
+            <div class="lbrow"><div class="lbnum" style="background:rgba(148,163,184,0.15);color:#94a3b8;">🥈</div><div class="lb-av" style="background:rgba(255,255,255,0.08);color:#94a3b8;">RK</div><div style="flex:1;min-width:0;overflow:hidden;"><div class="lb-name">Rahul Singh</div><div class="lb-meta">22 reports · Gomti Nagar</div></div><div class="lb-pts" style="color:#94a3b8;">320 pts</div></div>
+            <div class="lbrow"><div class="lbnum" style="background:rgba(167,139,250,0.15);color:#a78bfa;">🥉</div><div class="lb-av" style="background:rgba(167,139,250,0.15);color:#a78bfa;">PS</div><div style="flex:1;min-width:0;overflow:hidden;"><div class="lb-name">Priya Sharma</div><div class="lb-meta">18 reports · Aliganj</div></div><div class="lb-pts" style="color:#a78bfa;">290 pts</div></div>
+            <div class="lbrow"><div class="lbnum" style="background:rgba(255,255,255,0.05);color:#64748b;font-size:0.68rem;">4</div><div class="lb-av" style="background:rgba(251,146,60,0.15);color:#fb923c;">AV</div><div style="flex:1;min-width:0;overflow:hidden;"><div class="lb-name">Aman Verma</div><div class="lb-meta">14 reports · Indira Nagar</div></div><div class="lb-pts" style="color:#fb923c;">245 pts</div></div>
           </div>
         </div>
 
@@ -994,61 +685,36 @@ body::before {
 
       <!-- TEAM SECTION -->
       <div class="fu d8" style="margin-bottom:var(--sg);">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-          <div class="slbl" style="margin-bottom:0;flex:1;">Hackathon Team</div>
-          <a href="team.html" style="font-size:0.68rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;">View →</a>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
+          <div class="slbl" style="margin-bottom:0;flex:1;min-width:0;">Hackathon Team</div>
+          <a href="team.html" style="font-size:0.65rem;color:#00e5cc;font-family:'Syne',sans-serif;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;margin-left:8px;">View →</a>
         </div>
-        <div style="background:linear-gradient(135deg,rgba(147,51,234,0.08),rgba(0,207,255,0.05));border:1px solid rgba(147,51,234,0.2);border-radius:18px;padding:16px;position:relative;overflow:hidden;">
-          <div style="position:absolute;top:-40px;right:-40px;width:130px;height:130px;background:radial-gradient(circle,rgba(147,51,234,0.12),transparent 70%);pointer-events:none;"></div>
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-            <div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,rgba(147,51,234,0.3),rgba(0,207,255,0.2));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">⚡</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;background:linear-gradient(135deg,#a78bfa,#00cfff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Null Pointer</div>
-              <div style="font-size:0.62rem;color:#64748b;">CivicPulse · Hackathon 2025</div>
+        <div style="background:linear-gradient(135deg,rgba(147,51,234,0.08),rgba(0,207,255,0.05));border:1px solid rgba(147,51,234,0.2);border-radius:16px;padding:14px;position:relative;overflow:hidden;width:100%;box-sizing:border-box;">
+          <div style="position:absolute;top:-30px;right:-30px;width:110px;height:110px;background:radial-gradient(circle,rgba(147,51,234,0.12),transparent 70%);pointer-events:none;"></div>
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;overflow:hidden;">
+            <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(147,51,234,0.3),rgba(0,207,255,0.2));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">⚡</div>
+            <div style="flex:1;min-width:0;overflow:hidden;">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;background:linear-gradient(135deg,#a78bfa,#00cfff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Null Pointer</div>
+              <div style="font-size:0.6rem;color:#64748b;">CivicPulse · Hackathon 2025</div>
             </div>
             <span class="bdg bi" style="flex-shrink:0;">Active</span>
           </div>
-          <div class="ghr" style="background:linear-gradient(to right,transparent,rgba(147,51,234,0.3),transparent);margin:0 0 12px;"></div>
+          <div class="ghr" style="background:linear-gradient(to right,transparent,rgba(147,51,234,0.3),transparent);margin:0 0 10px;"></div>
           <div id="teamGrid">
-            <!-- Member row template — consistent on all phones -->
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,0.22);border-radius:12px;">
-              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00e5cc,#00cfff);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.8rem;color:#060c14;flex-shrink:0;">SA</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:0.82rem;font-weight:600;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Shobhit Asthana</div>
-                <div style="display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap;">
-                  <span class="bdg bi" style="font-size:0.56rem;">Leader</span>
-                  <span style="font-size:0.6rem;color:#64748b;">+91 63880 95158</span>
-                </div>
-              </div>
-              <a href="tel:+916388095158" style="width:32px;height:32px;border-radius:9px;background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.2);display:flex;align-items:center;justify-content:center;color:#00e5cc;text-decoration:none;flex-shrink:0;" onclick="showToast('📞 Calling Shobhit…','info')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-              </a>
+            <div style="display:flex;align-items:center;gap:9px;padding:9px 10px;background:rgba(0,0,0,0.22);border-radius:11px;overflow:hidden;">
+              <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#00e5cc,#00cfff);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.75rem;color:#060c14;flex-shrink:0;">SA</div>
+              <div style="flex:1;min-width:0;overflow:hidden;"><div style="font-size:0.78rem;font-weight:600;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Shobhit Asthana</div><div style="display:flex;align-items:center;gap:5px;margin-top:2px;flex-wrap:wrap;"><span class="bdg bi" style="font-size:0.54rem;">Leader</span><span style="font-size:0.58rem;color:#64748b;">+91 63880 95158</span></div></div>
+              <a href="tel:+916388095158" style="width:30px;height:30px;border-radius:8px;background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.2);display:flex;align-items:center;justify-content:center;color:#00e5cc;text-decoration:none;flex-shrink:0;" onclick="showToast('📞 Calling Shobhit…','info')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg></a>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,0.22);border-radius:12px;">
-              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#7c3aed);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.8rem;color:#fff;flex-shrink:0;">AD</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:0.82rem;font-weight:600;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Anmol Dwivedi</div>
-                <div style="display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap;">
-                  <span class="bdg br" style="font-size:0.56rem;">Member</span>
-                  <span style="font-size:0.6rem;color:#64748b;">+91 75188 12885</span>
-                </div>
-              </div>
-              <a href="tel:+917518812885" style="width:32px;height:32px;border-radius:9px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.2);display:flex;align-items:center;justify-content:center;color:#a78bfa;text-decoration:none;flex-shrink:0;" onclick="showToast('📞 Calling Anmol…','info')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-              </a>
+            <div style="display:flex;align-items:center;gap:9px;padding:9px 10px;background:rgba(0,0,0,0.22);border-radius:11px;overflow:hidden;">
+              <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#7c3aed);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.75rem;color:#fff;flex-shrink:0;">AD</div>
+              <div style="flex:1;min-width:0;overflow:hidden;"><div style="font-size:0.78rem;font-weight:600;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Anmol Dwivedi</div><div style="display:flex;align-items:center;gap:5px;margin-top:2px;flex-wrap:wrap;"><span class="bdg br" style="font-size:0.54rem;">Member</span><span style="font-size:0.58rem;color:#64748b;">+91 75188 12885</span></div></div>
+              <a href="tel:+917518812885" style="width:30px;height:30px;border-radius:8px;background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.2);display:flex;align-items:center;justify-content:center;color:#a78bfa;text-decoration:none;flex-shrink:0;" onclick="showToast('📞 Calling Anmol…','info')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg></a>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,0.22);border-radius:12px;">
-              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#fb923c,#f59e0b);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.8rem;color:#060c14;flex-shrink:0;">AS</div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:0.82rem;font-weight:600;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Amber Savita</div>
-                <div style="display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap;">
-                  <span class="bdg bp" style="font-size:0.56rem;">Member</span>
-                  <span style="font-size:0.6rem;color:#64748b;">+91 83039 95618</span>
-                </div>
-              </div>
-              <a href="tel:+918303995618" style="width:32px;height:32px;border-radius:9px;background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.2);display:flex;align-items:center;justify-content:center;color:#fb923c;text-decoration:none;flex-shrink:0;" onclick="showToast('📞 Calling Amber…','info')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-              </a>
+            <div style="display:flex;align-items:center;gap:9px;padding:9px 10px;background:rgba(0,0,0,0.22);border-radius:11px;overflow:hidden;">
+              <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#fb923c,#f59e0b);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.75rem;color:#060c14;flex-shrink:0;">AS</div>
+              <div style="flex:1;min-width:0;overflow:hidden;"><div style="font-size:0.78rem;font-weight:600;color:#f1f5f9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Amber Savita</div><div style="display:flex;align-items:center;gap:5px;margin-top:2px;flex-wrap:wrap;"><span class="bdg bp" style="font-size:0.54rem;">Member</span><span style="font-size:0.58rem;color:#64748b;">+91 83039 95618</span></div></div>
+              <a href="tel:+918303995618" style="width:30px;height:30px;border-radius:8px;background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.2);display:flex;align-items:center;justify-content:center;color:#fb923c;text-decoration:none;flex-shrink:0;" onclick="showToast('📞 Calling Amber…','info')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg></a>
             </div>
           </div>
         </div>
@@ -1060,131 +726,108 @@ body::before {
 
 <!-- FAB -->
 <a href="report.html" class="fab-p">
-  <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
   Report Issue
 </a>
 
-<!-- ════ SCRIPTS ════ -->
 <script src="assets/js/app.js"></script>
 <script src="assets/js/shared-ui.js"></script>
 
 <script>
-/* ── CLOCK ── */
 function tick() {
-  const n = new Date(), pad = v => String(v).padStart(2,'0');
-  const t = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
-  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const mths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const lc = document.getElementById('liveClock');
-  const ld = document.getElementById('liveDate');
-  const hc = document.getElementById('hClock');
-  if (lc) lc.textContent = t;
-  if (ld) ld.textContent = `${days[n.getDay()]}, ${mths[n.getMonth()]} ${n.getDate()}`;
-  if (hc) hc.textContent = t.slice(0,5);
-  const gr = document.getElementById('greeting');
-  if (gr) { const h = n.getHours(); gr.textContent = h<12?'Good morning 👋':h<17?'Good afternoon 👋':'Good evening 👋'; }
+  const n=new Date(),pad=v=>String(v).padStart(2,'0');
+  const t=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const mths=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const lc=document.getElementById('liveClock'),ld=document.getElementById('liveDate'),hc=document.getElementById('hClock');
+  if(lc)lc.textContent=t;
+  if(ld)ld.textContent=`${days[n.getDay()]}, ${mths[n.getMonth()]} ${n.getDate()}`;
+  if(hc)hc.textContent=t.slice(0,5);
+  const gr=document.getElementById('greeting');
+  if(gr){const h=n.getHours();gr.textContent=h<12?'Good morning 👋':h<17?'Good afternoon 👋':'Good evening 👋';}
 }
-tick(); setInterval(tick, 1000);
+tick();setInterval(tick,1000);
 
-/* ── IMPACT BAR ── */
-setTimeout(() => { const f = document.getElementById('iFill'); if (f) f.style.width = '68%'; }, 700);
+setTimeout(()=>{const f=document.getElementById('iFill');if(f)f.style.width='68%';},700);
 
-/* ── COUNTER ANIMATION ── */
-function animateCounters() {
-  document.querySelectorAll('[data-counter]').forEach(el => {
-    const target = parseInt(el.dataset.counter);
-    const duration = 1200;
-    const step = target / (duration / 16);
-    let current = 0;
-    const timer = setInterval(() => {
-      current = Math.min(current + step, target);
-      el.textContent = Math.floor(current);
-      if (current >= target) clearInterval(timer);
-    }, 16);
+function animateCounters(){
+  document.querySelectorAll('[data-counter]').forEach(el=>{
+    const target=parseInt(el.dataset.counter);
+    let current=0;
+    const step=target/(1200/16);
+    const timer=setInterval(()=>{
+      current=Math.min(current+step,target);
+      el.textContent=Math.floor(current);
+      if(current>=target)clearInterval(timer);
+    },16);
   });
 }
-setTimeout(animateCounters, 400);
+setTimeout(animateCounters,400);
 
-/* ── SPARKLINES ── */
-function mkSpark(id, vals, color) {
-  const el = document.getElementById(id); if (!el) return;
-  const mx = Math.max(...vals);
-  el.innerHTML = vals.map((v,i) => `<div class="sbar" style="height:${Math.round(v/mx*100)}%;background:${color};animation-delay:${i*0.07}s;"></div>`).join('');
+function mkSpark(id,vals,color){
+  const el=document.getElementById(id);if(!el)return;
+  const mx=Math.max(...vals);
+  el.innerHTML=vals.map((v,i)=>`<div class="sbar" style="height:${Math.round(v/mx*100)}%;background:${color};animation-delay:${i*0.07}s;"></div>`).join('');
 }
-setTimeout(() => {
+setTimeout(()=>{
   mkSpark('sp1',[80,95,110,88,120,105,142],'rgba(251,146,60,0.5)');
-  mkSpark('sp2',[40,55,62,70,75,81,89],   'rgba(0,229,204,0.45)');
-  mkSpark('sp3',[25,28,30,32,35,34,37],   'rgba(167,139,250,0.5)');
-  mkSpark('sp4',[1,2,3,2,4,3,3],          'rgba(255,77,109,0.5)');
-}, 800);
+  mkSpark('sp2',[40,55,62,70,75,81,89],'rgba(0,229,204,0.45)');
+  mkSpark('sp3',[25,28,30,32,35,34,37],'rgba(167,139,250,0.5)');
+  mkSpark('sp4',[1,2,3,2,4,3,3],'rgba(255,77,109,0.5)');
+},800);
 
-/* ── MAP MARKERS ── */
-const MARKERS = [
-  {x:'22%',y:'36%',color:'#ff4d6d',label:'Garbage – Market Rd',d:0},
-  {x:'54%',y:'26%',color:'#fb923c',label:'Streetlight – Sec 12',d:0.3},
-  {x:'70%',y:'58%',color:'#00cfff',label:'Water – Civil Lines',d:0.6},
-  {x:'38%',y:'68%',color:'#00e5cc',label:'Pothole – Ring Rd ✓',d:0.9},
-  {x:'80%',y:'35%',color:'#ff4d6d',label:'Power – Aliganj',d:1.2},
+const MARKERS=[
+  {x:'22%',y:'36%',color:'#ff4d6d',label:'Garbage',d:0},
+  {x:'54%',y:'26%',color:'#fb923c',label:'Streetlight',d:0.3},
+  {x:'70%',y:'58%',color:'#00cfff',label:'Water',d:0.6},
+  {x:'38%',y:'68%',color:'#00e5cc',label:'Pothole ✓',d:0.9},
+  {x:'80%',y:'35%',color:'#ff4d6d',label:'Power',d:1.2},
 ];
-document.addEventListener('DOMContentLoaded', () => {
-  const mb = document.getElementById('mapBg');
-  if (mb) MARKERS.forEach(m => {
-    const el = document.createElement('div');
-    el.className = 'mmarker';
-    el.style.cssText = `left:${m.x};top:${m.y};`;
-    el.innerHTML = `<div class="mlabel">${m.label}</div><div class="mdot" style="background:${m.color};animation-delay:${m.d}s;"></div><div class="mring" style="color:${m.color};animation-delay:${m.d}s;"></div>`;
+document.addEventListener('DOMContentLoaded',()=>{
+  const mb=document.getElementById('mapBg');
+  if(mb)MARKERS.forEach(m=>{
+    const el=document.createElement('div');
+    el.className='mmarker';
+    el.style.cssText=`left:${m.x};top:${m.y};`;
+    el.innerHTML=`<div class="mlabel">${m.label}</div><div class="mdot" style="background:${m.color};animation-delay:${m.d}s;"></div><div class="mring" style="color:${m.color};animation-delay:${m.d}s;"></div>`;
     mb.appendChild(el);
   });
 });
 
-/* ── REPORT EXPAND ── */
-function toggleRpt(rowId, detailId) {
-  const row = document.getElementById(rowId), det = document.getElementById(detailId);
-  if (!row || !det) return;
-  const open = row.classList.contains('exp');
-  document.querySelectorAll('.rrow').forEach(r => { r.classList.remove('exp'); const d = r.querySelector('.rdetail'); if (d) d.classList.remove('open'); });
-  if (!open) { row.classList.add('exp'); det.classList.add('open'); }
+function toggleRpt(rowId,detailId){
+  const row=document.getElementById(rowId),det=document.getElementById(detailId);
+  if(!row||!det)return;
+  const open=row.classList.contains('exp');
+  document.querySelectorAll('.rrow').forEach(r=>{r.classList.remove('exp');const d=r.querySelector('.rdetail');if(d)d.classList.remove('open');});
+  if(!open){row.classList.add('exp');det.classList.add('open');}
 }
 
-/* ── RIPPLE ── */
-function rippleEl(el) {
-  const r = document.createElement('span');
-  r.style.cssText = 'position:absolute;border-radius:50%;background:rgba(0,229,204,0.18);width:80px;height:80px;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);animation:ripA 0.5s ease forwards;pointer-events:none;z-index:10;';
-  if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
-  el.style.overflow = 'hidden';
+function rippleEl(el){
+  const r=document.createElement('span');
+  r.style.cssText='position:absolute;border-radius:50%;background:rgba(0,229,204,0.18);width:70px;height:70px;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);animation:ripA 0.5s ease forwards;pointer-events:none;z-index:10;';
+  if(getComputedStyle(el).position==='static')el.style.position='relative';
+  el.style.overflow='hidden';
   el.appendChild(r);
-  setTimeout(() => r.remove(), 560);
+  setTimeout(()=>r.remove(),560);
 }
 
-/* ── RESPONSIVE ── */
-function applyRes() {
-  const w = window.innerWidth;
-  const ml = document.getElementById('mLogo');
-  const dt = document.getElementById('dTitle');
-  const hc = document.getElementById('hClock');
-  if (w >= 768) {
-    if (ml) ml.style.display = 'none';
-    if (dt) dt.style.display = 'block';
-    if (hc) hc.style.display = 'block';
-  } else {
-    if (ml) ml.style.display = 'block';
-    if (dt) dt.style.display = 'none';
-    if (hc) hc.style.display = 'none';
-  }
+function applyRes(){
+  const w=window.innerWidth;
+  const ml=document.getElementById('mLogo'),dt=document.getElementById('dTitle'),hc=document.getElementById('hClock');
+  if(w>=768){if(ml)ml.style.display='none';if(dt)dt.style.display='block';if(hc)hc.style.display='block';}
+  else{if(ml)ml.style.display='block';if(dt)dt.style.display='none';if(hc)hc.style.display='none';}
 }
-applyRes();
-window.addEventListener('resize', applyRes);
+applyRes();window.addEventListener('resize',applyRes);
 </script>
 
 <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
+if("serviceWorker"in navigator){
+  window.addEventListener("load",()=>{
     navigator.serviceWorker.register("/sw.js")
-      .then(() => console.log("SW registered"))
-      .catch(err => console.log("SW failed", err));
+      .then(()=>console.log("SW registered"))
+      .catch(err=>console.log("SW failed",err));
   });
 }
 </script>
-
 </body>
 </html>

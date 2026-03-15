@@ -1,0 +1,425 @@
+/* ════════════════════════════════════════════════════
+   CivicPulse — Mobile Overflow Fix
+   Add this AFTER style.css in your <head>
+   Fixes: right-side cutoff, button overflow, pill wrap,
+          FAB overlap, avatar cutoff on all phones 320-400px
+════════════════════════════════════════════════════ */
+
+/* ── 1. UNIVERSAL OVERFLOW PROTECTION ── */
+*, *::before, *::after {
+  box-sizing: border-box !important;
+}
+
+html {
+  overflow-x: hidden !important;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  position: relative;
+}
+
+/* ── 2. FIX LAYOUT CONTAINERS ──
+   These override style.css app-layout / main-area / page-content
+   which are the root cause of right-side cutoff */
+
+.app-layout {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.main-area {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  /* Remove any left margin that might be set for sidebar */
+  margin-left: 0 !important;
+}
+
+/* Header fix — avatar getting cut on right */
+.app-header {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-right: max(12px, env(safe-area-inset-right, 12px)) !important;
+  padding-left: max(12px, env(safe-area-inset-left, 12px)) !important;
+  box-sizing: border-box !important;
+}
+
+.header-right {
+  flex-shrink: 0;
+  gap: 8px !important;
+  overflow: hidden;
+}
+
+/* ── 3. PAGE CONTENT — this is the main fix ──
+   style.css likely sets padding: 16px or similar
+   but may be missing padding-right or using wrong units */
+
+.page-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  /* Symmetric padding on all sides */
+  padding: 16px !important;
+  /* Bottom padding for FAB + bottom nav */
+  padding-bottom: calc(var(--tab-h, 70px) + env(safe-area-inset-bottom, 16px) + 80px) !important;
+  overflow-x: hidden !important;
+}
+
+/* On tablet+ restore normal bottom */
+@media (min-width: 768px) {
+  .page-content {
+    padding: 24px !important;
+    padding-bottom: 48px !important;
+  }
+  .main-area {
+    margin-left: var(--sidebar-w, 0px) !important;
+  }
+}
+
+/* ── 4. HERO SECTION ── */
+.hero-section {
+  width: 100% !important;
+  overflow: hidden !important;
+  padding: 16px 0 !important;
+}
+
+/* Hero desc overflow — was getting cut on right */
+.hero-desc {
+  width: 100% !important;
+  max-width: 100% !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  font-size: 0.85rem !important;
+}
+
+/* Hero title */
+.hero-title {
+  font-size: clamp(1.3rem, 5vw, 2.2rem) !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Hero chip — was overflowing on 320px */
+.hero-chip {
+  max-width: 100% !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+
+/* ── 5. BUTTONS — were stretching full width ── */
+.hero-btn-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.hero-btn-row .btn-teal,
+.hero-btn-row .btn-outline {
+  /* Auto width, not full stretch */
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+/* On 320px both buttons go full width */
+@media (max-width: 340px) {
+  .hero-btn-row {
+    flex-direction: column !important;
+  }
+  .hero-btn-row .btn-teal,
+  .hero-btn-row .btn-outline {
+    width: 100% !important;
+  }
+}
+
+/* ── 6. PILLS — "Emergencies" was cut off ── */
+.pills-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 5px !important;
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+.issue-pill {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  max-width: calc(50% - 4px) !important; /* max 2 pills per row */
+}
+
+/* ── 7. STATS ROW ── */
+.hero-stats {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 12px !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+.hero-stat {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.hero-stat-num {
+  font-size: 1rem !important;
+}
+
+.hero-stat-lbl {
+  font-size: 0.55rem !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+
+/* ── 8. HIW GRID — cards overflow fix ── */
+.hiw-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.hiw-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  padding: 14px !important;
+}
+
+/* ── 9. WELCOME CARD ── */
+.welcome-card {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+/* ── 10. ACTION TILES GRID ── */
+#aGrid, #sGrid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.atile {
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  padding: 14px 10px !important;
+}
+
+.atile-title {
+  font-size: 0.75rem !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+
+/* ── 11. STAT CARDS ── */
+.scard {
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  padding: 10px !important;
+}
+
+.scard-num {
+  font-size: 1.3rem !important;
+}
+
+/* ── 12. REPORT ROWS ── */
+.rrow, .rtop, .alert-item, .lbrow {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.rtop-right {
+  flex-shrink: 0 !important;
+  gap: 4px !important;
+}
+
+/* Badge overflow fix */
+.bdg {
+  max-width: 70px !important;
+  font-size: 0.58rem !important;
+  padding: 2px 6px !important;
+}
+
+/* ── 13. ALERT ITEMS ── */
+.alert-title {
+  font-size: 0.75rem !important;
+}
+
+.alert-meta {
+  font-size: 0.6rem !important;
+}
+
+/* ── 14. LEADERBOARD ── */
+.lbrow {
+  padding: 9px 10px !important;
+  gap: 8px !important;
+}
+
+.lb-name {
+  font-size: 0.75rem !important;
+}
+
+.lb-meta {
+  font-size: 0.58rem !important;
+}
+
+.lb-pts {
+  font-size: 0.78rem !important;
+  white-space: nowrap !important;
+}
+
+/* ── 15. TEAM SECTION ── */
+#teamGrid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+#teamGrid > div {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* ── 16. FAB — was overlapping content ──
+   Ensure it's above bottom nav but doesn't block content */
+.fab-p {
+  position: fixed !important;
+  bottom: calc(var(--tab-h, 62px) + env(safe-area-inset-bottom, 0px) + 16px) !important;
+  right: max(14px, env(safe-area-inset-right, 14px)) !important;
+  z-index: 45 !important;
+  /* Slightly smaller on phone */
+  height: 46px !important;
+  padding: 0 16px !important;
+  font-size: 0.78rem !important;
+}
+
+/* ── 17. BOTTOM NAV — ensure it has proper safe area ── */
+.bottom-nav,
+.tab-bar,
+[class*="bottom-bar"],
+[class*="tab-bar"] {
+  padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ── 18. TWO-COL — single column on phone ── */
+.two-col {
+  display: block !important;
+  width: 100% !important;
+}
+
+@media (min-width: 768px) {
+  .two-col {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 18px !important;
+  }
+}
+
+/* ── 19. MAP CARD ── */
+.map-card, .map-bg {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+/* ── 20. GENERAL — any element that might overflow ── */
+section, div, article, aside, main, header, footer {
+  max-width: 100% !important;
+}
+
+/* Prevent long strings breaking layout */
+p, span, div, h1, h2, h3, h4 {
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+/* ── 21. 320px EXTREME SMALL PHONE ── */
+@media (max-width: 320px) {
+  .page-content {
+    padding: 12px !important;
+  }
+  
+  .hiw-card {
+    padding: 10px !important;
+  }
+  
+  .hiw-title {
+    font-size: 0.78rem !important;
+  }
+  
+  .hiw-desc {
+    font-size: 0.65rem !important;
+  }
+  
+  .hero-title {
+    font-size: 1.2rem !important;
+  }
+  
+  .welcome-card {
+    padding: 12px !important;
+  }
+  
+  .atile {
+    padding: 10px 8px !important;
+  }
+  
+  .atile-title {
+    font-size: 0.7rem !important;
+  }
+  
+  .scard-num {
+    font-size: 1.1rem !important;
+  }
+  
+  .fab-p {
+    font-size: 0.72rem !important;
+    padding: 0 12px !important;
+    height: 42px !important;
+  }
+}
+
+/* ── 22. HEADER AVATAR CUTOFF FIX ── */
+.avatar {
+  flex-shrink: 0 !important;
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.icon-btn {
+  flex-shrink: 0 !important;
+  min-width: 32px !important;
+}
+
+/* ── 23. SIDEBAR — ensure it doesn't push main content on mobile ── */
+@media (max-width: 767px) {
+  .sidebar,
+  [class*="sidebar"] {
+    position: fixed !important;
+    z-index: 100 !important;
+    transform: translateX(-100%) !important;
+  }
+  
+  .sidebar.open,
+  [class*="sidebar"].open {
+    transform: translateX(0) !important;
+  }
+}
