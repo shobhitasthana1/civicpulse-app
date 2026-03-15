@@ -103,9 +103,7 @@
         <!-- Footer user info -->
         <div class="cp-sidebar-footer">
           <div class="cp-sidebar-user">
-           <div class="cp-sidebar-avatar" style="padding:0;overflow:hidden;">
-  <img src="assets/shobhit.png" alt="Shobhit" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;"/>
-</div>
+            <div class="cp-sidebar-avatar">SA</div>
             <div>
               <div class="cp-sidebar-username">Shobhit Asthana</div>
               <div class="cp-sidebar-role">Level 4 · Null Pointer</div>
@@ -159,11 +157,12 @@
     const sidebar    = document.getElementById('cpSidebar');
     const overlay    = document.getElementById('cpSidebarOverlay');
     const closeBtn   = document.getElementById('cpSidebarClose');
-    // Hamburger button — in header
+    // Hamburger button — in header, may load before or after sidebar injection
     const hamburger  = document.querySelector('.hamburger');
 
     if (!sidebar || !overlay) {
-      console.warn('CivicPulse: Sidebar elements not found');
+      console.warn('CivicPulse: Sidebar elements not found, retrying...');
+      setTimeout(initSidebarToggle, 100);
       return;
     }
 
@@ -183,16 +182,23 @@
       hamburger && hamburger.setAttribute('aria-expanded', 'false');
     }
 
-    /* Hamburger click → open */
+    /* Hamburger click → toggle */
     if (hamburger) {
-      hamburger.addEventListener('click', function (e) {
+      // Remove any previous listener to avoid double-bind
+      const newHamburger = hamburger.cloneNode(true);
+      hamburger.parentNode.replaceChild(newHamburger, hamburger);
+
+      newHamburger.addEventListener('click', function (e) {
+        e.preventDefault();
         e.stopPropagation();
-        if (sidebar.classList.contains('open')) {
-          closeSidebar();
-        } else {
-          openSidebar();
-        }
+        const isOpen = sidebar.classList.contains('open');
+        if (isOpen) { closeSidebar(); } else { openSidebar(); }
       });
+
+      // Also bind to the replaced element reference
+      window._cpHamburger = newHamburger;
+    } else {
+      console.warn('CivicPulse: .hamburger button not found in DOM');
     }
 
     /* Close button → close */
@@ -219,7 +225,6 @@
     sidebar.querySelectorAll('.cp-nav-item').forEach(function (item) {
       item.addEventListener('click', function () {
         closeSidebar();
-        // Navigation happens via href naturally
       });
     });
   }
@@ -314,32 +319,50 @@
         background: currentColor;
       }
 
-      /* Hamburger button styles */
+      /* Hamburger button — strict size control */
       .hamburger {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 22px;
-        height: 16px;
-        cursor: pointer;
-        background: none;
-        border: none;
-        padding: 0;
-        flex-shrink: 0;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        width: 22px !important;
+        height: 16px !important;
+        min-width: 22px !important;
+        max-width: 22px !important;
+        min-height: 16px !important;
+        max-height: 16px !important;
+        cursor: pointer !important;
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        flex-shrink: 0 !important;
+        overflow: visible !important;
+        position: relative !important;
+        z-index: 201 !important;
+        -webkit-tap-highlight-color: transparent !important;
+        /* Larger tap area without changing visual size */
+        touch-action: manipulation !important;
       }
 
       .hamburger span {
-        display: block;
-        width: 100%;
-        height: 2px;
-        background: #94a3b8;
-        border-radius: 2px;
-        transition: all 0.25s ease;
+        display: block !important;
+        width: 100% !important;
+        height: 2px !important;
+        background: #94a3b8 !important;
+        border-radius: 2px !important;
+        transition: background 0.2s ease !important;
+        flex-shrink: 0 !important;
+        pointer-events: none !important;
+      }
+
+      .hamburger span:nth-child(2) {
+        width: 75% !important;
       }
 
       .hamburger:hover span,
       .hamburger[aria-expanded="true"] span {
-        background: #00e5cc;
+        background: #00e5cc !important;
       }
 
       /* CSS variable for tab height — used by page-content padding */
@@ -408,10 +431,11 @@
     injectBottomNavStyles();
     inject();
 
-    // Small delay to ensure DOM is fully ready
-    requestAnimationFrame(function () {
+    // Wait for DOM paint then bind events
+    // Using setTimeout(0) ensures injected HTML is in DOM before we query it
+    setTimeout(function () {
       initSidebarToggle();
-    });
+    }, 0);
   }
 
   /* Run when DOM is ready */
