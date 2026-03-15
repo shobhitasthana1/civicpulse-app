@@ -12,6 +12,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="assets/css/style.css"/>
 
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0f172a">
+
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+
+
 <style>
 /* ══════════════════════════════════════
    CivicPulse — Home Page Styles v4
@@ -307,6 +315,7 @@ body::before {
         </button>
         <div class="avatar" role="button" aria-label="Profile" tabindex="0">SA</div>
       </div>
+      
     </header>
 
     <!-- ════ PAGE CONTENT ════ -->
@@ -801,5 +810,15 @@ function applyRes(){
 }
 applyRes(); window.addEventListener('resize',applyRes);
 </script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js")
+    .then(() => console.log("Service Worker Registered"));
+}
+</script>
+
+
+
 </body>
 </html>
