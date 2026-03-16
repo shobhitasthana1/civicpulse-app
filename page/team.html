@@ -15,7 +15,7 @@
 :root { --teal:#00e5cc; --cyan:#00cfff; --purple:#a78bfa; --orange:#fb923c; --red:#ff4d6d; }
 *, *::before, *::after { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html { font-size:16px; -webkit-text-size-adjust:100%; }
-html,body { width:100%; max-width:100%; overflow-x:hidden; margin:0; padding:0; }
+html,body { width:100%; max-width:100%; overflow-x:hidden; margin:0; padding:0; background-color:#060c14; color:#f1f5f9; }
 
 body::before {
   content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
@@ -29,23 +29,24 @@ body::before {
 .syne-font { font-family:'Syne',sans-serif; }
 .slbl { font-family:'Syne',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:rgba(0,229,204,0.65); display:flex; align-items:center; gap:8px; margin-bottom:12px; }
 .slbl::after { content:''; flex:1; height:1px; background:linear-gradient(to right,rgba(0,229,204,0.2),transparent); }
+
+/* Animations */
 .fu { opacity:0; transform:translateY(16px); animation:fu .4s ease forwards; }
 @keyframes fu { to { opacity:1; transform:translateY(0); } }
-.d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}
+.d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}.d5{animation-delay:.30s}.d6{animation-delay:.36s}
 
-/* Member card */
+/* Member card - Fully Equalized */
 .mcard {
   background:rgba(11,20,34,0.75); border:1px solid rgba(255,255,255,0.08);
-  border-radius:22px; padding:24px; position:relative; overflow:hidden;
+  border-top:2px solid rgba(0,229,204,0.4); border-radius:22px; padding:24px; 
+  position:relative; overflow:hidden; display:flex; flex-direction:column;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-
-/* Avatar ring */
-.av-ring {
-  position:absolute; inset:-3px; border-radius:50%;
-  background:conic-gradient(#00e5cc,#00cfff,#a78bfa,#00e5cc);
-  animation:spin-ring 4s linear infinite;
+.mcard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0,229,204,0.1);
+  border-color: rgba(0,229,204,0.3);
 }
-@keyframes spin-ring { to { transform:rotate(360deg); } }
 
 /* Glass card */
 .glass-card {
@@ -59,9 +60,27 @@ body::before {
   padding:12px; border-radius:14px; background:rgba(255,255,255,0.05);
   border:1px solid rgba(255,255,255,0.1); color:#94a3b8;
   font-family:'Syne',sans-serif; font-weight:700; font-size:0.82rem;
-  cursor:pointer; transition:all .2s; text-decoration:none;
+  cursor:pointer; transition:all .2s; text-decoration:none; margin-top:auto;
 }
+.btn-contact:hover { background:rgba(0,229,204,0.1); color:#00e5cc; border-color:rgba(0,229,204,0.3); }
 .btn-contact:active { transform:scale(0.96); }
+
+/* Avatar Base */
+.av-wrapper {
+  position:relative; width:80px; height:80px; margin:0 auto 16px;
+  border-radius:50%; padding:3px; background:linear-gradient(135deg, #00e5cc, #a78bfa);
+  box-shadow: 0 0 15px rgba(0,229,204,0.2);
+}
+
+/* Bottom Nav */
+.bottom-nav {
+  position:fixed; bottom:0; left:0; width:100%; background:rgba(6,12,20,0.9);
+  backdrop-filter:blur(10px); border-top:1px solid rgba(255,255,255,0.05);
+  display:flex; justify-content:space-around; align-items:center; padding:10px 0;
+  z-index:50; padding-bottom:calc(10px + env(safe-area-inset-bottom));
+}
+.nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; color:#64748b; font-size:0.65rem; font-weight:600; text-decoration:none; transition:color 0.2s; }
+.nav-item.active { color:#00e5cc; }
 </style>
 </head>
 
@@ -70,7 +89,6 @@ body::before {
 <div class="app-layout">
 <div class="main-area">
 
-<!-- HEADER -->
 <header class="app-header">
   <div class="header-left">
     <button class="hamburger" aria-label="Open navigation menu" type="button">
@@ -90,202 +108,279 @@ body::before {
       <span class="notif-badge"></span>
     </button>
     <div class="avatar" style="flex-shrink:0;overflow:hidden;padding:0;">
-      <img src="../image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.parentElement.textContent='SA';"/>
+      <img src="../image/shobhit.png" alt="User" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.parentElement.textContent='U';"/>
     </div>
   </div>
 </header>
 
-<!-- PAGE CONTENT -->
-<main class="page-content">
+<main class="page-content" style="padding-bottom: 90px;">
 
-  <!-- HERO BANNER -->
-  <div class="fu" style="background:linear-gradient(135deg,rgba(147,51,234,0.1),rgba(0,207,255,0.07));border:1px solid rgba(147,51,234,0.2);border-radius:22px;padding:28px 24px;text-align:center;position:relative;overflow:hidden;margin-bottom:24px;">
-    <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(147,51,234,0.2),transparent 70%);pointer-events:none;"></div>
-    <div style="position:absolute;bottom:-20px;left:-20px;width:90px;height:90px;background:radial-gradient(circle,rgba(0,207,255,0.15),transparent 70%);pointer-events:none;"></div>
+  <div class="fu d1" style="background:linear-gradient(135deg,rgba(0,229,204,0.1),rgba(147,51,234,0.07));border:1px solid rgba(0,229,204,0.2);border-radius:22px;padding:32px 24px;text-align:center;position:relative;overflow:hidden;margin-bottom:28px;">
+    <div style="position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(0,229,204,0.2),transparent 70%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(147,51,234,0.15),transparent 70%);pointer-events:none;"></div>
+    
     <div style="position:relative;z-index:1;">
-      <div style="font-size:2.5rem;margin-bottom:8px;">⚡</div>
-      <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.6rem,5vw,2.2rem);background:linear-gradient(135deg,#a78bfa,#00cfff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;">Null Pointer</h1>
-      <p style="font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;color:#64748b;font-weight:700;margin-bottom:16px;">Hackathon 2025 · CivicPulse</p>
-      <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:8px;">
-        <span style="background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);color:#a78bfa;padding:4px 12px;border-radius:50px;font-size:0.65rem;font-weight:700;">🏆 Hackathon</span>
-        <span style="background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.3);color:#00e5cc;padding:4px 12px;border-radius:50px;font-size:0.65rem;font-weight:700;">Civic Tech</span>
-        <span style="background:rgba(0,207,255,0.1);border:1px solid rgba(0,207,255,0.3);color:#00cfff;padding:4px 12px;border-radius:50px;font-size:0.65rem;font-weight:700;">3 Members</span>
+      <div style="font-size:2.5rem;margin-bottom:8px; animation: bounce 2s infinite;">⚡</div>
+      <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.8rem,6vw,2.5rem);background:linear-gradient(135deg,#00e5cc,#a78bfa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">Null Pointer</h1>
+      <p style="font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;color:#94a3b8;font-weight:700;margin-bottom:20px;">Hackathon 2025 · CivicPulse</p>
+      
+      <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:10px;">
+        <span style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:#ffd700;padding:6px 14px;border-radius:50px;font-size:0.68rem;font-weight:700;">🏆 Hackathon Project</span>
+        <span style="background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.3);color:#00e5cc;padding:6px 14px;border-radius:50px;font-size:0.68rem;font-weight:700;">Civic Tech</span>
+        <span style="background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);color:#a78bfa;padding:6px 14px;border-radius:50px;font-size:0.68rem;font-weight:700;">3 Developers</span>
       </div>
     </div>
   </div>
 
-  <!-- LEADER CARD -->
-  <div class="mcard fu d1" style="border-top:2px solid rgba(0,229,204,0.4);margin-bottom:16px;">
-    <div style="position:absolute;top:-30px;right:-30px;width:130px;height:130px;background:radial-gradient(circle,rgba(0,229,204,0.08),transparent 70%);pointer-events:none;"></div>
-    <span style="position:absolute;top:14px;right:16px;font-size:1.5rem;">👑</span>
+  <div class="slbl fu d2">Development Team</div>
 
-    <div style="text-align:center;position:relative;z-index:1;margin-bottom:20px;">
-      <div style="position:relative;width:76px;height:76px;margin:0 auto 14px;">
-        <div class="av-ring"></div>
-        <div style="position:relative;z-index:1;width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#00e5cc,#00cfff);border:3px solid #060c14;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:900;font-size:1.4rem;color:#060c14;">SA</div>
-      </div>
-      <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:#f1f5f9;margin-bottom:4px;">Shobhit Asthana</h2>
-      <p style="font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:#00e5cc;font-weight:700;margin-bottom:12px;">Team Leader</p>
-      <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:6px;">
-        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:3px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">Frontend Dev</span>
-        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:3px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">UI/UX</span>
-        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:3px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">Tailwind CSS</span>
-      </div>
-    </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;margin-bottom:28px;" class="fu d2">
 
-    <div style="height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.1),transparent);margin-bottom:16px;"></div>
-
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;text-align:center;">
-      <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:10px 4px;border:1px solid rgba(255,255,255,0.05);">
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#00e5cc;">19</div>
-        <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Reports</div>
+    <div class="mcard">
+      <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(0,229,204,0.06),transparent 70%);pointer-events:none;"></div>
+      
+      <div class="av-wrapper">
+        <img src="../image/shobhit.png" alt="Shobhit Asthana" style="width:100%;height:100%;object-fit:cover;border-radius:50%;background:#0b1422;" onerror="this.outerHTML='<div style=\'width:100%;height:100%;border-radius:50%;background:#0b1422;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#00e5cc;\'>SA</div>'"/>
       </div>
-      <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:10px 4px;border:1px solid rgba(255,255,255,0.05);">
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#f1f5f9;">340</div>
-        <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Points</div>
-      </div>
-      <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:10px 4px;border:1px solid rgba(255,255,255,0.05);">
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#f59e0b;">#1</div>
-        <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Rank</div>
-      </div>
-    </div>
-
-    <div style="margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;font-size:0.62rem;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:6px;">
-        <span>Community Impact</span>
-        <span style="color:#00e5cc;">68% to Lv 5</span>
-      </div>
-      <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:5px;overflow:hidden;">
-        <div id="leaderBar" style="height:100%;background:linear-gradient(90deg,#00e5cc,#00cfff);border-radius:5px;width:0;transition:width 1s ease;box-shadow:0 0 8px rgba(0,229,204,0.5);"></div>
-      </div>
-    </div>
-
-    <a href="tel:+916388095158" class="btn-contact" style="display:flex;" onclick="showToast('📞 Calling Shobhit...','info')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-      +91 63880 95158
-    </a>
-  </div>
-
-  <!-- MEMBER CARDS GRID -->
-  <div style="display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:20px;" class="fu d2">
-
-    <!-- Anmol -->
-    <div class="mcard" style="border-top:2px solid rgba(167,139,250,0.4);">
-      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,rgba(167,139,250,0.08),transparent 70%);pointer-events:none;"></div>
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;position:relative;z-index:1;">
-        <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#7c3aed);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff;flex-shrink:0;box-shadow:0 0 14px rgba(167,139,250,0.3);">AD</div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:#f1f5f9;">Anmol Dwivedi</div>
-          <p style="font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#a78bfa;font-weight:700;margin:2px 0 6px;">Backend Developer</p>
-          <div style="display:flex;gap:5px;flex-wrap:wrap;">
-            <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:2px 8px;border-radius:6px;font-size:0.6rem;font-weight:700;">APIs</span>
-            <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:2px 8px;border-radius:6px;font-size:0.6rem;font-weight:700;">Database</span>
-          </div>
+      
+      <div style="text-align:center;margin-bottom:16px;">
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:#f1f5f9;margin-bottom:4px;">Shobhit Asthana</h2>
+        <p style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#00e5cc;font-weight:700;margin-bottom:12px;">CivicPulse Developer</p>
+        <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:6px;">
+          <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:4px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">Frontend</span>
+          <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:4px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">UI/UX</span>
+          <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:4px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">JavaScript</span>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;text-align:center;">
-        <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;border:1px solid rgba(255,255,255,0.05);">
-          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#a78bfa;">8</div>
-          <div style="font-size:0.56rem;color:#64748b;text-transform:uppercase;">Reports</div>
+
+      <div style="height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.1),transparent);margin-bottom:16px;"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;text-align:center;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:12px 4px;border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#00e5cc;">19</div>
+          <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Reports</div>
         </div>
-        <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;border:1px solid rgba(255,255,255,0.05);">
-          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#f1f5f9;">180</div>
-          <div style="font-size:0.56rem;color:#64748b;text-transform:uppercase;">Points</div>
+        <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:12px 4px;border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#f1f5f9;">340</div>
+          <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Points</div>
         </div>
       </div>
-      <a href="tel:+917518812885" class="btn-contact" style="display:flex;" onclick="showToast('📞 Calling Anmol...','info')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.62rem;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:6px;">
+          <span>Community Impact</span>
+          <span style="color:#00e5cc;">70%</span>
+        </div>
+        <div style="height:6px;background:rgba(255,255,255,0.07);border-radius:6px;overflow:hidden;">
+          <div class="impact-bar" data-width="70%" style="height:100%;background:linear-gradient(90deg,#00e5cc,#00cfff);border-radius:6px;width:0;transition:width 1s ease 0.5s;"></div>
+        </div>
+      </div>
+
+      <a href="tel:+916388095158" class="btn-contact" onclick="showToast('📞 Calling Shobhit...','info')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+        +91 63880 95158
+      </a>
+    </div>
+
+    <div class="mcard">
+      <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(0,229,204,0.06),transparent 70%);pointer-events:none;"></div>
+      
+      <div class="av-wrapper">
+        <img src="../image/amber.png" alt="Amber Savita" style="width:100%;height:100%;object-fit:cover;border-radius:50%;background:#0b1422;" onerror="this.outerHTML='<div style=\'width:100%;height:100%;border-radius:50%;background:#0b1422;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#00e5cc;\'>AS</div>'"/>
+      </div>
+      
+      <div style="text-align:center;margin-bottom:16px;">
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:#f1f5f9;margin-bottom:4px;">Amber Savita</h2>
+        <p style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#00e5cc;font-weight:700;margin-bottom:12px;">CivicPulse Developer</p>
+        <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:6px;">
+          <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:4px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">Research</span>
+          <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:4px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">Testing</span>
+          <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:4px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">Outreach</span>
+        </div>
+      </div>
+
+      <div style="height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.1),transparent);margin-bottom:16px;"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;text-align:center;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:12px 4px;border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#00e5cc;">6</div>
+          <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Reports</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:12px 4px;border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#f1f5f9;">140</div>
+          <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Points</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.62rem;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:6px;">
+          <span>Community Impact</span>
+          <span style="color:#00e5cc;">69%</span>
+        </div>
+        <div style="height:6px;background:rgba(255,255,255,0.07);border-radius:6px;overflow:hidden;">
+          <div class="impact-bar" data-width="69%" style="height:100%;background:linear-gradient(90deg,#00e5cc,#00cfff);border-radius:6px;width:0;transition:width 1s ease 0.6s;"></div>
+        </div>
+      </div>
+
+      <a href="tel:+918303995618" class="btn-contact" onclick="showToast('📞 Calling Amber...','info')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+        +91 83039 95618
+      </a>
+    </div>
+
+    <div class="mcard">
+      <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(0,229,204,0.06),transparent 70%);pointer-events:none;"></div>
+      
+      <div class="av-wrapper">
+        <img src="../image/anmol.png" alt="Anmol Dwivedi" style="width:100%;height:100%;object-fit:cover;border-radius:50%;background:#0b1422;" onerror="this.outerHTML='<div style=\'width:100%;height:100%;border-radius:50%;background:#0b1422;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#00e5cc;\'>AD</div>'"/>
+      </div>
+      
+      <div style="text-align:center;margin-bottom:16px;">
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:#f1f5f9;margin-bottom:4px;">Anmol Dwivedi</h2>
+        <p style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#00e5cc;font-weight:700;margin-bottom:12px;">CivicPulse Developer</p>
+        <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:6px;">
+          <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:4px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">Backend</span>
+          <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:4px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">APIs</span>
+          <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:4px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">Database</span>
+        </div>
+      </div>
+
+      <div style="height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.1),transparent);margin-bottom:16px;"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;text-align:center;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:12px 4px;border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#00e5cc;">8</div>
+          <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Reports</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:12px 4px;border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#f1f5f9;">180</div>
+          <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Points</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.62rem;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:6px;">
+          <span>Community Impact</span>
+          <span style="color:#00e5cc;">68%</span>
+        </div>
+        <div style="height:6px;background:rgba(255,255,255,0.07);border-radius:6px;overflow:hidden;">
+          <div class="impact-bar" data-width="68%" style="height:100%;background:linear-gradient(90deg,#00e5cc,#00cfff);border-radius:6px;width:0;transition:width 1s ease 0.7s;"></div>
+        </div>
+      </div>
+
+      <a href="tel:+917518812885" class="btn-contact" onclick="showToast('📞 Calling Anmol...','info')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
         +91 75188 12885
       </a>
     </div>
 
-    <!-- Amber -->
-    <div class="mcard" style="border-top:2px solid rgba(251,146,60,0.4);">
-      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,rgba(251,146,60,0.08),transparent 70%);pointer-events:none;"></div>
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;position:relative;z-index:1;">
-        <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#fb923c,#f59e0b);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#060c14;flex-shrink:0;box-shadow:0 0 14px rgba(251,146,60,0.3);">AS</div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:#f1f5f9;">Amber Savita</div>
-          <p style="font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#fb923c;font-weight:700;margin:2px 0 6px;">Research & Outreach</p>
-          <div style="display:flex;gap:5px;flex-wrap:wrap;">
-            <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:2px 8px;border-radius:6px;font-size:0.6rem;font-weight:700;">Outreach</span>
-            <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:2px 8px;border-radius:6px;font-size:0.6rem;font-weight:700;">Testing</span>
-          </div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;text-align:center;">
-        <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;border:1px solid rgba(255,255,255,0.05);">
-          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fb923c;">6</div>
-          <div style="font-size:0.56rem;color:#64748b;text-transform:uppercase;">Reports</div>
-        </div>
-        <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;border:1px solid rgba(255,255,255,0.05);">
-          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#f1f5f9;">140</div>
-          <div style="font-size:0.56rem;color:#64748b;text-transform:uppercase;">Points</div>
-        </div>
-      </div>
-      <a href="tel:+918303995618" class="btn-contact" style="display:flex;" onclick="showToast('📞 Calling Amber...','info')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-        +91 83039 95618
-      </a>
-    </div>
   </div>
 
-  <!-- TECH STACK -->
-  <div class="fu d3" style="margin-bottom:16px;">
+  <div class="fu d3" style="margin-bottom:28px;">
     <div class="slbl">Tech Stack</div>
-    <div class="glass-card" style="padding:18px;">
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+    <div class="glass-card" style="padding:22px;">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
         <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">🌐 HTML5</span>
         <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">🎨 Tailwind CSS</span>
         <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">⚡ JavaScript</span>
         <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">📱 PWA</span>
-        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">🔮 Glassmorphism</span>
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">🔮 Glassmorphism UI</span>
       </div>
-      <div style="height:1px;background:rgba(255,255,255,0.07);margin-bottom:12px;"></div>
-      <p style="font-size:0.78rem;color:#64748b;line-height:1.6;">Built with pure HTML/CSS/JS — zero heavy dependencies. Fully responsive from 320px phones to 4K desktops. Deployed as a Trusted Web Activity Android app.</p>
+      <div style="height:1px;background:rgba(255,255,255,0.07);margin-bottom:14px;"></div>
+      <p style="font-size:0.8rem;color:#94a3b8;line-height:1.6;">Built using pure HTML, CSS, and JavaScript with a mobile-first architecture. CivicPulse is optimized for performance, responsiveness, and real-world civic usage.</p>
     </div>
   </div>
 
-  <!-- PROJECT -->
-  <div class="fu d4">
+  <div class="fu d4" style="margin-bottom:28px;">
     <div class="slbl">Project Overview</div>
-    <div class="glass-card" style="padding:18px;">
-      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;">
-        <span style="font-size:1.4rem;flex-shrink:0;">🎯</span>
+    <div class="glass-card" style="padding:22px;">
+      <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:18px;">
+        <span style="font-size:1.5rem;flex-shrink:0;">🎯</span>
         <div>
-          <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:#f1f5f9;margin-bottom:4px;">Mission</h4>
-          <p style="font-size:0.75rem;color:#64748b;line-height:1.6;">Bridge the gap between citizens and civic authorities through technology, making issue reporting fast, transparent, and effective.</p>
+          <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:#f1f5f9;margin-bottom:6px;">Mission</h4>
+          <p style="font-size:0.8rem;color:#94a3b8;line-height:1.6;">Bridge the gap between citizens and civic authorities through technology, enabling transparent and efficient issue reporting.</p>
         </div>
       </div>
-      <div style="height:1px;background:rgba(255,255,255,0.07);margin-bottom:14px;"></div>
-      <div style="display:flex;gap:14px;align-items:flex-start;">
-        <span style="font-size:1.4rem;flex-shrink:0;">🏆</span>
+      <div style="height:1px;background:rgba(255,255,255,0.07);margin-bottom:18px;"></div>
+      <div style="display:flex;gap:16px;align-items:flex-start;">
+        <span style="font-size:1.5rem;flex-shrink:0;">🏆</span>
         <div>
-          <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:#f1f5f9;margin-bottom:4px;">Hackathon Goal</h4>
-          <p style="font-size:0.75rem;color:#64748b;line-height:1.6;">Build a production-grade civic technology app that could realistically be deployed to serve real citizens in Lucknow and beyond.</p>
+          <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:#f1f5f9;margin-bottom:6px;">Hackathon Goal</h4>
+          <p style="font-size:0.8rem;color:#94a3b8;line-height:1.6;">Develop a production-grade civic technology platform that empowers citizens to report issues and track solutions in real time.</p>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="fu d5" style="margin-bottom:28px;">
+    <div class="slbl">Team Contribution</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(100px, 1fr));gap:12px;">
+      
+      <div class="glass-card" style="padding:20px 10px;text-align:center;">
+        <div style="font-size:1.8rem;margin-bottom:8px;">📝</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.8rem;color:#00e5cc;line-height:1;">33</div>
+        <div style="font-size:0.6rem;text-transform:uppercase;color:#94a3b8;font-weight:700;margin-top:8px;letter-spacing:1px;">Total Reports<br>Submitted</div>
+      </div>
+      
+      <div class="glass-card" style="padding:20px 10px;text-align:center;border-color:rgba(167,139,250,0.3);">
+        <div style="font-size:1.8rem;margin-bottom:8px;">⭐</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.8rem;color:#a78bfa;line-height:1;">660</div>
+        <div style="font-size:0.6rem;text-transform:uppercase;color:#94a3b8;font-weight:700;margin-top:8px;letter-spacing:1px;">Community<br>Points</div>
+      </div>
+      
+      <div class="glass-card" style="padding:20px 10px;text-align:center;">
+        <div style="font-size:1.8rem;margin-bottom:8px;">✅</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:1.8rem;color:#00cfff;line-height:1;">15</div>
+        <div style="font-size:0.6rem;text-transform:uppercase;color:#94a3b8;font-weight:700;margin-top:8px;letter-spacing:1px;">Issues<br>Resolved</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="fu d6" style="text-align:center;padding:24px 16px;">
+    <div style="font-size:2rem;margin-bottom:12px;">🤝</div>
+    <h3 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#f1f5f9;margin-bottom:10px;">Built with collaboration, innovation, and civic responsibility.</h3>
+    <p style="font-size:0.85rem;color:#64748b;line-height:1.6;max-width:400px;margin:0 auto;">We built CivicPulse to help cities become smarter and more responsive to citizen needs. Every line of code brings us closer to a better community.</p>
   </div>
 
 </main>
 </div>
 </div>
 
-<!-- FAB -->
-<a href="report.html" class="fab-p">
+<a href="report.html" class="fab-p" style="bottom: 85px;">
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
   Report Issue
 </a>
+
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    <span>Home</span>
+  </a>
+  <a href="reports.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+    <span>Reports</span>
+  </a>
+  <a href="team.html" class="nav-item active">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+    <span>Team</span>
+  </a>
+  <a href="profile.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+    <span>Profile</span>
+  </a>
+</nav>
 
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shared-ui.js"></script>
 <script>
 window.addEventListener('DOMContentLoaded', () => {
+  // Trigger progressive bar fills for visually pleasing UI
   setTimeout(() => {
-    const bar = document.getElementById('leaderBar');
-    if (bar) bar.style.width = '68%';
-  }, 500);
+    document.querySelectorAll('.impact-bar').forEach(bar => {
+      bar.style.width = bar.getAttribute('data-width');
+    });
+  }, 100);
 });
 </script>
 </body>
