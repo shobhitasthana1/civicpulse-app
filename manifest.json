@@ -1,21 +1,66 @@
 {
-  "name": "CivicPulse",
+  "name": "CivicPulse — Fix Kanpur Together",
   "short_name": "CivicPulse",
+  "description": "Report civic issues in Kanpur, track complaints and improve your city together.",
   "id": "/",
-  "start_url": "/",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#020617",
-  "theme_color": "#06b6d4",
+  "orientation": "portrait",
+  "theme_color": "#060c14",
+  "background_color": "#060c14",
+
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Report Issue",
+      "short_name": "Report",
+      "description": "Submit a civic issue in Kanpur",
+      "url": "/page/report.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Emergency SOS",
+      "short_name": "SOS",
+      "description": "Quick emergency help",
+      "url": "/page/emergency.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Track Reports",
+      "short_name": "Track",
+      "description": "View complaint status",
+      "url": "/page/reports.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }
