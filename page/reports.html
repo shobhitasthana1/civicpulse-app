@@ -96,7 +96,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .img-modal img { max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
 .img-modal-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-/* ══ REPORT ISSUE FAB BUTTON (index.html style) ══ */
+/* ══ REPORT ISSUE FAB BUTTON ══ */
 .fab-p {
     position: fixed;
     bottom: calc(62px + env(safe-area-inset-bottom, 0px) + 14px);
@@ -117,6 +117,45 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .fab-p:active { transform: scale(0.93); }
 @media (min-width: 768px) { .fab-p { bottom: 28px; right: 24px; } }
 @keyframes fp { 0%,100%{box-shadow:0 6px 28px rgba(0,229,204,0.4)} 50%{box-shadow:0 6px 40px rgba(0,229,204,0.62)} }
+
+/* ══ REPORT ISSUE FAB BUTTON ══ */
+.fab-p {
+    position: fixed;
+    bottom: calc(62px + env(safe-area-inset-bottom, 0px) + 14px);
+    right: max(14px, env(safe-area-inset-right, 14px));
+    z-index: 45;
+    display: flex; 
+    align-items: center; 
+    gap: 7px;
+    background: linear-gradient(135deg, #00e5cc 0%, #00cfff 100%);
+    color: #060c14;
+    font-family: 'Syne', sans-serif; 
+    font-weight: 800; 
+    font-size: 0.78rem;
+    padding: 0 16px; 
+    height: 46px; 
+    border-radius: 23px; 
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 28px rgba(0, 229, 204, 0.4);
+    animation: fp 3s ease-in-out infinite;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-decoration: none; 
+    white-space: nowrap;
+}
+
+.fab-p:active { 
+    transform: scale(0.93); 
+}
+
+@media (min-width: 768px) { 
+    .fab-p { bottom: 28px; right: 24px; } 
+}
+
+@keyframes fp { 
+    0%, 100% { box-shadow: 0 6px 28px rgba(0, 229, 204, 0.4); } 
+    50% { box-shadow: 0 6px 40px rgba(0, 229, 204, 0.62); } 
+}
 </style>
 </head>
 <body>
@@ -280,11 +319,20 @@ function getPriorityClass(pri) {
     return 'pri-normal';
 }
 
+// FORMAT TIMESTAMP TO "TIME AGO" (UX Update #1)
+function timeAgo(ts) {
+    if (!ts) return 'Just now';
+    const diff = Math.floor((Date.now() - ts) / 1000);
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+    return Math.floor(diff / 86400) + 'd ago';
+}
+
 // 3. Initialize & Merge Data
 function loadData() {
     let localData = JSON.parse(localStorage.getItem('civicReports')) || [];
     
-    // Map local storage reports to standard format
     let userReports = localData.map(r => {
         let st = (r.status || 'pending').toLowerCase();
         if(st === 'open') st = 'pending';
@@ -301,20 +349,18 @@ function loadData() {
             loc: r.location,
             status: st,
             prog: prog,
-            date: r.date || 'Just now',
+            date: timeAgo(r.timestamp), // Now uses dynamic relative time
             dept: dept,
             eta: eta,
             priority: r.priority || 'Normal',
             desc: r.description || 'No detailed description provided.',
             image: r.image || null,
-            timestamp: r.timestamp || Date.now(), // used for simulation
+            timestamp: r.timestamp || Date.now(),
             isUser: true
         };
     });
 
-    // Merge: User reports first (reversed for newest first), then demo
     allReports = [...userReports.reverse(), ...DEMO_REPORTS];
-    
     updateStats();
     renderReports();
 }
@@ -332,6 +378,24 @@ function updateStats() {
     document.getElementById('statResolved').innerText = res;
 }
 
+// WITHDRAW/DELETE REPORT LOGIC (UX Update #2)
+window.deleteReport = function(id, e) {
+    if(e) e.stopPropagation();
+    if(!confirm("Are you sure you want to withdraw this report?")) return;
+    
+    let localData = JSON.parse(localStorage.getItem('civicReports')) || [];
+    localData = localData.filter(r => r.id !== id);
+    localStorage.setItem('civicReports', JSON.stringify(localData));
+    
+    // Attempt to use global showToast from app.js, otherwise fallback
+    if(typeof showToast === 'function') {
+        showToast('🗑️ Report withdrawn successfully', 'info');
+    } else {
+        alert('Report withdrawn successfully');
+    }
+    loadData();
+};
+
 // 5. Render Reports
 function renderReports() {
     const list = document.getElementById('rList');
@@ -345,13 +409,24 @@ function renderReports() {
     });
 
     if(!items.length) {
-        list.innerHTML = `
-        <div class="empty-state">
-            <div style="font-size:3rem; margin-bottom:12px; opacity:0.8;">📭</div>
-            <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:var(--txt1); margin-bottom:6px;">No reports yet</div>
-            <p style="font-size:0.8rem; margin-bottom:16px;">Submit your first civic issue to help improve your city.</p>
-            <a href="report.html" style="display:inline-block; padding:10px 20px; background:linear-gradient(135deg,var(--teal),var(--cyan)); color:#000; border-radius:10px; font-family:'Syne',sans-serif; font-weight:700; text-decoration:none; font-size:0.8rem;">+ Report Issue</a>
-        </div>`;
+        // SMART EMPTY STATE (UX Update #3)
+        if(searchQ || activeF !== 'all') {
+            list.innerHTML = `
+            <div class="empty-state">
+                <div style="font-size:3rem; margin-bottom:12px; opacity:0.8;">🔍</div>
+                <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:var(--txt1); margin-bottom:6px;">No results found</div>
+                <p style="font-size:0.8rem; margin-bottom:16px;">We couldn't find any reports matching your search or filter.</p>
+                <button onclick="document.querySelector('.search-input').value=''; filterReports(''); setFilter('all', document.querySelector('.fchip'));" style="display:inline-block; padding:10px 20px; background:linear-gradient(135deg,var(--teal),var(--cyan)); color:#000; border-radius:10px; font-family:'Syne',sans-serif; font-weight:700; border:none; cursor:pointer; font-size:0.8rem;">Clear Filters</button>
+            </div>`;
+        } else {
+            list.innerHTML = `
+            <div class="empty-state">
+                <div style="font-size:3rem; margin-bottom:12px; opacity:0.8;">📭</div>
+                <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:var(--txt1); margin-bottom:6px;">No reports yet</div>
+                <p style="font-size:0.8rem; margin-bottom:16px;">Submit your first civic issue to help improve your city.</p>
+                <a href="report.html" style="display:inline-block; padding:10px 20px; background:linear-gradient(135deg,var(--teal),var(--cyan)); color:#000; border-radius:10px; font-family:'Syne',sans-serif; font-weight:700; text-decoration:none; font-size:0.8rem;">+ Report Issue</a>
+            </div>`;
+        }
         return;
     }
 
@@ -360,6 +435,13 @@ function renderReports() {
         const priCls = getPriorityClass(r.priority);
         const imgHtml = r.image ? `<div style="margin-top:14px;"><span class="detail-lbl">Evidence Photo</span><img src="${r.image}" class="evidence-img mt-2" onclick="openModal('${r.image}')" /></div>` : '';
         
+        // Add Delete Button only for user reports
+        const deleteBtnHtml = r.isUser ? `
+            <button onclick="deleteReport('${r.id}', event)" style="margin-top:16px;width:100%;padding:10px;background:rgba(255,77,109,0.08);color:#ff4d6d;border:1px solid rgba(255,77,109,0.25);border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='rgba(255,77,109,0.15)'" onmouseout="this.style.background='rgba(255,77,109,0.08)'">
+                🗑️ Withdraw Report
+            </button>
+        ` : '';
+
         return `
         <div class="rrow" id="rr${i}">
             <div class="rtop" onclick="toggleRpt(${i})">
@@ -398,6 +480,8 @@ function renderReports() {
                         <span style="font-size:.58rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;font-weight:700;">Resolution Progress</span>
                         <span style="font-size:.65rem;color:${s.color};font-weight:800;font-family:'Syne',sans-serif;">${r.prog}%</span>
                     </div>
+                    
+                    ${deleteBtnHtml}
                 </div>
             </div>
         </div>`;
@@ -412,14 +496,12 @@ function toggleRpt(i){
     
     const open = row.classList.contains('exp');
     
-    // Close all
     document.querySelectorAll('.rrow').forEach((r, j) => {
         r.classList.remove('exp');
         const d = document.getElementById('rd'+j);
         if(d) d.classList.remove('open');
     });
     
-    // Open clicked
     if(!open){
         row.classList.add('exp');
         det.classList.add('open');
@@ -429,7 +511,7 @@ function toggleRpt(i){
 function setFilter(f, btn){
     activeF = f;
     document.querySelectorAll('.fchip').forEach(b => b.classList.remove('act'));
-    btn.classList.add('act');
+    if(btn) btn.classList.add('act');
     renderReports();
 }
 
@@ -446,24 +528,22 @@ function closeModal(e) {
     document.getElementById('imgModal').classList.remove('show');
 }
 
-// 7. Status Simulator (Real-time logic for User Reports)
+// 7. Status Simulator
 function simulateStatus() {
     let localData = JSON.parse(localStorage.getItem('civicReports')) || [];
     let changed = false;
     const now = Date.now();
 
     localData = localData.map(r => {
-        if (!r.timestamp) r.timestamp = now; // Add timestamp if missing
+        if (!r.timestamp) r.timestamp = now; 
         
         let elapsed = now - r.timestamp;
         let st = r.status.toLowerCase();
         
-        // After 30 seconds -> Active
         if ((st === 'open' || st === 'pending') && elapsed > 30000) { 
             r.status = 'active';
             changed = true;
         } 
-        // After 2 minutes (120s) -> Resolved
         else if (st === 'active' && elapsed > 120000) {
             r.status = 'resolved';
             changed = true;
@@ -473,16 +553,17 @@ function simulateStatus() {
 
     if(changed) {
         localStorage.setItem('civicReports', JSON.stringify(localData));
-        loadData(); // Re-render everything
+        loadData(); 
     }
 }
 
 // 8. Initialization
 window.addEventListener('DOMContentLoaded', () => {
     loadData();
-    setInterval(simulateStatus, 10000); // Check every 10 seconds for simulated updates
+    setInterval(simulateStatus, 10000); 
+    // Re-render timestamps every minute so "Time Ago" stays accurate
+    setInterval(loadData, 60000); 
 });
-
 </script>
 <script>if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{});});}</script>
 </body>
