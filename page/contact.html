@@ -12,70 +12,36 @@
 <link rel="stylesheet" href="../assets/css/style.css"/>
 <link rel="stylesheet" href="../assets/css/mobile-fix.css"/>
 <style>
-    /* Responsive Variables & Base */
+    /* ── BASE VARIABLES ── */
     :root {
-      --teal: #0d9488;
-      --border: rgba(255, 255, 255, 0.1);
-      --glass-bg: rgba(11, 20, 34, 0.7);
+      --teal: #00e5cc;
+      --cyan: #00cfff;
+      --border: rgba(255, 255, 255, 0.08);
+      --glass-bg: rgba(11, 20, 34, 0.75);
       --text-muted: #94a3b8;
     }
 
-    /* Fix for the 2-column layout on Mobile */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr; /* Stack on mobile */
-      gap: 32px;
+    *, *::before, *::after { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    html { font-size:16px; -webkit-text-size-adjust:100%; }
+    html,body { width:100%; max-width:100%; overflow-x:hidden; margin:0; padding:0; background-color:#060c14; color:#f1f5f9; font-family:'DM Sans', sans-serif; }
+    
+    body::before {
+      content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image: linear-gradient(rgba(0,229,204,0.025) 1px,transparent 1px),
+                        linear-gradient(90deg,rgba(0,229,204,0.025) 1px,transparent 1px);
+      background-size:40px 40px;
+      mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);
     }
 
-    @media (min-width: 1024px) {
-      .contact-grid {
-        grid-template-columns: 1.8fr 1fr; /* Side-by-side on Desktop */
-      }
-    }
+    /* ── LAYOUT & ANIMATIONS ── */
+    .app-layout { display:flex; min-height:100vh; position:relative; z-index:1; }
+    .main-area { flex:1; display:flex; flex-direction:column; width:100%; min-width:0; overflow-x:hidden; }
+    
+    .fu { opacity:0; transform:translateY(16px); animation:fu 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    @keyframes fu { to { opacity:1; transform:translateY(0); } }
+    .d1{animation-delay:.06s} .d2{animation-delay:.12s} .d3{animation-delay:.18s} .d4{animation-delay:.24s} .d5{animation-delay:.30s}
 
-    /* Form Grid Fix */
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-
-    @media (min-width: 640px) {
-      .form-row {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    /* FAQ Accordion Enhancements */
-    .faq-item { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 12px; transition: 0.3s; }
-    .faq-q {
-      padding: 18px 20px;
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      cursor: pointer; font-weight: 600; font-size: 14px;
-      background: var(--glass-bg); backdrop-filter: blur(12px);
-    }
-    .faq-icon {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: rgba(13,148,136,0.1); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.3s;
-    }
-    .faq-item.open .faq-icon { background: var(--teal); transform: rotate(45deg); color: white; }
-    .faq-a {
-      max-height: 0; overflow: hidden; transition: all 0.35s ease;
-      padding: 0 20px; color: var(--text-muted); font-size: 14px; line-height: 1.6;
-    }
-    .faq-item.open .faq-a { max-height: 300px; padding: 16px 20px; border-top: 1px solid var(--border); }
-
-    /* Map Utility */
-    .map-container {
-      height: 240px;
-      background: linear-gradient(135deg, rgba(13,148,136,0.05), #060c14);
-      position: relative;
-      display: flex; align-items: center; justify-content: center;
-    }
-    @media (min-width: 768px) { .map-container { height: 350px; } }
-
-    /* Helper Classes */
+    /* ── UI COMPONENTS ── */
     .glass-card { 
       background: var(--glass-bg); 
       backdrop-filter: blur(12px); 
@@ -83,31 +49,142 @@
       border-radius: 20px;
       padding: 24px;
     }
-    @media (min-width: 768px) { .glass-card { padding: 40px; } }
-    
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-    .status-dot.green { background: #10b981; box-shadow: 0 0 8px #10b981; }
+    @media (min-width: 768px) { .glass-card { padding: 32px; } }
 
-    /* Utility to hide/show parts */
-    .mobile-only { display: block; }
-    @media (min-width: 768px) { .mobile-only { display: none; } }
-  </style>
-<style>
-*, *::before, *::after { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html { font-size:16px; -webkit-text-size-adjust:100%; }
-html,body { width:100%; max-width:100%; overflow-x:hidden; margin:0; padding:0; }
-body::before {
-  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
-  background-image: linear-gradient(rgba(13,148,136,0.025) 1px,transparent 1px),
-                    linear-gradient(90deg,rgba(13,148,136,0.025) 1px,transparent 1px);
-  background-size:40px 40px;
-  mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);
-}
+    .slbl { font-family:'Syne',sans-serif; font-size:0.65rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:var(--teal); display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+    .slbl::after { content:''; flex:1; height:1px; background:linear-gradient(to right,rgba(0,229,204,0.2),transparent); }
+
+    /* ── FORM ELEMENTS ── */
+    .finput {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: white;
+      font-size: 14px;
+      transition: 0.2s ease;
+      outline: none;
+    }
+    .finput:focus { border-color: var(--teal); background: rgba(0, 229, 204, 0.05); box-shadow: 0 0 0 3px rgba(0, 229, 204, 0.1); }
+    .finput::placeholder { color: #64748b; }
+    .finput.error { border-color: #ff4d6d; background: rgba(255,77,109,0.05); }
+    
+    .error-msg { color: #ff4d6d; font-size: 11px; margin-top: 6px; display: none; font-weight: 600; animation: fu 0.2s ease-out forwards; }
+    .error-msg.active { display: block; }
+
+    /* Fix 4 & 5: Button Spacing & Visuals */
+    .btn-submit {
+      margin-top: 22px;
+      box-shadow: 0 4px 14px rgba(0, 229, 204, 0.3);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-submit:hover {
+      box-shadow: 0 8px 24px rgba(0, 229, 204, 0.5);
+      transform: translateY(-2px);
+    }
+    .btn-submit:active {
+      transform: scale(0.95);
+    }
+
+    /* ── CONTACT GRID ── */
+    .contact-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    @media (min-width: 1024px) { .contact-grid { grid-template-columns: 1.6fr 1fr; } }
+    
+    .form-row { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 640px) { .form-row { grid-template-columns: 1fr 1fr; } }
+
+    /* ── QUICK SUPPORT CARDS ── */
+    .qs-card {
+        background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .qs-card:hover { background: rgba(0,229,204,0.05); border-color: rgba(0,229,204,0.4); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0, 229, 204, 0.15); }
+    .qs-card:active { transform: scale(0.97); }
+
+    /* ── FAQ ACCORDION ── */
+    .faq-item { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 12px; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); background: rgba(0,0,0,0.2); }
+    .faq-item:hover { border-color: rgba(0,229,204,0.3); box-shadow: 0 4px 20px rgba(0,229,204,0.08); }
+    .faq-q { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; font-weight: 600; font-size: 14px; color:#f1f5f9; }
+    .faq-icon { width: 24px; height: 24px; border-radius: 50%; background: rgba(0,229,204,0.1); border: 1px solid rgba(0,229,204,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s; color: var(--teal); font-weight:bold; }
+    .faq-item.open .faq-icon { background: var(--teal); transform: rotate(45deg); color: #060c14; border-color:var(--teal); }
+    .faq-a { max-height: 0; overflow: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 0 20px; color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+    .faq-item.open .faq-a { max-height: 300px; padding: 0px 20px 20px; }
+
+    /* ── COMMUNITY CARD ── */
+    .community-card { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .community-card:hover { transform: scale(1.02); box-shadow: 0 12px 32px rgba(0, 207, 255, 0.15); border-color: rgba(0, 229, 204, 0.3); }
+
+    /* ── MAP ── */
+    .map-container { height: 200px; background: radial-gradient(circle at center, rgba(0,229,204,0.1), transparent 70%), #0b1422; border-radius: 16px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; border:1px solid var(--border); margin-top:20px; }
+    .map-container::before { content:''; position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px); background-size:20px 20px; opacity:0.5; }
+    
+    /* ── STATUS INDICATOR ── */
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: #00e5cc; box-shadow: 0 0 10px #00e5cc; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 10px #00e5cc; } 50% { opacity: 0.4; box-shadow: 0 0 2px #00e5cc; } }
+
+    /* ── TOAST ── */
+    #contactToast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(6,12,20,0.95); color: #f1f5f9; padding: 12px 24px; border-radius: 30px; border: 1px solid rgba(0,229,204,0.3); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; opacity: 0; white-space: nowrap; }
+    #contactToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ── BOTTOM NAV & FAB (HARDCODED EXACTLY FROM INDEX) ── */
+    .bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:rgba(6,12,20,0.9); backdrop-filter:blur(10px); border-top:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-around; align-items:center; padding:10px 0; z-index:50; padding-bottom:calc(10px + env(safe-area-inset-bottom)); }
+    .nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; color:#64748b; font-size:0.65rem; font-weight:600; text-decoration:none; transition:color 0.2s; }
+    .nav-item.active { color:#00e5cc; }
+    
+    .fab-p { position: fixed; bottom: calc(62px + env(safe-area-inset-bottom, 0px) + 14px); right: max(14px, env(safe-area-inset-right, 14px)); z-index: 45; display: flex; align-items: center; gap: 7px; background: linear-gradient(135deg,#00e5cc 0%,#00cfff 100%); color: #060c14; font-family: 'Syne',sans-serif; font-weight: 800; font-size: 0.78rem; padding: 0 16px; height: 46px; border-radius: 23px; border: none; cursor: pointer; box-shadow: 0 6px 28px rgba(0,229,204,0.4); animation: fp 3s ease-in-out infinite; transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); text-decoration: none; white-space: nowrap; }
+    .fab-p:hover { transform: scale(1.05); }
+    .fab-p:active { transform: scale(0.93); }
+    @keyframes fp { 0%,100%{box-shadow:0 6px 28px rgba(0,229,204,0.4)} 50%{box-shadow:0 6px 40px rgba(0,229,204,0.62)} }
+
+    .page-content-padding { padding-bottom: 120px !important; }
 </style>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
+
 <div class="app-layout">
+  
+  <div class="sidebar-overlay cp-sidebar-overlay" id="cpSidebarOverlay"></div>
+  <nav class="sidebar cp-sidebar" id="cpSidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-logo cp-sidebar-header">
+      <div class="logo-icon cp-sidebar-logo">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="logo-text cp-sidebar-title">CivicPulse</span>
+      <button class="sidebar-close cp-sidebar-close" id="cpSidebarClose" aria-label="Close menu" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    
+    <div class="cp-nav-section">Navigation</div>
+    
+    <div class="sidebar-nav cp-sidebar-nav">
+      <a href="../index.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">🏠</span><span class="nav-label cp-nav-label">Home</span></a>
+      <a href="report.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">🚨</span><span class="nav-label cp-nav-label">Report Issue</span></a>
+      <a href="reports.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">📋</span><span class="nav-label cp-nav-label">Track Reports</span></a>
+      <a href="activity.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">👥</span><span class="nav-label cp-nav-label">Community</span></a>
+      <a href="resources.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">🔍</span><span class="nav-label cp-nav-label">Resources</span></a>
+      <a href="dashboard.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">📊</span><span class="nav-label cp-nav-label">Dashboard</span></a>
+      <a href="contact.html" class="nav-item cp-nav-item active cp-active"><span class="nav-icon cp-nav-icon">📞</span><span class="nav-label cp-nav-label">Contact</span></a>
+      <a href="features.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">⭐</span><span class="nav-label cp-nav-label">Features</span></a>
+      <a href="team.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">👤</span><span class="nav-label cp-nav-label">Team</span></a>
+      <div class="cp-nav-divider"></div>
+      <a href="emergency.html" class="nav-item cp-nav-item sos-nav cp-nav-sos"><span class="nav-icon cp-nav-icon">⚡</span><span class="nav-label cp-nav-label">Emergency SOS</span></a>
+    </div>
+    
+    <div class="sidebar-footer cp-sidebar-footer">
+      <div class="sidebar-user cp-sidebar-user">
+        <div class="avatar cp-sidebar-avatar" style="padding:0;overflow:hidden;">
+          <img src="../image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.style.display='none';this.parentElement.textContent='SA';"/>
+        </div>
+        <div>
+          <div class="cp-sidebar-username" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;color:#f1f5f9;">Shobhit Asthana</div>
+          <div class="cp-sidebar-role" style="font-size:0.6rem;color:#64748b;margin-top:1px;">Level 4 · Null Pointer</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
 <div class="main-area">
 
 <header class="app-header">
@@ -119,12 +196,12 @@ body::before {
       <div class="logo-icon" style="width:26px;height:26px;border-radius:7px;flex-shrink:0;">
         <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
       </div>
-      <span class="logo-text" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Contact Us</span>
+      <span class="logo-text" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">CivicPulse</span>
     </div>
   </div>
   <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
     <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
-    <button class="icon-btn" style="position:relative;flex-shrink:0;" type="button" aria-label="Notifications">
+    <button class="icon-btn" style="position:relative;flex-shrink:0;" type="button" aria-label="Notifications" onclick="showLocalToast('🔔 No new notifications')">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       <span class="notif-badge"></span>
     </button>
@@ -134,122 +211,261 @@ body::before {
   </div>
 </header>
 
-<main class="page-content">
+<main class="page-content page-content-padding">
 <div style="max-width:960px;margin:0 auto;">
-<main class="container mx-auto px-6 pb-20">
-    <div class="contact-grid">
+
+  <div class="fu d1" style="background:linear-gradient(135deg,rgba(0,229,204,0.1),rgba(0,207,255,0.05));border:1px solid rgba(0,229,204,0.2);border-radius:22px;padding:32px 24px;text-align:center;position:relative;overflow:hidden;margin-bottom:28px;">
+    <div style="position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(0,229,204,0.2),transparent 70%);pointer-events:none;"></div>
+    <div style="position:relative;z-index:1;">
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;color:#94a3b8;margin-bottom:12px;">💬 Support Center</div>
+      <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.6rem,5vw,2.2rem);background:linear-gradient(135deg,#00e5cc,#00cfff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">Contact CivicPulse</h1>
+      <p style="font-size:0.8rem;color:#94a3b8;max-width:500px;margin:0 auto;line-height:1.6;">Have questions, feedback, or need help with a civic report? Our dedicated support team is here to assist you.</p>
+    </div>
+  </div>
+
+  <div class="contact-grid">
+    
+    <div class="glass-card fu d2" style="display:flex;flex-direction:column;">
+      <div class="slbl">Send a Message</div>
       
-      <div class="glass-card">
-        <h2 class="text-xl font-bold mb-2">Send a Message</h2>
-        <p class="text-slate-400 text-xs mb-8">Fill in the form and we'll get back to you as soon as possible.</p>
-
-        <form id="contact-form" class="flex flex-col gap-5">
-          <div class="form-row">
-            <div class="flex flex-col gap-2">
-              <label class="text-[11px] font-bold uppercase text-slate-500">Full Name *</label>
-              <input type="text" class="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500/50 outline-none" placeholder="John Doe" required />
-            </div>
-            <div class="flex flex-col gap-2">
-              <label class="text-[11px] font-bold uppercase text-slate-500">Email Address *</label>
-              <input type="email" class="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500/50 outline-none" placeholder="john@example.com" required />
-            </div>
+      <form id="contactForm" class="flex flex-col gap-4" onsubmit="handleContactSubmit(event)" novalidate>
+        <div class="form-row">
+          <div>
+            <label for="fname" class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2" aria-label="Full Name">Full Name <span class="text-[#00e5cc]">*</span></label>
+            <input type="text" id="fname" class="finput" placeholder="Your Name" aria-required="true" />
+            <div id="fname-err" class="error-msg">⚠ Please enter your name</div>
           </div>
-
-          <div class="flex flex-col gap-2">
-            <label class="text-[11px] font-bold uppercase text-slate-500">Subject *</label>
-            <select class="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-teal-500/50 outline-none appearance-none">
-              <option class="bg-[#111]">Report a Bug</option>
-              <option class="bg-[#111]">Suggest a Feature</option>
-              <option class="bg-[#111]">General Question</option>
-            </select>
-          </div>
-
-          <div class="flex flex-col gap-2">
-            <label class="text-[11px] font-bold uppercase text-slate-500">Message *</label>
-            <textarea class="bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-teal-500/50 outline-none min-h-[120px]" placeholder="How can we help?"></textarea>
-          </div>
-
-          <button type="submit" class="bg-teal-500 hover:bg-teal-400 text-[#060c14] font-bold py-3 px-8 rounded-xl transition-all self-start text-sm mt-2">
-            ✉️ Send Message
-          </button>
-        </form>
-      </div>
-
-      <div class="flex flex-col gap-6">
-        <div class="glass-card !py-6 !px-8">
-          <h3 class="text-sm font-bold flex items-center gap-2 mb-4"><span>🕐</span> Support Hours</h3>
-          <div class="flex flex-col gap-3 text-xs">
-            <div class="flex justify-between"><span class="text-slate-500">Mon – Fri</span><span>9 AM – 8 PM</span></div>
-            <div class="flex justify-between"><span class="text-slate-500">Saturday</span><span>10 AM – 5 PM</span></div>
-            <div class="pt-3 border-t border-white/5 flex items-center gap-2 text-emerald-400 font-bold">
-              <span class="status-dot green"></span> Currently Open
-            </div>
+          <div>
+            <label for="femail" class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2" aria-label="Email Address">Email Address <span class="text-[#00e5cc]">*</span></label>
+            <input type="email" id="femail" class="finput" placeholder="yourmail@gmail.com" aria-required="true" />
+            <div id="femail-err" class="error-msg">⚠ Please enter a valid email address</div>
           </div>
         </div>
 
-        <div class="glass-card !py-6 !px-8">
-          <div class="flex flex-col gap-6">
-            <div class="flex items-start gap-4">
-              <div class="text-xl bg-teal-500/10 p-2 rounded-lg">📧</div>
-              <div>
-                <p class="text-[10px] uppercase font-bold text-slate-500">Email</p>
-                <p class="text-sm font-medium text-teal-400"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d6e75727f7574697c6e69757c737c2c2f2e5d7a707c7471337e7270">[email&#160;protected]</a></p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="text-xl bg-amber-500/10 p-2 rounded-lg">📞</div>
-              <div>
-                <p class="text-[10px] uppercase font-bold text-slate-500">Phone</p>
-                <p class="text-sm font-medium">+91 6388 095 158</p>
-              </div>
-            </div>
+        <div>
+          <label for="fsub" class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2" aria-label="Subject">Subject <span class="text-[#00e5cc]">*</span></label>
+          <select id="fsub" class="finput appearance-none" style="cursor:pointer;" aria-required="true">
+            <option value="" disabled selected hidden>Choose a topic (Bug, Feedback, Support)</option>
+            <option value="bug" class="bg-[#0b1422]">Report a Bug</option>
+            <option value="feature" class="bg-[#0b1422]">Suggest a Feature</option>
+            <option value="feedback" class="bg-[#0b1422]">General Feedback</option>
+            <option value="help" class="bg-[#0b1422]">Need Help with Report</option>
+          </select>
+          <div id="fsub-err" class="error-msg">⚠ Please select a subject</div>
+        </div>
+
+        <div style="flex:1;">
+          <label for="fmsg" class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2" aria-label="Message">Message <span class="text-[#00e5cc]">*</span></label>
+          <textarea id="fmsg" class="finput min-h-[120px] resize-none h-full" placeholder="Describe your question, feedback, or issue in detail..." aria-required="true"></textarea>
+          <div id="fmsg-err" class="error-msg">⚠ Please describe your issue in at least 10 characters</div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="bg-gradient-to-r from-[#00e5cc] to-[#00cfff] text-[#060c14] font-bold font-['Syne'] py-3 px-6 rounded-xl btn-submit self-start text-sm flex items-center gap-2">
+          <span>✉️</span> <span id="btnText">Send Message</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="flex flex-col gap-6">
+      
+      <div class="glass-card fu d3" style="padding:20px;">
+        <h3 class="text-sm font-bold flex items-center gap-2 mb-4 font-['Syne'] text-white"><span>🕐</span> Support Hours</h3>
+        <div class="flex flex-col gap-3 text-[13px]">
+          <div class="flex justify-between"><span class="text-slate-400 font-medium">Mon – Fri</span><span class="text-slate-200">9:00 AM – 8:00 PM</span></div>
+          <div class="flex justify-between"><span class="text-slate-400 font-medium">Saturday</span><span class="text-slate-200">10:00 AM – 5:00 PM</span></div>
+          <div class="flex justify-between"><span class="text-slate-400 font-medium">Sunday</span><span class="text-slate-200">Closed</span></div>
+          <div class="pt-3 border-t border-white/10 flex items-center gap-2 text-[#00e5cc] font-bold text-xs uppercase tracking-wide mt-1">
+            <span class="status-dot"></span> Currently Open
           </div>
+        </div>
+      </div>
+
+      <div class="fu d4 flex flex-col gap-3">
+        <a href="mailto:shobhitasthana123@gmail.com" class="qs-card">
+          <div class="w-10 h-10 rounded-xl bg-[#00cfff]/10 flex items-center justify-center text-lg flex-shrink-0">📧</div>
+          <div>
+            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Email Support</div>
+            <div class="text-sm font-medium text-[#00cfff]">shobhitasthana123@gmail.com</div>
+          </div>
+        </a>
+        <a href="tel:+916388095158" class="qs-card">
+          <div class="w-10 h-10 rounded-xl bg-[#00e5cc]/10 flex items-center justify-center text-lg flex-shrink-0">📞</div>
+          <div>
+            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Call Support</div>
+            <div class="text-sm font-medium text-[#00e5cc]">+91 63880 95158</div>
+          </div>
+        </a>
+        <a href="http://google.com/maps?q=Lucknow,+Uttar+Pradesh,+India" target="_blank" rel="noopener noreferrer" class="qs-card">
+          <div class="w-10 h-10 rounded-xl bg-[#a78bfa]/10 flex items-center justify-center text-lg flex-shrink-0">📍</div>
+          <div>
+            <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Visit Office</div>
+            <div class="text-sm font-medium text-[#a78bfa]">Lucknow, UP 226010</div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="fu d5 mt-10">
+    <div class="slbl">Find Our Office</div>
+    <div class="map-container">
+      <div class="relative z-10 flex flex-col items-center">
+        <div class="w-12 h-12 bg-[#00e5cc] rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(0,229,204,0.6)] text-xl animate-bounce">📍</div>
+        <div class="mt-3 bg-[#0b1422]/90 backdrop-blur-md px-5 py-3 rounded-xl border border-white/10 text-center shadow-xl">
+          <p class="text-sm font-bold font-['Syne'] text-white">CivicPulse HQ</p>
+          <p class="text-[11px] text-slate-400 mt-1">Lucknow, Uttar Pradesh 226010</p>
+          <a href="http://google.com/maps?q=Lucknow,+Uttar+Pradesh,+India" target="_blank" class="text-[10px] font-bold text-[#00e5cc] uppercase tracking-wide mt-2 inline-block hover:underline">Open in Google Maps →</a>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="mt-20 rounded-3xl overflow-hidden border border-white/5">
-      <div class="bg-white/5 px-6 py-4 border-b border-white/5">
-        <h3 class="text-sm font-bold">Find Our Office</h3>
-      </div>
-      <div class="map-container">
-        <div class="relative z-10 flex flex-col items-center">
-          <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(20,184,166,0.5)]">📍</div>
-          <div class="mt-4 bg-[#060c14]/80 backdrop-blur px-4 py-2 rounded-lg border border-white/10 text-center">
-            <p class="text-xs font-bold">CivicPulse HQ</p>
-            <p class="text-[10px] text-slate-400">Lucknow, UP 226010</p>
-          </div>
-        </div>
-      </div>
+  <div class="fu d5 mt-16 max-w-3xl mx-auto">
+    <div class="text-center mb-8">
+      <span class="text-[#00e5cc] text-[10px] font-bold uppercase tracking-widest bg-[#00e5cc]/10 px-3 py-1 rounded-full border border-[#00e5cc]/20">❓ FAQ</span>
+      <h2 class="text-2xl font-bold mt-3 font-['Syne']">Common Questions</h2>
     </div>
 
-    <div class="mt-20 max-w-2xl mx-auto">
-      <div class="text-center mb-10">
-        <span class="text-teal-400 text-[10px] font-bold uppercase tracking-widest">❓ FAQ</span>
-        <h2 class="text-2xl font-bold mt-2">Common Questions</h2>
+    <div class="faq-container">
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">How do I report an issue? <div class="faq-icon">+</div></div>
+        <div class="faq-a">Open the <strong>Report Issue</strong> section, submit details like location, category, and priority, and you will receive a unique tracking ID instantly.</div>
       </div>
-
-      <div class="faq-container">
-        <div class="faq-item" onclick="this.classList.toggle('open')">
-          <div class="faq-q">How do I report an issue? <div class="faq-icon">+</div></div>
-          <div class="faq-a">Navigate to the Dashboard and click "Report Issue." Fill in the details, and we'll route it to the right department.</div>
-        </div>
-        <div class="faq-item" onclick="this.classList.toggle('open')">
-          <div class="faq-q">Is it free to use? <div class="faq-icon">+</div></div>
-          <div class="faq-a">Yes! CivicPulse is free for all citizens. We are supported by municipal partnerships.</div>
-        </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Is CivicPulse free to use? <div class="faq-icon">+</div></div>
+        <div class="faq-a">Yes. CivicPulse is a completely free platform for citizens to report civic issues. We work in partnership with local municipalities.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">How can I track my complaint? <div class="faq-icon">+</div></div>
+        <div class="faq-a">Use the <strong>Track Reports</strong> page from the navigation menu. You can search using your tracking ID, title, or location to see real-time progress.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Can I upload photos of the issue? <div class="faq-icon">+</div></div>
+        <div class="faq-a">Absolutely. You can attach image evidence (JPG, PNG) when submitting a report to help authorities understand the severity of the issue faster.</div>
       </div>
     </div>
-  </main>
+  </div>
 
-  
+  <div class="fu d5 mt-16 text-center bg-gradient-to-t from-[#00cfff]/5 to-transparent border border-white/5 rounded-2xl p-8 max-w-3xl mx-auto community-card">
+    <div class="text-3xl mb-3">🤝</div>
+    <h3 class="font-['Syne'] font-bold text-lg text-white mb-2">Community Help</h3>
+    <p class="text-sm text-slate-400 leading-relaxed max-w-xl mx-auto mb-6">CivicPulse is powered by a community of dedicated volunteers and active citizens working together to improve city infrastructure.</p>
+    <div class="flex justify-center gap-4 text-xs font-bold text-[#00e5cc] uppercase tracking-wide">
+        <span>Report Issues</span> • <span>Track Updates</span> • <span>Contribute Feedback</span>
+    </div>
+  </div>
+
 </div>
 </main>
+
+<nav class="bottom-bar bottom-nav" id="cpBottomNav" role="navigation" aria-label="Bottom navigation">
+  <a href="../index.html" class="tab-item nav-item" data-key="home"><span class="tab-icon">🏠</span><span class="tab-label">Home</span></a>
+  <a href="report.html" class="tab-item nav-item" data-key="report"><span class="tab-icon">🚨</span><span class="tab-label">Report</span></a>
+  <a href="reports.html" class="tab-item nav-item" data-key="reports"><span class="tab-icon">📋</span><span class="tab-label">Track</span></a>
+  <a href="activity.html" class="tab-item nav-item" data-key="activity"><span class="tab-icon">👥</span><span class="tab-label">Community</span></a>
+  <a href="emergency.html" class="tab-item nav-item sos-tab cp-nav-sos" data-key="emergency"><span class="tab-icon">⚡</span><span class="tab-label">SOS</span></a>
+</nav>
+
 </div>
 </div>
+
+<a href="report.html" class="fab-p">
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+  Report Issue
+</a>
+
+<div id="contactToast"></div>
 
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shared-ui.js"></script>
+
+<script>
+    // Simulate Toast
+    function showLocalToast(msg) {
+        const toast = document.getElementById('contactToast');
+        toast.innerHTML = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // Form Validation & Submission
+    function handleContactSubmit(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('fname');
+        const email = document.getElementById('femail');
+        const sub = document.getElementById('fsub');
+        const msg = document.getElementById('fmsg');
+        
+        let isValid = true;
+
+        // Reset errors
+        document.querySelectorAll('.finput').forEach(el => el.classList.remove('error'));
+        document.querySelectorAll('.error-msg').forEach(el => el.classList.remove('active'));
+
+        // Name Validation
+        if(name.value.trim() === '') {
+            name.classList.add('error');
+            document.getElementById('fname-err').classList.add('active');
+            isValid = false;
+        }
+
+        // Email Validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email.value.trim())) {
+            email.classList.add('error');
+            document.getElementById('femail-err').classList.add('active');
+            isValid = false;
+        }
+
+        // Subject Validation
+        if(sub.value === '') {
+            sub.classList.add('error');
+            document.getElementById('fsub-err').classList.add('active');
+            isValid = false;
+        }
+
+        // Message Validation (min 10 chars)
+        if(msg.value.trim().length < 10) {
+            msg.classList.add('error');
+            document.getElementById('fmsg-err').classList.add('active');
+            isValid = false;
+        }
+
+        if(isValid) {
+            // Show Loading State
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            btnText.innerHTML = 'Sending... <span class="animate-pulse">⏳</span>';
+
+            setTimeout(() => {
+                // Success - Fix 6 applied here
+                showLocalToast('✅ Message sent successfully. Our team will respond shortly.');
+                document.getElementById('contactForm').reset();
+                
+                // Reset Button
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btnText.innerText = 'Send Message';
+
+                // Optional: Save to localStorage to simulate history
+                const messages = JSON.parse(localStorage.getItem('civicContactMessages')) || [];
+                messages.push({
+                    name: name.value,
+                    email: email.value,
+                    subject: sub.value,
+                    message: msg.value,
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('civicContactMessages', JSON.stringify(messages));
+
+            }, 1500);
+        }
+    }
+</script>
 
 </body>
 </html>
