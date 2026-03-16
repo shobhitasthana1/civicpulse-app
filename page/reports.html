@@ -15,78 +15,154 @@
 *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{font-size:16px;-webkit-text-size-adjust:100%;}
 html,body{width:100%;max-width:100%;overflow-x:hidden;margin:0;padding:0;}
-:root{--teal:#00e5cc;--cyan:#00cfff;--purple:#a78bfa;--orange:#fb923c;--red:#ff4d6d;--bg:#060c14;--card:rgba(11,20,34,0.75);--border:rgba(255,255,255,0.07);--txt1:#f1f5f9;--txt2:#94a3b8;--txt3:#64748b;--sg:16px;--tab-h:62px;}
+:root{
+    --teal:#00e5cc; --cyan:#00cfff; --purple:#a78bfa; --orange:#fb923c; --red:#ff4d6d;
+    --bg:#060c14; --card:rgba(11,20,34,0.75); --border:rgba(255,255,255,0.07);
+    --txt1:#f1f5f9; --txt2:#94a3b8; --txt3:#64748b; --sg:16px; --tab-h:62px;
+}
 body{background:var(--bg);color:var(--txt1);font-family:'DM Sans',sans-serif;}
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,229,204,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,204,.025) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);-webkit-mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);}
 .app-layout{display:flex;min-height:100vh;position:relative;z-index:1;}
 .main-area{flex:1;display:flex;flex-direction:column;width:100%;min-width:0;overflow-x:hidden;}
-.app-header{position:sticky;top:0;z-index:50;background:rgba(6,12,20,.92);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.07);padding:0 14px;height:calc(56px + env(safe-area-inset-top,0px));display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:env(safe-area-inset-top,0px);}
-.header-left{display:flex;align-items:center;gap:8px;flex:1;min-width:0;overflow:hidden;max-width:calc(100% - 120px);}
-.header-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.logo-icon{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;background:linear-gradient(135deg,var(--teal),var(--cyan));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;}
-.live-indicator{display:flex;align-items:center;gap:4px;font-size:.6rem;color:var(--teal);font-weight:700;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
-.live-dot{width:6px;height:6px;background:var(--teal);border-radius:50%;box-shadow:0 0 6px var(--teal);animation:liveblink 1.5s ease-in-out infinite;}
-@keyframes liveblink{0%,100%{opacity:1}50%{opacity:.2}}
-.icon-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;cursor:pointer;color:var(--txt2);flex-shrink:0;position:relative;}
-.notif-badge{position:absolute;top:4px;right:4px;width:6px;height:6px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg);}
-.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.72rem;color:#060c14;flex-shrink:0;overflow:hidden;}
-.hamburger{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;width:22px;height:16px;min-width:22px;max-width:22px;cursor:pointer;background:none;border:none;padding:0;flex-shrink:0;z-index:201;}
-.hamburger span{display:block;width:100%;height:2px;background:#94a3b8;border-radius:2px;}
-.hamburger span:nth-child(2){width:75%;}
-.page-content{flex:1;padding:16px;padding-bottom:calc(var(--tab-h) + env(safe-area-inset-bottom,0px) + 70px);width:100%;max-width:100%;box-sizing:border-box;}
-.slbl{font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:rgba(0,229,204,.65);display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-.slbl::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(0,229,204,.2),transparent);}
-.bdg{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:20px;font-size:.6rem;font-weight:600;white-space:nowrap;flex-shrink:0;}
-.bp{background:rgba(251,146,60,.15);color:#fb923c;border:1px solid rgba(251,146,60,.3);}
-.bi{background:rgba(0,207,255,.1);color:#00cfff;border:1px solid rgba(0,207,255,.25);}
-.br{background:rgba(0,229,204,.1);color:#00e5cc;border:1px solid rgba(0,229,204,.25);}
-.bc{background:rgba(255,77,109,.12);color:#ff4d6d;border:1px solid rgba(255,77,109,.25);}
-.fu{opacity:0;transform:translateY(18px);animation:fu .44s ease forwards;}
+.page-content{flex:1;padding:16px;padding-bottom:calc(var(--tab-h) + env(safe-area-inset-bottom,0px) + 90px);width:100%;max-width:100%;box-sizing:border-box;}
+
+/* Utilities & Animations */
+.fu{opacity:0;transform:translateY(18px);animation:fu .5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;}
 @keyframes fu{to{opacity:1;transform:translateY(0)}}
 .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
-.fab-p{position:fixed;bottom:calc(var(--tab-h) + env(safe-area-inset-bottom,0px) + 14px);right:max(14px,env(safe-area-inset-right,14px));z-index:45;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#00e5cc,#00cfff);color:#060c14;font-family:'Syne',sans-serif;font-weight:800;font-size:.78rem;padding:0 16px;height:46px;border-radius:23px;border:none;cursor:pointer;box-shadow:0 6px 28px rgba(0,229,204,.4);text-decoration:none;white-space:nowrap;}
-.fab-p:active{transform:scale(.93);}
 
-/* Page specific */
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 6px;text-align:center;}
-.filter-row{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;scrollbar-width:none;}
-.filter-row::-webkit-scrollbar{display:none;}
-.fchip{padding:6px 14px;border-radius:50px;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--txt2);white-space:nowrap;cursor:pointer;transition:.2s;flex-shrink:0;}
-.fchip.act{background:rgba(0,229,204,.1);border-color:var(--teal);color:var(--teal);}
-.fchip:active{transform:scale(.95);}
+/* Search & Filters */
 .search-wrap{position:relative;margin-bottom:14px;}
 .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--txt3);}
-.search-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:11px 12px 11px 38px;font-size:.85rem;color:var(--txt1);outline:none;transition:.2s;font-family:'DM Sans',sans-serif;box-sizing:border-box;}
-.search-input:focus{border-color:rgba(0,229,204,.35);background:rgba(0,229,204,.04);}
+.search-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 12px 12px 38px;font-size:.85rem;color:var(--txt1);outline:none;transition:all .2s;font-family:'DM Sans',sans-serif;box-sizing:border-box;}
+.search-input:focus{border-color:rgba(0,229,204,.4);background:rgba(0,229,204,.04);box-shadow:0 0 0 3px rgba(0,229,204,.1);}
 .search-input::placeholder{color:var(--txt3);}
-.rrow{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .18s;width:100%;margin-bottom:8px;}
-.rrow:last-child{margin-bottom:0;}
-.rrow.exp{border-color:rgba(0,229,204,.25);}
-.rtop{display:flex;align-items:center;gap:9px;padding:11px;cursor:pointer;}
-.rtop:active{background:rgba(255,255,255,.03);}
-.rtop-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+
+.filter-row{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;scrollbar-width:none;}
+.filter-row::-webkit-scrollbar{display:none;}
+.fchip{padding:6px 14px;border-radius:50px;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--txt2);white-space:nowrap;cursor:pointer;transition:all .2s;flex-shrink:0;}
+.fchip.act{background:rgba(0,229,204,.1);border-color:var(--teal);color:var(--teal);transform:scale(1.05);}
+.fchip:active{transform:scale(.95);}
+
+/* Stats Grid */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 6px;text-align:center;transition:transform 0.2s;}
+.stat-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15);}
+
+/* Report Cards */
+.rrow{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s cubic-bezier(0.34, 1.56, 0.64, 1);width:100%;margin-bottom:12px;}
+.rrow:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.4);border-color:rgba(255,255,255,0.15);}
+.rrow.exp{border-color:rgba(0,229,204,.35);box-shadow:0 10px 30px rgba(0,229,204,0.1);}
+.rtop{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;}
+.rtop-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;box-shadow:inset 0 0 10px rgba(255,255,255,0.05);}
 .rtop-info{flex:1;min-width:0;overflow:hidden;}
-.rtop-title{font-size:.8rem;font-weight:500;color:var(--txt1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.rtop-sub{font-size:.6rem;color:var(--txt3);margin-top:1px;}
-.rtop-right{display:flex;align-items:center;gap:5px;flex-shrink:0;}
-.rdetail{max-height:0;overflow:hidden;transition:max-height .32s cubic-bezier(.4,0,.2,1),padding .22s;padding:0 11px;}
-.rdetail.open{max-height:180px;padding:0 11px 12px;}
-.rdetail-inner{background:rgba(0,0,0,.25);border-radius:8px;padding:10px 12px;font-size:.72rem;color:#94a3b8;line-height:1.65;}
-.chevron{width:15px;height:15px;flex-shrink:0;color:var(--txt3);transition:transform .28s cubic-bezier(.4,0,.2,1);}
-.rrow.exp .chevron{transform:rotate(180deg);}
-.progress-bar{height:4px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden;margin-top:8px;}
-.progress-fill{height:100%;border-radius:4px;transition:width 1s ease;}
-.empty-state{text-align:center;padding:40px 20px;color:var(--txt3);}
+.rtop-title{font-size:.85rem;font-weight:600;color:var(--txt1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rtop-sub{font-size:.65rem;color:var(--txt3);margin-top:2px;}
+.rdetail{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1),padding .3s;padding:0 14px;opacity:0;}
+.rdetail.open{max-height:800px;padding:0 14px 14px;opacity:1;}
+.rdetail-inner{background:rgba(0,0,0,.3);border-radius:10px;padding:12px 14px;font-size:.75rem;color:var(--txt2);line-height:1.6;border:1px solid rgba(255,255,255,0.03);}
+.chevron{width:16px;height:16px;flex-shrink:0;color:var(--txt3);transition:transform .3s cubic-bezier(.4,0,.2,1);}
+.rrow.exp .chevron{transform:rotate(180deg);color:var(--teal);}
+
+/* Detail Layout & Timeline */
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.detail-lbl { font-size: 0.6rem; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; display: block; margin-bottom: 2px;}
+.pri-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; background: rgba(255,255,255,0.1); }
+.pri-normal { color: #00e5cc; background: rgba(0,229,204,0.1); border: 1px solid rgba(0,229,204,0.2); }
+.pri-high { color: #fb923c; background: rgba(251,146,60,0.1); border: 1px solid rgba(251,146,60,0.2); }
+.pri-emergency { color: #ff4d6d; background: rgba(255,77,109,0.1); border: 1px solid rgba(255,77,109,0.2); }
+
+.report-timeline { display: flex; justify-content: space-between; position: relative; margin: 20px 0 16px; }
+.report-timeline::before { content: ''; position: absolute; top: 8px; left: 10%; right: 10%; height: 2px; background: rgba(255,255,255,0.1); z-index: 0; }
+.tl-step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+.tl-dot { width: 18px; height: 18px; border-radius: 50%; background: #0b1422; border: 2px solid var(--txt3); transition: all 0.3s; }
+.tl-text { font-size: 0.55rem; color: var(--txt3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; }
+.tl-step.completed .tl-dot { background: var(--teal); border-color: var(--teal); box-shadow: 0 0 10px rgba(0,229,204,0.5); }
+.tl-step.completed .tl-text { color: var(--teal); }
+
+.evidence-img { width: 100%; max-height: 140px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; }
+.evidence-img:hover { filter: brightness(1.1); border-color: var(--teal); }
+
+/* Progress Bar */
+.progress-bar{height:6px;border-radius:6px;background:rgba(255,255,255,.05);overflow:hidden;margin-top:10px;}
+.progress-fill{height:100%;border-radius:6px;transition:width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);}
+
+/* Empty State */
+.empty-state{text-align:center;padding:50px 20px;color:var(--txt3);background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.1);border-radius:16px;}
+
+/* Modal */
+.img-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; }
+.img-modal.show { display: flex; opacity: 1; }
+.img-modal img { max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+.img-modal-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+/* ══ REPORT ISSUE FAB BUTTON (index.html style) ══ */
+.fab-p {
+    position: fixed;
+    bottom: calc(62px + env(safe-area-inset-bottom, 0px) + 14px);
+    right: max(14px, env(safe-area-inset-right, 14px));
+    z-index: 45;
+    display: flex; align-items: center; gap: 7px;
+    background: linear-gradient(135deg,#00e5cc 0%,#00cfff 100%);
+    color: #060c14;
+    font-family: 'Syne',sans-serif; font-weight: 800; font-size: 0.78rem;
+    padding: 0 16px; height: 46px; border-radius: 23px; border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 28px rgba(0,229,204,0.4);
+    animation: fp 3s ease-in-out infinite;
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    text-decoration: none; white-space: nowrap;
+}
+.fab-p:hover { transform: scale(1.05); }
+.fab-p:active { transform: scale(0.93); }
+@media (min-width: 768px) { .fab-p { bottom: 28px; right: 24px; } }
+@keyframes fp { 0%,100%{box-shadow:0 6px 28px rgba(0,229,204,0.4)} 50%{box-shadow:0 6px 40px rgba(0,229,204,0.62)} }
 </style>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
 <div class="app-layout">
+
+  <div class="sidebar-overlay cp-sidebar-overlay" id="cpSidebarOverlay"></div>
+  <nav class="sidebar cp-sidebar" id="cpSidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-logo cp-sidebar-header">
+      <div class="logo-icon cp-sidebar-logo">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="logo-text cp-sidebar-title">CivicPulse</span>
+      <button class="sidebar-close cp-sidebar-close" id="cpSidebarClose" aria-label="Close menu" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="cp-nav-section">Navigation</div>
+    <div class="sidebar-nav cp-sidebar-nav">
+      <a href="../index.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">🏠</span><span class="nav-label cp-nav-label">Home</span></a>
+      <a href="report.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">🚨</span><span class="nav-label cp-nav-label">Report Issue</span></a>
+      <a href="reports.html" class="nav-item cp-nav-item active cp-active"><span class="nav-icon cp-nav-icon">📋</span><span class="nav-label cp-nav-label">Track Reports</span></a>
+      <a href="activity.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">👥</span><span class="nav-label cp-nav-label">Community</span></a>
+      <a href="resources.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">🔍</span><span class="nav-label cp-nav-label">Resources</span></a>
+      <a href="dashboard.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">📊</span><span class="nav-label cp-nav-label">Dashboard</span></a>
+      <a href="contact.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">📞</span><span class="nav-label cp-nav-label">Contact</span></a>
+      <a href="features.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">⭐</span><span class="nav-label cp-nav-label">Features</span></a>
+      <a href="team.html" class="nav-item cp-nav-item"><span class="nav-icon cp-nav-icon">👤</span><span class="nav-label cp-nav-label">Team</span></a>
+      <div class="cp-nav-divider"></div>
+      <a href="emergency.html" class="nav-item cp-nav-item sos-nav cp-nav-sos"><span class="nav-icon cp-nav-icon">⚡</span><span class="nav-label cp-nav-label">Emergency SOS</span></a>
+    </div>
+    <div class="sidebar-footer cp-sidebar-footer">
+      <div class="sidebar-user cp-sidebar-user">
+        <div class="avatar cp-sidebar-avatar" style="padding:0;overflow:hidden;">
+          <img src="../image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.style.display='none';this.parentElement.textContent='SA';"/>
+        </div>
+        <div>
+          <div class="cp-sidebar-username" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;color:#f1f5f9;">Shobhit Asthana</div>
+          <div class="cp-sidebar-role" style="font-size:0.6rem;color:#64748b;margin-top:1px;">Level 4 · Null Pointer</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
 <div class="main-area">
 
-<!-- HEADER -->
 <header class="app-header">
   <div class="header-left">
     <button class="hamburger" aria-label="Open navigation menu" type="button"><span></span><span></span><span></span></button>
@@ -105,110 +181,308 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   </div>
 </header>
 
-<!-- CONTENT -->
 <main class="page-content">
 
-  <!-- Title -->
   <div style="margin-bottom:16px;" class="fu">
     <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:50px;background:rgba(0,229,204,.08);border:1px solid rgba(0,229,204,.2);font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;color:var(--teal);margin-bottom:10px;">📡 My Reports</div>
     <h1 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.2rem,4vw,1.7rem);color:var(--txt1);margin-bottom:6px;">Track Your <span style="background:linear-gradient(135deg,#00e5cc,#00cfff,#a78bfa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Reports</span></h1>
-    <p style="font-size:.8rem;color:var(--txt2);">Monitor the status of your submitted civic complaints.</p>
+    <p style="font-size:.8rem;color:var(--txt2);">Monitor the real-time status of your submitted civic complaints.</p>
   </div>
 
-  <!-- Stats -->
   <div class="stat-grid fu d1">
-    <div class="stat-card"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--txt1);">19</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Total</div></div>
-    <div class="stat-card"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--orange);">7</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Pending</div></div>
-    <div class="stat-card"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--cyan);">5</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Active</div></div>
-    <div class="stat-card"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--teal);">7</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Resolved</div></div>
+    <div class="stat-card"><div id="statTotal" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--txt1);">0</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Total</div></div>
+    <div class="stat-card"><div id="statPending" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--orange);">0</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Pending</div></div>
+    <div class="stat-card"><div id="statActive" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--cyan);">0</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Active</div></div>
+    <div class="stat-card"><div id="statResolved" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--teal);">0</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Resolved</div></div>
   </div>
 
-  <!-- Search -->
   <div class="search-wrap fu d2">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="search" class="search-input" placeholder="Search by title, location, ID..." oninput="filterReports(this.value)" autocomplete="off"/>
   </div>
 
-  <!-- Filters -->
   <div class="filter-row fu d2">
     <button class="fchip act" onclick="setFilter('all',this)">All</button>
     <button class="fchip" onclick="setFilter('pending',this)">🟡 Pending</button>
-    <button class="fchip" onclick="setFilter('progress',this)">🔵 Active</button>
+    <button class="fchip" onclick="setFilter('active',this)">🔵 Active</button>
     <button class="fchip" onclick="setFilter('resolved',this)">✅ Resolved</button>
     <button class="fchip" onclick="setFilter('critical',this)">🔴 Critical</button>
   </div>
 
-  <!-- Reports list -->
-  <div id="rList" class="fu d3"></div>
+  <div id="rList" class="fu d3">
+      </div>
 
 </main>
+
+  <nav class="bottom-bar bottom-nav" id="cpBottomNav" role="navigation" aria-label="Bottom navigation">
+    <a href="../index.html" class="tab-item nav-item" data-key="home"><span class="tab-icon">🏠</span><span class="tab-label">Home</span></a>
+    <a href="report.html" class="tab-item nav-item" data-key="report"><span class="tab-icon">🚨</span><span class="tab-label">Report</span></a>
+    <a href="reports.html" class="tab-item nav-item active cp-active" data-key="reports"><span class="tab-icon">📋</span><span class="tab-label">Track</span></a>
+    <a href="activity.html" class="tab-item nav-item" data-key="activity"><span class="tab-icon">👥</span><span class="tab-label">Community</span></a>
+    <a href="emergency.html" class="tab-item nav-item sos-tab cp-nav-sos" data-key="emergency"><span class="tab-icon">⚡</span><span class="tab-label">SOS</span></a>
+  </nav>
+
 </div>
 </div>
 
-<!-- FAB -->
 <a href="report.html" class="fab-p">
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
   New Report
 </a>
 
+<div id="imgModal" class="img-modal" onclick="closeModal(event)">
+    <button class="img-modal-close" onclick="document.getElementById('imgModal').classList.remove('show')">×</button>
+    <img id="modalImg" src="" alt="Evidence Fullscreen" onclick="event.stopPropagation()"/>
+</div>
+
+<div id="toast"></div>
+
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shared-ui.js"></script>
+
 <script>
-const REPORTS=[
-  {id:'CP-2025-0042',icon:'💡',title:'Broken streetlight – Sector 12',loc:'Sector 12, Gomti Nagar',status:'pending',prog:10,date:'2h ago',dept:'Municipal Corp, Zone 3',eta:'24–48 hours'},
-  {id:'CP-2025-0041',icon:'🗑️',title:'Garbage overflow – Market Road',loc:'Market Road, Hazratganj',status:'critical',prog:5,date:'4h ago',dept:'Nagar Nigam Sanitation',eta:'Priority escalated'},
-  {id:'CP-2025-0040',icon:'💧',title:'Water leakage – Civil Lines',loc:'Civil Lines, Lucknow',status:'progress',prog:55,date:'6h ago',dept:'Jal Kal Vibhag, Team B',eta:'Technician ETA: 1.5h'},
-  {id:'CP-2025-0039',icon:'🛣️',title:'Pothole – Ring Road',loc:'Ring Road, Aliganj',status:'resolved',prog:100,date:'1d ago',dept:'PWD',eta:'Patching complete ✓'},
-  {id:'CP-2025-0038',icon:'⚡',title:'Low hanging cable – Park Road',loc:'Park Road, Indira Nagar',status:'critical',prog:20,date:'1d ago',dept:'UPPCL, Maintenance',eta:'Team dispatched'},
-  {id:'CP-2025-0037',icon:'🛣️',title:'Road cave-in near underpass',loc:'Underpass, Chowk',status:'progress',prog:70,date:'2d ago',dept:'PWD + Traffic Dept',eta:'2 days to complete'},
+// 1. Core Data
+const DEMO_REPORTS = [
+  {id:'CP-2025-0042', icon:'💡', title:'Broken streetlight – Sector 12', loc:'Sector 12, Gomti Nagar', status:'pending', prog:10, date:'2h ago', dept:'Municipal Corp, Zone 3', eta:'24–48 hours', priority: 'Normal', desc: 'The street is completely dark, causing safety issues for pedestrians.'},
+  {id:'CP-2025-0041', icon:'🗑️', title:'Garbage overflow – Market Road', loc:'Market Road, Hazratganj', status:'critical', prog:5, date:'4h ago', dept:'Nagar Nigam Sanitation', eta:'Priority escalated', priority: 'Emergency', desc: 'Garbage dump is spilling onto the main road blocking traffic.'},
+  {id:'CP-2025-0040', icon:'💧', title:'Water leakage – Civil Lines', loc:'Civil Lines, Lucknow', status:'active', prog:55, date:'6h ago', dept:'Jal Kal Vibhag, Team B', eta:'Technician ETA: 1.5h', priority: 'High', desc: 'Main pipeline burst. Lots of water wastage.'},
+  {id:'CP-2025-0039', icon:'🛣️', title:'Pothole – Ring Road', loc:'Ring Road, Aliganj', status:'resolved', prog:100, date:'1d ago', dept:'PWD', eta:'Patching complete ✓', priority: 'Normal', desc: 'Large pothole causing vehicle damage.'},
+  {id:'CP-2025-0038', icon:'⚡', title:'Low hanging cable – Park Road', loc:'Park Road, Indira Nagar', status:'critical', prog:20, date:'1d ago', dept:'UPPCL, Maintenance', eta:'Team dispatched', priority: 'Emergency', desc: 'Live wire hanging too low near the park.'},
 ];
-const SC={
-  pending:{lbl:'Pending',color:'#fb923c',bg:'rgba(251,146,60,.12)',border:'rgba(251,146,60,.25)'},
-  progress:{lbl:'Active',color:'#00cfff',bg:'rgba(0,207,255,.1)',border:'rgba(0,207,255,.25)'},
-  resolved:{lbl:'Resolved',color:'#00e5cc',bg:'rgba(0,229,204,.1)',border:'rgba(0,229,204,.25)'},
-  critical:{lbl:'Critical',color:'#ff4d6d',bg:'rgba(255,77,109,.12)',border:'rgba(255,77,109,.25)'},
+
+const SC = {
+  pending: {lbl:'Pending',  color:'#fb923c', bg:'rgba(251,146,60,.12)', border:'rgba(251,146,60,.25)'},
+  active:  {lbl:'Active',   color:'#00cfff', bg:'rgba(0,207,255,.1)',   border:'rgba(0,207,255,.25)'},
+  resolved:{lbl:'Resolved', color:'#00e5cc', bg:'rgba(0,229,204,.1)',   border:'rgba(0,229,204,.25)'},
+  critical:{lbl:'Critical', color:'#ff4d6d', bg:'rgba(255,77,109,.12)', border:'rgba(255,77,109,.25)'},
 };
-let activeF='all',searchQ='';
-function renderReports(){
-  const list=document.getElementById('rList');
-  const items=REPORTS.filter(r=>(activeF==='all'||r.status===activeF)&&(r.title.toLowerCase().includes(searchQ)||r.loc.toLowerCase().includes(searchQ)||r.id.toLowerCase().includes(searchQ)));
-  if(!items.length){list.innerHTML='<div class="empty-state"><div style="font-size:2.5rem;margin-bottom:10px;opacity:.4;">🔍</div><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:1rem;color:var(--txt1);margin-bottom:4px;">No reports found</div><p style="font-size:.78rem;">Try adjusting your filters.</p></div>';return;}
-  list.innerHTML=items.map((r,i)=>{
-    const s=SC[r.status];
-    return`<div class="rrow" id="rr${i}" onclick="toggleRpt(${i})">
-      <div class="rtop">
-        <div class="rtop-icon" style="background:rgba(255,255,255,.06);">${r.icon}</div>
-        <div class="rtop-info">
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px;">
-            <span style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--txt3);font-weight:600;">${r.id}</span>
-            <span style="background:${s.bg};color:${s.color};border:1px solid ${s.border};padding:1px 7px;border-radius:20px;font-size:.56rem;font-weight:700;font-family:'Syne',sans-serif;">${s.lbl}</span>
-          </div>
-          <div class="rtop-title">${r.title}</div>
-          <div class="rtop-sub">📍 ${r.loc} · ${r.date}</div>
-        </div>
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-      <div class="rdetail" id="rd${i}">
-        <div class="rdetail-inner">
-          <div style="margin-bottom:6px;">🔧 <strong>Assigned:</strong> ${r.dept}</div>
-          <div style="margin-bottom:8px;">🕐 <strong>Status:</strong> ${r.eta}</div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${r.prog}%;background:${s.color};box-shadow:0 0 6px ${s.color};"></div></div>
-          <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:.58rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;">Resolution</span><span style="font-size:.58rem;color:${s.color};font-weight:700;">${r.prog}%</span></div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+
+let allReports = [];
+let activeF = 'all';
+let searchQ = '';
+
+// 2. Helper Functions
+function getIcon(cat) {
+    if(!cat) return '📌';
+    let c = cat.toLowerCase();
+    if(c.includes('road')) return '🛣️';
+    if(c.includes('garbage')) return '🗑️';
+    if(c.includes('water')) return '💧';
+    if(c.includes('light')) return '💡';
+    if(c.includes('safe') || c.includes('emergency')) return '🚨';
+    return '📌';
 }
+
+function getPriorityClass(pri) {
+    let p = (pri || 'Normal').toLowerCase();
+    if(p.includes('high')) return 'pri-high';
+    if(p.includes('emergency') || p.includes('critical')) return 'pri-emergency';
+    return 'pri-normal';
+}
+
+// 3. Initialize & Merge Data
+function loadData() {
+    let localData = JSON.parse(localStorage.getItem('civicReports')) || [];
+    
+    // Map local storage reports to standard format
+    let userReports = localData.map(r => {
+        let st = (r.status || 'pending').toLowerCase();
+        if(st === 'open') st = 'pending';
+        if(st === 'progress') st = 'active';
+        
+        let prog = st === 'resolved' ? 100 : (st === 'active' ? 45 : 10);
+        let dept = st === 'pending' ? 'Pending Assignment' : (st === 'resolved' ? 'Local Authorities' : 'Assigned to Unit');
+        let eta = st === 'resolved' ? 'Completed' : (st === 'active' ? 'In Progress' : 'Under Review');
+        
+        return {
+            id: r.id,
+            icon: getIcon(r.category),
+            title: r.title,
+            loc: r.location,
+            status: st,
+            prog: prog,
+            date: r.date || 'Just now',
+            dept: dept,
+            eta: eta,
+            priority: r.priority || 'Normal',
+            desc: r.description || 'No detailed description provided.',
+            image: r.image || null,
+            timestamp: r.timestamp || Date.now(), // used for simulation
+            isUser: true
+        };
+    });
+
+    // Merge: User reports first (reversed for newest first), then demo
+    allReports = [...userReports.reverse(), ...DEMO_REPORTS];
+    
+    updateStats();
+    renderReports();
+}
+
+// 4. Update Stats
+function updateStats() {
+    let tot = allReports.length;
+    let pen = allReports.filter(r => r.status === 'pending').length;
+    let act = allReports.filter(r => r.status === 'active' || r.status === 'critical').length;
+    let res = allReports.filter(r => r.status === 'resolved').length;
+
+    document.getElementById('statTotal').innerText = tot;
+    document.getElementById('statPending').innerText = pen;
+    document.getElementById('statActive').innerText = act;
+    document.getElementById('statResolved').innerText = res;
+}
+
+// 5. Render Reports
+function renderReports() {
+    const list = document.getElementById('rList');
+    
+    const items = allReports.filter(r => {
+        let matchFilter = (activeF === 'all') || (r.status === activeF);
+        let matchSearch = r.title.toLowerCase().includes(searchQ) || 
+                          r.loc.toLowerCase().includes(searchQ) || 
+                          r.id.toLowerCase().includes(searchQ);
+        return matchFilter && matchSearch;
+    });
+
+    if(!items.length) {
+        list.innerHTML = `
+        <div class="empty-state">
+            <div style="font-size:3rem; margin-bottom:12px; opacity:0.8;">📭</div>
+            <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:var(--txt1); margin-bottom:6px;">No reports yet</div>
+            <p style="font-size:0.8rem; margin-bottom:16px;">Submit your first civic issue to help improve your city.</p>
+            <a href="report.html" style="display:inline-block; padding:10px 20px; background:linear-gradient(135deg,var(--teal),var(--cyan)); color:#000; border-radius:10px; font-family:'Syne',sans-serif; font-weight:700; text-decoration:none; font-size:0.8rem;">+ Report Issue</a>
+        </div>`;
+        return;
+    }
+
+    list.innerHTML = items.map((r, i) => {
+        const s = SC[r.status] || SC.pending;
+        const priCls = getPriorityClass(r.priority);
+        const imgHtml = r.image ? `<div style="margin-top:14px;"><span class="detail-lbl">Evidence Photo</span><img src="${r.image}" class="evidence-img mt-2" onclick="openModal('${r.image}')" /></div>` : '';
+        
+        return `
+        <div class="rrow" id="rr${i}">
+            <div class="rtop" onclick="toggleRpt(${i})">
+                <div class="rtop-icon" style="background:rgba(255,255,255,.06);">${r.icon}</div>
+                <div class="rtop-info">
+                    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--txt3);font-weight:600;">${r.id}</span>
+                        <span style="background:${s.bg};color:${s.color};border:1px solid ${s.border};padding:2px 8px;border-radius:20px;font-size:.56rem;font-weight:700;font-family:'Syne',sans-serif;box-shadow:0 0 10px ${s.bg}">${s.lbl}</span>
+                        ${r.isUser ? `<span style="font-size:0.55rem; background:rgba(167,139,250,0.15); color:#a78bfa; padding:2px 6px; border-radius:6px; font-weight:bold;">Yours</span>` : ''}
+                    </div>
+                    <div class="rtop-title">${r.title}</div>
+                    <div class="rtop-sub">📍 ${r.loc} · ${r.date}</div>
+                </div>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            
+            <div class="rdetail" id="rd${i}">
+                <div class="rdetail-inner">
+                    <div class="detail-grid">
+                        <div><span class="detail-lbl">Assigned Department</span><span style="font-weight:500; color:var(--txt1);">${r.dept}</span></div>
+                        <div><span class="detail-lbl">Priority</span><span class="pri-badge ${priCls}">${r.priority || 'Normal'}</span></div>
+                        <div style="grid-column: span 2;"><span class="detail-lbl">Description</span><span>${r.desc}</span></div>
+                    </div>
+                    
+                    ${imgHtml}
+
+                    <div class="report-timeline">
+                        <div class="tl-step ${r.prog >= 10 ? 'completed' : ''}"><div class="tl-dot"></div><div class="tl-text">Submitted</div></div>
+                        <div class="tl-step ${r.prog >= 30 ? 'completed' : ''}"><div class="tl-dot"></div><div class="tl-text">Assigned</div></div>
+                        <div class="tl-step ${r.prog >= 45 ? 'completed' : ''}"><div class="tl-dot"></div><div class="tl-text">Active</div></div>
+                        <div class="tl-step ${r.prog >= 100 ? 'completed' : ''}"><div class="tl-dot"></div><div class="tl-text">Resolved</div></div>
+                    </div>
+
+                    <div class="progress-bar"><div class="progress-fill" style="width:${r.prog}%;background:${s.color};box-shadow:0 0 8px ${s.color};"></div></div>
+                    <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                        <span style="font-size:.58rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;font-weight:700;">Resolution Progress</span>
+                        <span style="font-size:.65rem;color:${s.color};font-weight:800;font-family:'Syne',sans-serif;">${r.prog}%</span>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// 6. UI Interactions
 function toggleRpt(i){
-  const row=document.getElementById('rr'+i),det=document.getElementById('rd'+i);
-  if(!row||!det)return;
-  const open=row.classList.contains('exp');
-  document.querySelectorAll('.rrow').forEach((r,j)=>{r.classList.remove('exp');const d=document.getElementById('rd'+j);if(d)d.classList.remove('open');});
-  if(!open){row.classList.add('exp');det.classList.add('open');}
+    const row = document.getElementById('rr'+i);
+    const det = document.getElementById('rd'+i);
+    if(!row || !det) return;
+    
+    const open = row.classList.contains('exp');
+    
+    // Close all
+    document.querySelectorAll('.rrow').forEach((r, j) => {
+        r.classList.remove('exp');
+        const d = document.getElementById('rd'+j);
+        if(d) d.classList.remove('open');
+    });
+    
+    // Open clicked
+    if(!open){
+        row.classList.add('exp');
+        det.classList.add('open');
+    }
 }
-function setFilter(f,btn){activeF=f;document.querySelectorAll('.fchip').forEach(b=>b.classList.remove('act'));btn.classList.add('act');renderReports();}
-function filterReports(v){searchQ=v.toLowerCase();renderReports();}
-renderReports();
+
+function setFilter(f, btn){
+    activeF = f;
+    document.querySelectorAll('.fchip').forEach(b => b.classList.remove('act'));
+    btn.classList.add('act');
+    renderReports();
+}
+
+function filterReports(v){
+    searchQ = v.toLowerCase();
+    renderReports();
+}
+
+function openModal(src) {
+    document.getElementById('modalImg').src = src;
+    document.getElementById('imgModal').classList.add('show');
+}
+function closeModal(e) {
+    document.getElementById('imgModal').classList.remove('show');
+}
+
+// 7. Status Simulator (Real-time logic for User Reports)
+function simulateStatus() {
+    let localData = JSON.parse(localStorage.getItem('civicReports')) || [];
+    let changed = false;
+    const now = Date.now();
+
+    localData = localData.map(r => {
+        if (!r.timestamp) r.timestamp = now; // Add timestamp if missing
+        
+        let elapsed = now - r.timestamp;
+        let st = r.status.toLowerCase();
+        
+        // After 30 seconds -> Active
+        if ((st === 'open' || st === 'pending') && elapsed > 30000) { 
+            r.status = 'active';
+            changed = true;
+        } 
+        // After 2 minutes (120s) -> Resolved
+        else if (st === 'active' && elapsed > 120000) {
+            r.status = 'resolved';
+            changed = true;
+        }
+        return r;
+    });
+
+    if(changed) {
+        localStorage.setItem('civicReports', JSON.stringify(localData));
+        loadData(); // Re-render everything
+    }
+}
+
+// 8. Initialization
+window.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    setInterval(simulateStatus, 10000); // Check every 10 seconds for simulated updates
+});
+
 </script>
 <script>if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{});});}</script>
 </body>
