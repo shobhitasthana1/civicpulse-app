@@ -26,57 +26,80 @@ body::before {
   -webkit-mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);
 }
 
-.slbl { font-family:'Syne',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:rgba(0,229,204,0.65); display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+.slbl { font-family:'Syne',sans-serif; font-size:0.65rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:rgba(0,229,204,0.8); display:flex; align-items:center; gap:8px; margin-bottom:12px; }
 .slbl::after { content:''; flex:1; height:1px; background:linear-gradient(to right,rgba(0,229,204,0.2),transparent); }
-.fu { opacity:0; transform:translateY(16px); animation:fu .4s ease forwards; }
+.fu { opacity:0; transform:translateY(16px); animation:fu .4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
 @keyframes fu { to { opacity:1; transform:translateY(0); } }
-.d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
+.d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}.d5{animation-delay:.30s}
+
+/* Map Preview Hero */
+.map-hero {
+  background: radial-gradient(circle at center, rgba(0,229,204,0.1), transparent 70%), #0b1422;
+  border: 1px solid rgba(0,229,204,0.15); border-radius: 20px; padding: 20px; margin-bottom: 24px;
+  position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.map-hero::before {
+  content:''; position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px); background-size:20px 20px; pointer-events:none;
+}
+
+/* Quick Contacts */
+.quick-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 24px; }
+@media (min-width: 640px) { .quick-grid { grid-template-columns: repeat(4, 1fr); } }
+.quick-card {
+  background: rgba(255,77,109,0.05); border: 1px solid rgba(255,77,109,0.15); border-radius: 16px; padding: 14px 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  text-decoration: none; transition: 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.quick-card:hover { background: rgba(255,77,109,0.1); border-color: rgba(255,77,109,0.3); transform: translateY(-2px); }
+.quick-card:active { transform: scale(0.96); }
 
 /* Search hero */
-.search-hero {
-  background:linear-gradient(135deg,rgba(0,229,204,0.07),rgba(0,207,255,0.04));
-  border:1px solid rgba(0,229,204,0.15); border-radius:18px; padding:18px; margin-bottom:18px;
-  position:relative; overflow:hidden;
-}
-.search-hero::before {
-  content:''; position:absolute; top:-30px; right:-30px; width:120px; height:120px;
-  background:radial-gradient(circle,rgba(0,229,204,0.1),transparent 70%); pointer-events:none;
-}
 .search-input {
-  width:100%; background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.1);
-  border-radius:12px; padding:12px 12px 12px 40px; font-size:0.85rem; color:#f1f5f9;
-  outline:none; transition:.2s; font-family:'DM Sans',sans-serif;
+  width: 100%; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 14px 14px 14px 44px; font-size: 0.9rem; color: #f1f5f9;
+  outline: none; transition: .2s; font-family: 'DM Sans', sans-serif;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
-.search-input:focus { border-color:rgba(0,229,204,0.4); background:rgba(0,229,204,0.05); }
-.search-input::placeholder { color:#475569; }
+.search-input:focus { border-color: var(--teal); background: rgba(0,229,204,0.05); box-shadow: 0 0 0 3px rgba(0,229,204,0.1); }
+.search-input::placeholder { color: #64748b; }
 
 /* Category chips */
-.cat-row { display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-bottom:18px; scrollbar-width:none; }
+.cat-row { display:flex; gap:8px; overflow-x:auto; padding-bottom:10px; margin-bottom:14px; scrollbar-width:none; }
 .cat-row::-webkit-scrollbar { display:none; }
 .cchip {
-  display:flex; align-items:center; gap:5px; padding:7px 14px; border-radius:50px;
-  font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:700;
-  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#94a3b8;
-  white-space:nowrap; cursor:pointer; transition:.2s; flex-shrink:0;
+  display:flex; align-items:center; gap:6px; padding:8px 16px; border-radius:50px;
+  font-family:'Syne',sans-serif; font-size:0.75rem; font-weight:700;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#94a3b8;
+  white-space:nowrap; cursor:pointer; transition: 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); flex-shrink:0;
 }
-.cchip.act { background:rgba(0,229,204,0.1); border-color:var(--teal); color:var(--teal); }
+.cchip:hover { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.2); color:#f1f5f9; }
+.cchip.act { background:rgba(0,229,204,0.1); border-color:var(--teal); color:var(--teal); box-shadow: 0 4px 12px rgba(0,229,204,0.15); transform:scale(1.02); }
 .cchip:active { transform:scale(0.95); }
 
 /* Resource card */
 .res-card {
-  background:rgba(11,20,34,0.75); border:1px solid rgba(255,255,255,0.07);
-  border-radius:18px; padding:16px; margin-bottom:12px;
-  transition:border-color .2s;
+  background:rgba(11,20,34,0.8); border:1px solid rgba(255,255,255,0.07);
+  border-radius:20px; padding:18px; margin-bottom:14px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: fadeIn 0.4s ease forwards;
 }
-.res-card:last-child { margin-bottom:0; }
-.res-icon { width:50px; height:50px; border-radius:14px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
-.res-divider { height:1px; background:linear-gradient(to right,transparent,rgba(255,255,255,0.08),transparent); margin:12px 0; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.res-card:hover { border-color:rgba(0,229,204,0.3); box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 10px rgba(0,229,204,0.05); transform:translateY(-2px); }
+.res-icon { width:52px; height:52px; border-radius:14px; background:linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:1.6rem; flex-shrink:0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.05); }
+.res-divider { height:1px; background:linear-gradient(to right,transparent,rgba(255,255,255,0.08),transparent); margin:14px 0; }
+
+/* Action Buttons */
 .btn-action {
-  flex:1; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; gap:6px;
-  font-size:0.78rem; font-weight:600; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
-  color:#f1f5f9; transition:.2s; cursor:pointer; text-decoration:none; font-family:'DM Sans',sans-serif;
+  flex:1; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; gap:8px;
+  font-size:0.8rem; font-weight:700; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+  color:#f1f5f9; transition:0.2s cubic-bezier(0.34, 1.56, 0.64, 1); cursor:pointer; text-decoration:none; font-family:'DM Sans',sans-serif;
 }
-.btn-action:active { background:rgba(255,255,255,0.1); transform:scale(0.96); }
+.btn-action:hover { background:rgba(0,229,204,0.1); border-color:rgba(0,229,204,0.3); color:#00e5cc; }
+.btn-action:active { transform:scale(0.96); }
+
+/* Text & Wraps */
+.text-wrap-normal { white-space: normal; word-break: break-word; line-height: 1.4; }
 </style>
 </head>
 
@@ -85,7 +108,6 @@ body::before {
 <div class="app-layout">
 <div class="main-area">
 
-<!-- HEADER -->
 <header class="app-header">
   <div class="header-left">
     <button class="hamburger" aria-label="Open navigation menu" type="button">
@@ -110,43 +132,66 @@ body::before {
   </div>
 </header>
 
-<!-- PAGE CONTENT -->
-<main class="page-content">
+<main class="page-content" style="padding-bottom: 120px;">
+  <div style="max-width: 800px; margin: 0 auto;">
 
-  <!-- TITLE -->
-  <div style="margin-bottom:18px;" class="fu">
-    <div class="slbl">City Resources</div>
-    <h1 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:#f1f5f9;margin-bottom:6px;">Find Nearby Help</h1>
-    <p style="font-size:0.8rem;color:#64748b;">Locate hospitals, police stations, utilities, NGOs and public services near you.</p>
-  </div>
-
-  <!-- SEARCH -->
-  <div class="search-hero fu d1">
-    <div style="position:relative;z-index:1;">
-      <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="search" class="search-input" placeholder="Search services, hospitals, police..." oninput="filterRes(this.value)" autocomplete="off"/>
+    <div class="map-hero fu d1">
+      <div style="position: relative; z-index: 1;">
+        <div style="font-size: 2rem; margin-bottom: 4px; filter: drop-shadow(0 0 8px rgba(0,229,204,0.5));">📍</div>
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#f1f5f9;margin-bottom:4px;">Services in Kanpur</h2>
+        <p style="font-size:0.75rem;color:#94a3b8;max-width: 200px;line-height:1.4;">Showing accurate local emergency & civic resources in Uttar Pradesh.</p>
+      </div>
+      <a href="https://maps.app.goo.gl/jiNAPU8rgB4XVCj26" target="_blank" style="position: relative; z-index: 1; background: rgba(0,229,204,0.1); border: 1px solid rgba(0,229,204,0.3); color: #00e5cc; font-family:'Syne',sans-serif; font-size: 0.7rem; font-weight: 700; padding: 10px 16px; border-radius: 12px; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; transition: 0.2s;" onmouseover="this.style.background='rgba(0,229,204,0.2)'" onmouseout="this.style.background='rgba(0,229,204,0.1)'">Open Map →</a>
     </div>
+
+    <div class="fu d2">
+      <div class="slbl">Quick Emergency Lines</div>
+      <div class="quick-grid">
+        <a href="tel:112" class="quick-card" onclick="showToast('📞 Dialing Police...', 'info')">
+          <div style="font-size: 1.5rem; margin-bottom: 4px;">🚔</div>
+          <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:#ff4d6d; line-height:1;">112</div>
+          <div style="font-size:0.6rem; color:#94a3b8; font-weight:700; text-transform:uppercase; margin-top:4px;">Police</div>
+        </a>
+        <a href="tel:108" class="quick-card" onclick="showToast('📞 Dialing Ambulance...', 'info')">
+          <div style="font-size: 1.5rem; margin-bottom: 4px;">🚑</div>
+          <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:#ff4d6d; line-height:1;">108</div>
+          <div style="font-size:0.6rem; color:#94a3b8; font-weight:700; text-transform:uppercase; margin-top:4px;">Ambulance</div>
+        </a>
+        <a href="tel:101" class="quick-card" onclick="showToast('📞 Dialing Fire...', 'info')">
+          <div style="font-size: 1.5rem; margin-bottom: 4px;">🚒</div>
+          <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:#ff4d6d; line-height:1;">101</div>
+          <div style="font-size:0.6rem; color:#94a3b8; font-weight:700; text-transform:uppercase; margin-top:4px;">Fire Dept</div>
+        </a>
+        <a href="tel:1090" class="quick-card" onclick="showToast('📞 Dialing Women Helpline...', 'info')">
+          <div style="font-size: 1.5rem; margin-bottom: 4px;">🛡️</div>
+          <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:#ff4d6d; line-height:1;">1090</div>
+          <div style="font-size:0.6rem; color:#94a3b8; font-weight:700; text-transform:uppercase; margin-top:4px;">Women Help</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="fu d3" style="position:relative; margin-bottom:16px;">
+      <svg style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="search" class="search-input" placeholder="Search hospitals, police stations, utilities in Kanpur..." oninput="filterRes(this.value)" autocomplete="off"/>
+    </div>
+
+    <div class="cat-row fu d4">
+      <button class="cchip act" onclick="setCat('all',this)">🌐 All</button>
+      <button class="cchip" onclick="setCat('hospital',this)">🏥 Hospitals</button>
+      <button class="cchip" onclick="setCat('police',this)">🚔 Police</button>
+      <button class="cchip" onclick="setCat('fire',this)">🚒 Fire</button>
+      <button class="cchip" onclick="setCat('water',this)">💧 Water</button>
+      <button class="cchip" onclick="setCat('electric',this)">⚡ Electricity</button>
+      <button class="cchip" onclick="setCat('ngo',this)">🤝 NGOs</button>
+    </div>
+
+    <div id="resGrid" class="fu d5"></div>
+
   </div>
-
-  <!-- CATEGORIES -->
-  <div class="cat-row fu d2">
-    <button class="cchip act" onclick="setCat('all',this)">🌐 All</button>
-    <button class="cchip" onclick="setCat('hospital',this)">🏥 Hospitals</button>
-    <button class="cchip" onclick="setCat('police',this)">🚔 Police</button>
-    <button class="cchip" onclick="setCat('fire',this)">🚒 Fire</button>
-    <button class="cchip" onclick="setCat('water',this)">💧 Water</button>
-    <button class="cchip" onclick="setCat('electric',this)">⚡ Electricity</button>
-    <button class="cchip" onclick="setCat('ngo',this)">🤝 NGOs</button>
-  </div>
-
-  <!-- RESOURCES LIST -->
-  <div id="resGrid" class="fu d3"></div>
-
 </main>
 </div>
 </div>
 
-<!-- FAB — Emergency -->
 <a href="emergency.html" style="position:fixed;bottom:calc(var(--tab-h,62px) + env(safe-area-inset-bottom,0px) + 14px);right:max(14px,env(safe-area-inset-right,14px));z-index:45;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#ff4d6d,#cc0033);color:white;font-family:'Syne',sans-serif;font-weight:800;font-size:0.78rem;padding:0 16px;height:46px;border-radius:23px;border:none;cursor:pointer;box-shadow:0 6px 28px rgba(255,77,109,0.4);text-decoration:none;white-space:nowrap;">
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
   Emergency SOS
@@ -156,58 +201,84 @@ body::before {
 <script src="../assets/js/shared-ui.js"></script>
 
 <script>
+/* Kanpur Realistic Civic Data */
 const RES = [
-  {id:1, cat:'hospital', icon:'🏥', name:'KGMU Hospital', desc:"King George's Medical University", dist:'1.2 km', tel:'0522-2257540', rating:4.5, info:'Beds Available'},
-  {id:2, cat:'hospital', icon:'🏥', name:'Ram Manohar Lohia Hospital', desc:'State Government Hospital, Lucknow', dist:'2.8 km', tel:'0522-2288874', rating:4.2, info:'Limited Beds'},
-  {id:3, cat:'police', icon:'🚔', name:'Hazratganj Police Station', desc:'District Police HQ, Civil Lines', dist:'0.9 km', tel:'0522-2614146', rating:3.8, info:''},
-  {id:4, cat:'police', icon:'🚔', name:'Gomti Nagar Police Station', desc:'Sector 14, Gomti Nagar, Lucknow', dist:'1.7 km', tel:'0522-2308000', rating:4.0, info:''},
-  {id:5, cat:'fire', icon:'🚒', name:'Fire Station – Alambagh', desc:'Near Alambagh Bus Stand', dist:'3.4 km', tel:'101', rating:4.6, info:''},
-  {id:6, cat:'water', icon:'💧', name:'Jal Kal Vibhag', desc:'Water supply authority, Lucknow', dist:'2.2 km', tel:'0522-2286566', rating:3.7, info:''},
-  {id:7, cat:'electric', icon:'⚡', name:'UPPCL Helpline', desc:'UP Power Corporation, Zone 3', dist:'1.8 km', tel:'1912', rating:3.5, info:''},
-  {id:8, cat:'ngo', icon:'🤝', name:'Null Pointer Civic Team', desc:'CivicPulse Volunteer Network', dist:'0.2 km', tel:'+91 6388095158', rating:5.0, info:'Active Now'},
+  {id:1, cat:'hospital', icon:'🏥', name:'GSVM Medical College Hospital', desc:'Lala Lajpat Rai Hospital, Swaroop Nagar, Kanpur', dist:'1.2 km', tel:'0512-2531122', rating:4.4, status:'open', badges:['Government', '24/7']},
+  {id:2, cat:'hospital', icon:'🏥', name:'Regency Hospital', desc:'A-2 Sarvodaya Nagar, Kanpur', dist:'2.5 km', tel:'0512-3081111', rating:4.6, status:'busy', badges:['Private', '24/7']},
+  {id:3, cat:'hospital', icon:'🏥', name:'Ursala Hospital Kanpur', desc:'Bara Chauraha, Civil Lines', dist:'4.5 km', tel:'0512-2321051', rating:4.1, status:'emergency', badges:['Government', '24/7']},
+  {id:4, cat:'police', icon:'🚔', name:'Kotwali Police Station', desc:'Bada Chauraha, Kanpur', dist:'0.8 km', tel:'112', rating:3.9, status:'open', badges:['Government', '24/7']},
+  {id:5, cat:'police', icon:'🚔', name:'Kakadeo Police Station', desc:'Kakadeo, Kanpur', dist:'2.1 km', tel:'112', rating:4.1, status:'busy', badges:['Government', '24/7']},
+  {id:6, cat:'fire', icon:'🚒', name:'Kanpur Central Fire Station', desc:'Fazalganj Industrial Estate, Kanpur', dist:'1.5 km', tel:'101', rating:4.5, status:'open', badges:['Government', '24/7']},
+  {id:7, cat:'water', icon:'💧', name:'Kanpur Jal Nigam', desc:'Benajhabar Road, Kanpur', dist:'2.3 km', tel:'0512-2544131', rating:3.5, status:'open', badges:['Government']},
+  {id:8, cat:'electric', icon:'⚡', name:'KESCO Electricity Helpline', desc:'Kanpur Electricity Supply Company HQ', dist:'1.8 km', tel:'1912', rating:3.2, status:'busy', badges:['Government', '24/7']},
+  {id:9, cat:'ngo', icon:'🤝', name:'CivicPulse Volunteer Network', desc:'Kanpur Local Response Chapter', dist:'0.5 km', tel:'+916388095158', rating:5.0, status:'open', badges:['Volunteer', '24/7']},
+  {id:10, cat:'ngo', icon:'🤝', name:'Kanpur Seva Samiti', desc:'Community Relief & Civil Support', dist:'1.1 km', tel:'0512-2300000', rating:4.8, status:'open', badges:['NGO']}
 ];
 
 let activeCat = 'all', searchQ = '';
 
-function getStars(r) { return '★'.repeat(Math.floor(r)) + (r%1?'½':'') + '☆'.repeat(5-Math.ceil(r)); }
+function getStars(r) { 
+    return '★'.repeat(Math.floor(r)) + (r % 1 ? '½' : '') + '☆'.repeat(5 - Math.ceil(r)); 
+}
+
+function getStatusUI(status) {
+    if(status === 'open') return `<span style="background:rgba(16, 185, 129, 0.1);color:#10b981;border:1px solid rgba(16, 185, 129, 0.25);padding:3px 8px;border-radius:20px;font-size:0.55rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:4px;"><span style="width:6px;height:6px;background:#10b981;border-radius:50%;box-shadow:0 0 6px #10b981;"></span> Open</span>`;
+    if(status === 'busy') return `<span style="background:rgba(245, 158, 11, 0.1);color:#f59e0b;border:1px solid rgba(245, 158, 11, 0.25);padding:3px 8px;border-radius:20px;font-size:0.55rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:4px;"><span style="width:6px;height:6px;background:#f59e0b;border-radius:50%;box-shadow:0 0 6px #f59e0b;"></span> Busy</span>`;
+    if(status === 'emergency') return `<span style="background:rgba(255, 77, 109, 0.1);color:#ff4d6d;border:1px solid rgba(255, 77, 109, 0.25);padding:3px 8px;border-radius:20px;font-size:0.55rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:4px;"><span style="width:6px;height:6px;background:#ff4d6d;border-radius:50%;box-shadow:0 0 6px #ff4d6d;"></span> Emergency Only</span>`;
+}
+
+function getBadgesUI(badges) {
+    if(!badges) return '';
+    return badges.map(b => `<span style="background:rgba(255,255,255,0.05);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);padding:2px 8px;border-radius:8px;font-size:0.55rem;font-weight:600;letter-spacing:0.3px;">${b}</span>`).join('');
+}
 
 function renderRes() {
   const grid = document.getElementById('resGrid');
   const items = RES.filter(r =>
-    (activeCat==='all' || r.cat===activeCat) &&
+    (activeCat === 'all' || r.cat === activeCat) &&
     (r.name.toLowerCase().includes(searchQ) || r.desc.toLowerCase().includes(searchQ))
   );
+  
   if (!items.length) {
-    grid.innerHTML = `<div style="text-align:center;padding:40px 20px;color:#64748b;"><div style="font-size:2.5rem;margin-bottom:10px;opacity:.5;">🔍</div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:#f1f5f9;margin-bottom:4px;">No resources found</div><p style="font-size:0.78rem;">Try adjusting your filters or search.</p></div>`;
+    grid.innerHTML = `
+      <div style="text-align:center;padding:50px 20px;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.1);border-radius:18px;animation: fadeIn 0.3s ease;">
+        <div style="font-size:2.8rem;margin-bottom:12px;opacity:0.8;">🔍</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#f1f5f9;margin-bottom:6px;">No resources found</div>
+        <p style="font-size:0.8rem;color:#64748b;">Try adjusting your filters or search query.</p>
+        <button onclick="document.querySelector('.search-input').value=''; filterRes(''); setCat('all', document.querySelector('.cchip'));" style="margin-top:16px;background:rgba(0,229,204,0.1);color:#00e5cc;border:1px solid rgba(0,229,204,0.3);padding:8px 16px;border-radius:10px;font-weight:700;font-size:0.75rem;cursor:pointer;">Clear Search</button>
+      </div>`;
     return;
   }
+  
   grid.innerHTML = items.map(r => `
     <div class="res-card">
-      <div style="display:flex;align-items:flex-start;gap:12px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;">
         <div class="res-icon">${r.icon}</div>
         <div style="flex:1;min-width:0;">
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
-            <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:#f1f5f9;margin:0;">${r.name}</h3>
-            <span style="background:rgba(0,229,204,0.1);color:#00e5cc;border:1px solid rgba(0,229,204,0.25);padding:1px 8px;border-radius:20px;font-size:0.56rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">● Open</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+            <h3 class="text-wrap-normal" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:#f1f5f9;margin:0;">${r.name}</h3>
+            ${getStatusUI(r.status)}
           </div>
-          <p style="font-size:0.72rem;color:#64748b;margin:0 0 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${r.desc}</p>
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <p class="text-wrap-normal" style="font-size:0.75rem;color:#94a3b8;margin:0 0 10px;">${r.desc}</p>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
             <span style="background:rgba(0,207,255,0.1);color:#00cfff;border:1px solid rgba(0,207,255,0.2);padding:3px 8px;border-radius:8px;font-size:0.6rem;font-weight:700;">📍 ${r.dist}</span>
-            <span style="font-size:0.6rem;color:#f59e0b;">${getStars(r.rating)} <span style="color:#64748b;">${r.rating}</span></span>
-            ${r.info ? `<span style="font-size:0.6rem;color:#64748b;border-left:1px solid rgba(255,255,255,0.1);padding-left:8px;">${r.info}</span>` : ''}
+            <span style="font-size:0.65rem;color:#f59e0b;letter-spacing:1px;">${getStars(r.rating)} <span style="color:#94a3b8;letter-spacing:0;">${r.rating}</span></span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            ${getBadgesUI(r.badges)}
           </div>
         </div>
       </div>
       <div class="res-divider"></div>
-      <div style="display:flex;gap:10px;">
-        <a href="tel:${r.tel}" class="btn-action" onclick="showToast('📞 Calling ${r.name}...','info')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+      <div style="display:flex;gap:12px;">
+        <a href="tel:${r.tel}" class="btn-action" onclick="showToast('📞 Dialing ${r.name}...','info')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
           Call
         </a>
-        <button class="btn-action" onclick="showToast('🗺 Opening directions...','info')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        <a href="http://google.com/maps?q=Lucknow,+Uttar+Pradesh,+India" target="_blank" class="btn-action" onclick="showToast('🗺 Opening map directions...','info')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
           Directions
-        </button>
+        </a>
       </div>
     </div>
   `).join('');
@@ -216,11 +287,15 @@ function renderRes() {
 function setCat(c, btn) {
   activeCat = c;
   document.querySelectorAll('.cchip').forEach(b => b.classList.remove('act'));
-  btn.classList.add('act');
+  if(btn) btn.classList.add('act');
   renderRes();
 }
-function filterRes(v) { searchQ = v.toLowerCase(); renderRes(); }
+function filterRes(v) { 
+    searchQ = v.toLowerCase(); 
+    renderRes(); 
+}
 
+// Initial render
 renderRes();
 </script>
 </body>
