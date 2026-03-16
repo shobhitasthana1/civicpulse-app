@@ -2,94 +2,30 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"/>
 <meta name="theme-color" content="#060c14"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <title>Features — CivicPulse</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../assets/css/style.css"/>
 <link rel="stylesheet" href="../assets/css/mobile-fix.css"/>
 <style>
-    :root {
-      --green-accent: #40916c;
-      --green-dark: #1b4332;
-      --green-pale: #74c69d;
-      --amber: #f4a261;
-      --amber-light: #e9c46a;
-      --amber-dark: #e76f51;
-      --bg-dark: #060c14;
-      --card-bg: rgba(255, 255, 255, 0.03);
-      --card-border: rgba(255, 255, 255, 0.08);
-    }
+/* ── BASE & THEME ── */
+:root { 
+  --teal: #00e5cc; 
+  --cyan: #00cfff; 
+  --bg-dark: #060c14;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --em: #ff4d6d;
+}
 
-    body {
-      background-color: var(--bg-dark);
-      color: #f1f5f9;
-      font-family: 'DM Sans', sans-serif;
-      overflow-x: hidden;
-    }
-
-    h1, h2, h3, .syne-font { font-family: 'Syne', sans-serif; }
-    .playfair { font-family: 'Playfair Display', serif; }
-
-    /* Background Pattern */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background-image: linear-gradient(rgba(64, 145, 108, 0.03) 1px, transparent 1px), 
-                        linear-gradient(90deg, rgba(64, 145, 108, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: radial-gradient(ellipse at 50% 0%, black 40%, transparent 80%);
-    }
-
-    /* Layout & Glass Cards */
-    .content-wrapper { position: relative; z-index: 1; }
-    .glass-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-    }
-
-    /* Section Labels */
-    .section-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-    }
-    .label-green { background: rgba(64,145,108,0.15); color: var(--green-pale); border: 1px solid rgba(64,145,108,0.3); }
-    .label-amber { background: rgba(231,111,81,0.15); color: var(--amber); border: 1px solid rgba(231,111,81,0.3); }
-
-    /* Table Styles for Mobile */
-    .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 100%; min-width: 600px; border-collapse: collapse; }
-    th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--card-border); }
-    th { font-family: 'Syne', sans-serif; font-weight: 700; color: #94a3b8; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; }
-
-    /* Utils */
-    .status-badge { font-size: 0.7rem; font-weight: 700; padding: 4px 10px; border-radius: 50px; }
-    .status-open { background: rgba(244,162,97,0.2); color: var(--amber-light); border: 1px solid rgba(244,162,97,0.4); }
-    .status-progress { background: rgba(64,145,108,0.2); color: var(--green-pale); border: 1px solid rgba(64,145,108,0.4); }
-
-    @keyframes pulse-sos { 0%, 100% { box-shadow: 0 0 30px rgba(231,111,81,0.4); } 50% { box-shadow: 0 0 60px rgba(231,111,81,0.8); } }
-    .animate-sos { animation: pulse-sos 2s ease-in-out infinite; }
-  </style>
-<style>
 *, *::before, *::after { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html { font-size:16px; -webkit-text-size-adjust:100%; }
-html,body { width:100%; max-width:100%; overflow-x:hidden; margin:0; padding:0; }
+html { font-size:16px; -webkit-text-size-adjust:100%; scroll-behavior: smooth; }
+body { background: var(--bg-dark); color: #f1f5f9; font-family: 'DM Sans', sans-serif; margin:0; padding:0; overflow-x:hidden; width:100%; max-width:100%; }
+
 body::before {
   content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
   background-image: linear-gradient(rgba(0,229,204,0.025) 1px,transparent 1px),
@@ -97,320 +33,475 @@ body::before {
   background-size:40px 40px;
   mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);
 }
+
+/* ── LAYOUT & TYPOGRAPHY ── */
+.page-content { font-size: clamp(14px, 2vw, 16px); padding-bottom: 120px !important; position: relative; z-index: 1; }
+.syne-font { font-family: 'Syne', sans-serif; }
+.no-wrap-ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+
+.glass-card { background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--card-border); border-radius: 20px; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s; }
+.glass-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 15px rgba(0,229,204,0.05); border-color: rgba(0,229,204,0.2); }
+
+.section-label { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 50px; font-family:'Syne', sans-serif; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+.label-teal { background: rgba(0,229,204,0.1); color: var(--teal); border: 1px solid rgba(0,229,204,0.25); }
+
+/* ── ANIMATIONS ── */
+.fu { opacity:0; transform:translateY(20px); animation:fu 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; will-change: transform, opacity; }
+@keyframes fu { to { opacity:1; transform:translateY(0); } }
+.d1{animation-delay:.05s}.d2{animation-delay:.15s}.d3{animation-delay:.25s}.d4{animation-delay:.35s}.d5{animation-delay:.45s}
+
+.glow-text { background: linear-gradient(135deg, #00e5cc, #a78bfa); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: pulseGlow 3s infinite alternate; }
+@keyframes pulseGlow { 0% { filter: drop-shadow(0 0 2px rgba(0,229,204,0.2)); } 100% { filter: drop-shadow(0 0 12px rgba(0,229,204,0.6)); } }
+
+/* ── HERO STATS COUNTER ── */
+.stat-box { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); padding: 16px 24px; border-radius: 16px; text-align: center; flex: 1; min-width: 140px; }
+.stat-num { font-family: 'JetBrains Mono', monospace; font-size: clamp(24px, 4vw, 36px); font-weight: 800; color: var(--teal); line-height: 1; margin-bottom: 4px; }
+.stat-lbl { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+
+/* ── INTERACTIVE SIMULATORS ── */
+.sim-container { background: #0b1422; border-radius: 16px; padding: 20px; border: 1px solid rgba(0,229,204,0.2); position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+.sim-step { display: flex; align-items: center; gap: 12px; opacity: 0.3; transition: 0.3s; margin-bottom: 12px; }
+.sim-step.active { opacity: 1; transform: translateX(5px); }
+.sim-step.completed { opacity: 0.6; }
+.sim-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+.sim-step.active .sim-icon { background: var(--teal); color: #000; box-shadow: 0 0 10px var(--teal); }
+.sim-step.completed .sim-icon { background: #10b981; color: white; }
+
+/* ── FEATURE CARD ENHANCEMENTS (MAP PREVIEW) ── */
+.map-preview-card {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.map-bg-pattern {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0,229,204,0.15) 0%, transparent 60%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='2' cy='2' r='1' fill='rgba(0,229,204,0.15)'/%3E%3C/svg%3E");
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── SOS SECTION ── */
+.sos-radar { width: 100px; height: 100px; background: var(--em); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; position: relative; cursor: pointer; box-shadow: 0 0 20px rgba(255,77,109,0.5); transition: 0.2s; margin: 0 auto 24px; }
+.sos-radar:hover { transform: scale(1.05); }
+.sos-radar:active { transform: scale(0.95); }
+.sos-ring { position: absolute; inset: 0; border: 2px solid var(--em); border-radius: 50%; animation: radar 2s infinite; opacity: 0; pointer-events: none; }
+.sos-ring:nth-child(2) { animation-delay: 0.6s; }
+@keyframes radar { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(2.5); opacity: 0; } }
+.sos-badge { opacity: 0; transform: translateY(10px); transition: 0.4s; background: rgba(255,77,109,0.15); border: 1px solid rgba(255,77,109,0.3); color: #ff4d6d; padding: 4px 12px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; }
+.sos-badge.show { opacity: 1; transform: translateY(0); }
+
+/* ── TIMELINE ── */
+.timeline { position: relative; padding-left: 24px; border-left: 2px solid rgba(255,255,255,0.1); margin-top: 20px; }
+.tl-item { position: relative; margin-bottom: 24px; }
+.tl-dot { position: absolute; left: -31px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: #0b1422; border: 2px solid var(--teal); box-shadow: 0 0 8px var(--teal); }
+.tl-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: #f1f5f9; margin-bottom: 4px; }
+.tl-desc { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
+
+/* ── COMPARISON TABLE ── */
+.comp-table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 20px; }
+.comp-table th, .comp-table td { padding: 14px 16px; border-bottom: 1px solid var(--card-border); font-size: clamp(12px, 1.5vw, 14px); }
+.comp-table th { font-family: 'Syne', sans-serif; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-size: 0.7rem; }
+.comp-table tr { transition: 0.2s; }
+.comp-table tr:hover td { background: rgba(255,255,255,0.02); }
+.cp-col { background: rgba(0,229,204,0.05); color: var(--teal); font-weight: 700; border-left: 1px solid rgba(0,229,204,0.1); border-right: 1px solid rgba(0,229,204,0.1); }
+
+/* ── BOTTOM NAV & FAB (HARDCODED EXACTLY) ── */
+.bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:rgba(6,12,20,0.9); backdrop-filter:blur(10px); border-top:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-around; align-items:center; padding:10px 0; z-index:50; padding-bottom:calc(10px + env(safe-area-inset-bottom)); }
+.nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; color:#64748b; font-size:0.65rem; font-weight:600; text-decoration:none; transition:color 0.2s; }
+.nav-item.active { color:#00e5cc; }
+.nav-item.sos-tab { color:var(--em); }
+.fab-p { position: fixed; bottom: calc(62px + env(safe-area-inset-bottom, 0px) + 14px); right: max(14px, env(safe-area-inset-right, 14px)); z-index: 45; display: flex; align-items: center; gap: 7px; background: linear-gradient(135deg,#00e5cc 0%,#00cfff 100%); color: #060c14; font-family: 'Syne',sans-serif; font-weight: 800; font-size: 0.78rem; padding: 0 16px; height: 46px; border-radius: 23px; border: none; cursor: pointer; box-shadow: 0 6px 28px rgba(0,229,204,0.4); animation: fp 3s ease-in-out infinite; transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); text-decoration: none; white-space: nowrap; }
+.fab-p:hover { transform: scale(1.05); }
+.fab-p:active { transform: scale(0.93); }
+@keyframes fp { 0%,100%{box-shadow:0 6px 28px rgba(0,229,204,0.4)} 50%{box-shadow:0 6px 40px rgba(0,229,204,0.62)} }
 </style>
 </head>
+
 <body>
 <canvas id="bg-canvas"></canvas>
+
 <div class="app-layout">
-<div class="main-area">
-
-<header class="app-header">
-  <div class="header-left">
-    <button class="hamburger" aria-label="Open navigation menu" type="button">
-      <span></span><span></span><span></span>
-    </button>
-    <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;">
-      <div class="logo-icon" style="width:26px;height:26px;border-radius:7px;flex-shrink:0;">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </div>
-      <span class="logo-text" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Features</span>
-    </div>
-  </div>
-  <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-    <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
-    <button class="icon-btn" style="position:relative;flex-shrink:0;" type="button" aria-label="Notifications">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <span class="notif-badge"></span>
-    </button>
-    <div class="avatar" style="flex-shrink:0;overflow:hidden;padding:0;">
-      <img src="../image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.parentElement.textContent='SA';"/>
-    </div>
-  </div>
-</header>
-
-<main class="page-content">
-
-
-<div class="content-wrapper">
   
-  
+  <div class="main-area">
 
-  <section class="container mx-auto px-6 py-20 md:py-32 text-center">
-    <div class="section-label label-green">🛠️ Platform Capabilities</div>
-    <h1 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
-      Powerful Features,<br>
-      <em class="playfair text-amber-200/90 font-bold">Built for Society</em>
-    </h1>
-    <p class="text-slate-400 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-      Every tool CivicPulse offers is designed to create a seamless bridge between citizens and civic resolution — fast, transparent, and accountable.
-    </p>
-  </section>
-
-  <section class="container mx-auto px-6 pb-24">
-    
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center mb-28">
-      <div class="order-2 lg:order-1">
-        <div class="section-label label-green">01 — Community Reporting</div>
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Report Any Civic Issue<br><em class="playfair text-[#74c69d]">In Under 60 Seconds</em></h2>
-        <p class="text-slate-400 leading-relaxed mb-6">Our smart reporting system lets citizens submit issues with just a title, location, category, and photo. The system auto-routes each report to the correct municipal department.</p>
-        <ul class="space-y-3 mb-8">
-          <li class="flex items-center gap-3 text-sm"><span class="text-[#74c69d] text-lg">✓</span> Smart category auto-detection</li>
-          <li class="flex items-center gap-3 text-sm"><span class="text-[#74c69d] text-lg">✓</span> GPS location tagging</li>
-          <li class="flex items-center gap-3 text-sm"><span class="text-[#74c69d] text-lg">✓</span> Instant tracking ID</li>
-        </ul>
-        <a href="/page/dashboard.html" class="inline-block bg-[#40916c] text-white px-6 py-3 rounded-xl font-bold text-sm">Try Reporting →</a>
+    <header class="app-header">
+      <div class="header-left">
+        <button class="hamburger" aria-label="Open navigation menu" type="button">
+          <span></span><span></span><span></span>
+        </button>
+        <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;">
+          <div class="logo-icon" style="width:26px;height:26px;border-radius:7px;flex-shrink:0;">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <span class="logo-text no-wrap-ellipsis">Features</span>
+        </div>
       </div>
+      <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
+        <button class="icon-btn" style="position:relative;flex-shrink:0;" type="button" aria-label="Notifications" onclick="showLocalToast('🔔 No new notifications')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-badge"></span>
+        </button>
+        <div class="avatar" style="flex-shrink:0;overflow:hidden;padding:0;">
+          <img src="../image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.parentElement.textContent='SA';"/>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
       
-      <div class="order-1 lg:order-2">
-        <div class="bg-gradient-to-br from-[#1b4332] to-[#081c15] rounded-3xl p-6 md:p-8 border border-[#40916c]/30 shadow-2xl">
-          <div class="glass-card p-4 mb-4">
-            <div class="flex justify-between items-center mb-4">
-              <span class="font-bold text-sm">New Issue Report</span>
-              <span class="status-badge status-open">Open</span>
-            </div>
-            <div class="bg-white/5 rounded-lg p-3 mb-3">
-              <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Issue Title</div>
-              <div class="text-sm font-medium">Broken streetlight — MG Road</div>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="bg-white/5 rounded-lg p-3">
-                <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Category</div>
-                <div class="text-sm font-medium text-amber-200">⚡ Infrastructure</div>
-              </div>
-              <div class="bg-white/5 rounded-lg p-3">
-                <div class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Priority</div>
-                <div class="text-sm font-medium text-red-400">🔴 High</div>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center gap-4 p-4 bg-[#40916c]/20 border border-[#40916c]/40 rounded-xl">
-            <span class="text-2xl">✅</span>
-            <div>
-              <p class="text-[#74c69d] font-bold text-sm">Report submitted!</p>
-              <p class="text-xs text-slate-400">Tracking ID: CP-0047 · Dept. notified</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center mb-28">
-      <div class="order-1 lg:order-1 glass-card overflow-hidden relative h-64 md:h-80 flex flex-col items-center justify-center border-amber-500/20 bg-gradient-to-b from-amber-500/5 to-transparent">
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjQ0LDE2Miw5NywwLjE1KSIvPjwvc3ZnPg==')] opacity-50"></div>
-        <div class="relative z-10 text-center">
-          <div class="text-5xl mb-3 drop-shadow-lg">🗺️</div>
-          <p class="text-sm font-bold text-amber-200 mb-4">Interactive Resource Map</p>
-          <div class="flex flex-wrap gap-2 justify-center px-4">
-            <span class="bg-[#40916c]/20 border border-[#40916c]/50 text-[#74c69d] px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">🏥 3 hospitals</span>
-            <span class="bg-amber-500/20 border border-amber-500/50 text-amber-300 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">🩸 2 blood banks</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="order-2 lg:order-2">
-        <div class="section-label label-amber">02 — Resource Finder</div>
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Locate Any Civic<br><em class="playfair text-amber-400">Resource Near You</em></h2>
-        <p class="text-slate-400 leading-relaxed mb-8">Find nearby civic resources including blood banks, hospitals, shelters, public toilets, and government offices — all on a single searchable map.</p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div class="glass-card !p-4 text-center hover:bg-white/5 transition"><div class="text-3xl mb-2">🏥</div><div class="text-xs font-bold">Hospitals</div></div>
-          <div class="glass-card !p-4 text-center hover:bg-white/5 transition"><div class="text-3xl mb-2">🩸</div><div class="text-xs font-bold">Blood Banks</div></div>
-          <div class="glass-card !p-4 text-center hover:bg-white/5 transition"><div class="text-3xl mb-2">🏠</div><div class="text-xs font-bold">Shelters</div></div>
-          <div class="glass-card !p-4 text-center hover:bg-white/5 transition"><div class="text-3xl mb-2">🗑️</div><div class="text-xs font-bold">Waste Points</div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center mb-28">
-      <div class="order-2 lg:order-1">
-        <div class="section-label label-amber !border-red-500/30 !text-red-400">03 — Emergency System</div>
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">One Tap to<br><em class="playfair text-red-400">Activate Help</em></h2>
-        <p class="text-slate-400 leading-relaxed mb-6">When seconds count, CivicPulse's emergency system sends automated alerts to nearest police, fire, and medical services simultaneously with GPS coordinates.</p>
-        <ul class="space-y-3">
-          <li class="flex items-center gap-3 text-sm"><span class="text-red-400 text-lg">🚨</span> Police / Fire / Medical dispatch</li>
-          <li class="flex items-center gap-3 text-sm"><span class="text-red-400 text-lg">📍</span> Real-time GPS sharing</li>
-          <li class="flex items-center gap-3 text-sm"><span class="text-red-400 text-lg">📱</span> Auto-SMS to family contacts</li>
-        </ul>
-      </div>
-      
-      <div class="order-1 lg:order-2">
-        <div class="bg-gradient-to-br from-[#2d0f0f] to-[#1a0a0a] rounded-3xl p-8 text-center border border-red-500/20 relative overflow-hidden shadow-2xl">
-          <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(231,111,81,0.1)_0%,transparent_70%)]"></div>
-          <div class="relative z-10">
-            <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-red-500 to-red-800 flex items-center justify-center mx-auto mb-6 text-4xl md:text-5xl animate-sos cursor-pointer border-4 border-white/10">🆘</div>
-            <h3 class="playfair text-2xl font-bold mb-2">Emergency SOS</h3>
-            <p class="text-xs text-slate-400 mb-6 uppercase tracking-widest font-bold">Hold for 2 seconds to activate</p>
-            <div class="flex flex-wrap gap-2 justify-center">
-              <span class="bg-red-500/20 border border-red-500/30 text-red-300 px-3 py-1.5 rounded-full text-xs font-bold">🚔 Police notified</span>
-              <span class="bg-red-500/20 border border-red-500/30 text-red-300 px-3 py-1.5 rounded-full text-xs font-bold">🚑 Ambulance en route</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
-      <div class="order-1 lg:order-1 glass-card p-6 md:p-8">
-        <div class="flex justify-between items-center mb-6">
-          <span class="font-bold">Issues This Week</span>
-          <span class="status-badge status-progress">↑ 12% vs last week</span>
-        </div>
+      <section class="fu d1 text-center pt-8 pb-12 px-4 relative">
+        <div style="position:absolute; top:-50px; left:50%; transform:translateX(-50%); width:300px; height:300px; background:radial-gradient(circle, rgba(0,229,204,0.15) 0%, transparent 70%); filter:blur(20px); pointer-events:none; z-index:-1;"></div>
         
-        <div class="w-full h-[140px] relative">
-          <canvas id="featureChart" class="w-full h-full"></canvas>
+        <div class="section-label label-teal">🚀 Platform Capabilities</div>
+        <h1 class="syne-font font-extrabold text-4xl md:text-5xl lg:text-6xl mb-4 tracking-tight leading-tight">
+          Powerful Features,<br>
+          <span class="glow-text">Built for Society</span>
+        </h1>
+        <p class="text-slate-400 max-w-xl mx-auto text-sm md:text-base leading-relaxed mb-10">
+          CivicPulse bridges the gap between citizens and authorities through smart technology, transparency, and rapid response systems.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto">
+          <div class="stat-box"><div class="stat-num counter" data-target="12481">0</div><div class="stat-lbl">Reports Submitted</div></div>
+          <div class="stat-box"><div class="stat-num counter" data-target="3920">0</div><div class="stat-lbl">Issues Resolved</div></div>
+          <div class="stat-box"><div class="stat-num counter" data-target="127">0</div><div class="stat-lbl">Active Volunteers</div></div>
         </div>
+      </section>
 
-        <div class="grid grid-cols-3 gap-4 mt-8 border-t border-white/10 pt-6">
-          <div class="text-center"><div class="playfair text-2xl text-amber-400 font-bold mb-1">18</div><div class="text-[10px] uppercase text-slate-400 font-bold">Open</div></div>
-          <div class="text-center"><div class="playfair text-2xl text-[#74c69d] font-bold mb-1">24</div><div class="text-[10px] uppercase text-slate-400 font-bold">In Progress</div></div>
-          <div class="text-center"><div class="playfair text-2xl text-white font-bold mb-1">47</div><div class="text-[10px] uppercase text-slate-400 font-bold">Resolved</div></div>
-        </div>
-      </div>
+      <div class="max-w-5xl mx-auto px-4">
+        
+        <section class="fu d2 grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-24">
+          <div class="order-2 md:order-1">
+            <div class="section-label label-teal">01 — Community Reporting</div>
+            <h2 class="syne-font font-bold text-2xl md:text-3xl mb-4">Report Civic Issues<br><span style="color:var(--teal);">In Under 60 Seconds</span></h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-6">Our smart reporting system lets citizens submit issues with location tagging and photo evidence. The system auto-routes each report directly to the correct municipal department.</p>
+            <button onclick="runSimulation()" class="bg-[rgba(0,229,204,0.1)] hover:bg-[rgba(0,229,204,0.2)] border border-[rgba(0,229,204,0.3)] text-[#00e5cc] px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 active:scale-95">
+              ▶ Try Interactive Demo
+            </button>
+          </div>
+          <div class="order-1 md:order-2 glass-card p-6">
+            <div class="sim-container" id="simContainer">
+              <div class="sim-step" id="sim1"><div class="sim-icon">1</div><div class="text-sm font-bold">Select issue category</div></div>
+              <div class="sim-step" id="sim2"><div class="sim-icon">2</div><div class="text-sm font-bold">Attach photo & GPS</div></div>
+              <div class="sim-step" id="sim3"><div class="sim-icon">3</div><div class="text-sm font-bold">Submit report to authorities</div></div>
+              <div class="sim-step" id="sim4"><div class="sim-icon">✓</div><div class="text-sm font-bold text-[#00e5cc]">Tracking ID: CP-8492 Generated</div></div>
+            </div>
+          </div>
+        </section>
 
-      <div class="order-2 lg:order-2">
-        <div class="section-label label-green">04 — Data Dashboard</div>
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">See Every Issue,<br><em class="playfair text-[#74c69d]">Every Update</em></h2>
-        <p class="text-slate-400 leading-relaxed mb-6">The CivicPulse dashboard gives citizens and authorities a bird's-eye view of all resolution progress. Complete transparency, end-to-end.</p>
-        <div class="grid grid-cols-2 gap-3">
-          <div class="glass-card !p-4"><div class="text-xl mb-2">📊</div><h4 class="font-bold text-sm mb-1">Live Analytics</h4><p class="text-[11px] text-slate-400">Real-time charts</p></div>
-          <div class="glass-card !p-4"><div class="text-xl mb-2">🔍</div><h4 class="font-bold text-sm mb-1">Smart Filters</h4><p class="text-[11px] text-slate-400">Sort by status & date</p></div>
-          <div class="glass-card !p-4"><div class="text-xl mb-2">📤</div><h4 class="font-bold text-sm mb-1">Exports</h4><p class="text-[11px] text-slate-400">PDF, CSV downloads</p></div>
-          <div class="glass-card !p-4"><div class="text-xl mb-2">🔔</div><h4 class="font-bold text-sm mb-1">Push Alerts</h4><p class="text-[11px] text-slate-400">SMS & app tracking</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
+        <section class="fu d3 grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-24">
+          <div class="glass-card map-preview-card p-6">
+            <div class="map-bg-pattern"></div>
+            
+            <div class="relative z-10 text-center">
+              <div class="text-4xl mb-4" style="filter: drop-shadow(0 0 10px rgba(0,229,204,0.5));">📍</div>
+              <h3 class="syne-font font-bold text-xl mb-4 text-[#f1f5f9]">Services near Kanpur, UP</h3>
+              
+              <div class="flex flex-wrap gap-3 justify-center mb-6">
+                <span class="bg-[rgba(0,229,204,0.1)] border border-[rgba(0,229,204,0.3)] text-[#00e5cc] px-4 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 hover:bg-[rgba(0,229,204,0.2)] cursor-pointer shadow-[0_4px_10px_rgba(0,229,204,0.1)]">🏥 Hospitals</span>
+                <span class="bg-[rgba(251,146,60,0.1)] border border-[rgba(251,146,60,0.3)] text-[#fb923c] px-4 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 hover:bg-[rgba(251,146,60,0.2)] cursor-pointer shadow-[0_4px_10px_rgba(251,146,60,0.1)]">🩸 Blood Banks</span>
+                <span class="bg-[rgba(167,139,250,0.1)] border border-[rgba(167,139,250,0.3)] text-[#a78bfa] px-4 py-2 rounded-full text-xs font-bold transition-all hover:scale-105 hover:bg-[rgba(167,139,250,0.2)] cursor-pointer shadow-[0_4px_10px_rgba(167,139,250,0.1)]">🗑️ Waste Points</span>
+              </div>
+              <a href="resources.html" class="inline-block text-xs font-bold uppercase tracking-wider text-[#94a3b8] hover:text-[#00e5cc] transition-colors underline decoration-[#00e5cc]/30 underline-offset-4 mt-2">Open Resource Finder →</a>
+            </div>
+          </div>
 
-  <section class="border-t border-white/5 bg-white/[0.02] py-20">
-    <div class="container mx-auto px-6">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <div class="section-label label-green">🆚 Why CivicPulse?</div>
-        <h2 class="text-3xl md:text-4xl font-bold">Traditional vs<br><em class="playfair text-[#74c69d]">CivicPulse Approach</em></h2>
-      </div>
-      
-      <div class="glass-card !p-0 overflow-hidden">
-        <div class="table-container">
-          <table>
-            <thead class="bg-black/20">
-              <tr>
-                <th class="w-1/3">Aspect</th>
-                <th class="w-1/3">Traditional Method</th>
-                <th class="w-1/3 text-[#74c69d]">✨ CivicPulse</th>
-              </tr>
-            </thead>
-            <tbody class="text-sm">
-              <tr><td class="font-medium">Issue Reporting</td><td class="text-slate-500">Physical visit / phone call</td><td class="text-[#74c69d] font-bold">✅ 60-second online report</td></tr>
-              <tr><td class="font-medium">Resolution Tracking</td><td class="text-slate-500">Unknown / no updates</td><td class="text-[#74c69d] font-bold">✅ Real-time status board</td></tr>
-              <tr><td class="font-medium">Response Time</td><td class="text-slate-500">14–21 days average</td><td class="text-[#74c69d] font-bold">✅ 4.2 days average</td></tr>
-              <tr class="border-none"><td class="font-medium">Accountability</td><td class="text-slate-500">None / opaque</td><td class="text-[#74c69d] font-bold">✅ Full SLA tracking</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
+          <div>
+            <div class="section-label label-teal">02 — Resource Finder</div>
+            <h2 class="syne-font font-bold text-2xl md:text-3xl mb-4">Locate Any Civic<br><span style="color:var(--teal);">Resource Near You</span></h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-6">Find verified civic resources including blood banks, hospitals, public toilets, and government offices — complete with real-time status and distance.</p>
+          </div>
+        </section>
 
-  <section class="py-24 text-center px-6 border-t border-white/5">
-    <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Start?</h2>
-    <p class="text-slate-400 max-w-md mx-auto mb-8 text-sm md:text-base">Use the dashboard to report your first issue and experience the difference CivicPulse makes.</p>
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="/page/dashboard.html" class="bg-[#40916c] hover:bg-[#2d6a4f] text-white px-8 py-3.5 rounded-xl font-bold transition">🚀 Open Dashboard</a>
-      <a href="/page/contact.html" class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-3.5 rounded-xl font-bold transition">Contact Team</a>
-    </div>
-  </section>
+        <section class="fu d4 grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-24">
+          <div class="order-2 md:order-1">
+            <div class="section-label" style="background:rgba(255,77,109,0.1); color:var(--em); border:1px solid rgba(255,77,109,0.3);">03 — Emergency System</div>
+            <h2 class="syne-font font-bold text-2xl md:text-3xl mb-4">One Tap to<br><span style="color:var(--em);">Activate Help</span></h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-6">When seconds count, the SOS system alerts nearest police, fire, medical services, and registered community volunteers simultaneously.</p>
+            <ul class="space-y-3 text-sm text-slate-300">
+              <li class="flex items-center gap-3"><span class="text-[1.2rem]">🚨</span> Police & Medical dispatch</li>
+              <li class="flex items-center gap-3"><span class="text-[1.2rem]">📍</span> Continuous GPS live tracking</li>
+              <li class="flex items-center gap-3"><span class="text-[1.2rem]">📱</span> Automated SMS to family</li>
+            </ul>
+          </div>
+          <div class="order-1 md:order-2 glass-card p-8 text-center" style="border-color: rgba(255,77,109,0.2);">
+            <div class="sos-radar" onclick="triggerSOSDemo(this)">
+              <div class="sos-ring"></div>
+              <div class="sos-ring"></div>
+              🆘
+            </div>
+            <h3 class="syne-font font-bold text-lg mb-4">Emergency SOS</h3>
+            <div class="flex flex-col gap-2 align-center justify-center min-h-[60px]" id="sosBadgeArea">
+               <span class="text-xs text-slate-500 uppercase font-bold tracking-widest">Click to Simulate</span>
+            </div>
+          </div>
+        </section>
 
-  <footer class="bg-black/40 border-t border-white/5 py-12 px-6">
-    <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-      <div class="col-span-1 md:col-span-2">
-        <div class="flex items-center gap-2 mb-4">
-          <div class="bg-[#40916c] p-1.5 rounded-lg text-sm">🌿</div>
-          <span class="syne-font font-bold text-lg">Civic<span class="text-[#74c69d]">Pulse</span></span>
-        </div>
-        <p class="text-slate-500 text-sm max-w-sm leading-relaxed">Building healthier, more responsive societies through citizen-driven civic technology.</p>
-      </div>
-      <div>
-        <h4 class="font-bold mb-4 text-white">Platform</h4>
-        <ul class="space-y-3 text-sm text-slate-400">
-          <li><a href="/page/features.html" class="hover:text-[#74c69d] transition">Features</a></li>
-          <li><a href="/page/dashboard.html" class="hover:text-[#74c69d] transition">Dashboard</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="font-bold mb-4 text-white">Contact</h4>
-        <ul class="space-y-3 text-sm text-slate-400">
-          <li><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="93fbf6fffffcd3f0fae5faf0e3e6ffe0f6bdfafd">[email&#160;protected]</a></li>
-          <li>+91 98765 43210</li>
-        </ul>
-      </div>
-    </div>
-    <div class="container mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between text-xs text-slate-600">
-      <span>© 2025 CivicPulse. Built with 💚</span>
-      <span class="mt-2 md:mt-0">Hackathon Project · Team Nexus</span>
-    </div>
-  </footer>
+        <section class="fu d5 grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+          <div class="glass-card p-6">
+            <div class="flex justify-between items-center mb-6">
+              <span class="font-bold syne-font">Live Resolution Analytics</span>
+              <span class="text-[10px] font-bold uppercase bg-[rgba(0,229,204,0.1)] text-[#00e5cc] px-2 py-1 rounded">Real-time</span>
+            </div>
+            
+            <div class="flex items-end gap-3 h-[120px] mb-6 border-b border-[rgba(255,255,255,0.1)] pb-2" id="chartArea">
+              <div class="w-1/3 bg-[#fb923c] rounded-t-md relative group cursor-pointer transition-all duration-1000" style="height: 0%;" data-h="30%">
+                <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition pointer-events-none">30%</div>
+              </div>
+              <div class="w-1/3 bg-[#00cfff] rounded-t-md relative group cursor-pointer transition-all duration-1000 delay-100" style="height: 0%;" data-h="65%">
+                <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition pointer-events-none">65%</div>
+              </div>
+              <div class="w-1/3 bg-[#00e5cc] rounded-t-md relative group cursor-pointer transition-all duration-1000 delay-200" style="height: 0%;" data-h="90%">
+                <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition pointer-events-none">90%</div>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-2 text-center text-xs font-bold text-slate-400 uppercase">
+              <div>Open</div><div>Active</div><div>Resolved</div>
+            </div>
+          </div>
 
+          <div>
+            <div class="section-label label-teal">04 — Transparency</div>
+            <h2 class="syne-font font-bold text-2xl md:text-3xl mb-4">Track End-to-End<br><span style="color:var(--teal);">Resolution Timeline</span></h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-2">Complete transparency from the moment an issue is reported until it is permanently fixed.</p>
+            
+            <div class="timeline">
+              <div class="tl-item"><div class="tl-dot"></div><div class="tl-title">Report Submitted</div><div class="tl-desc">Citizen logs issue via app.</div></div>
+              <div class="tl-item"><div class="tl-dot"></div><div class="tl-title">Department Assigned</div><div class="tl-desc">Auto-routed to correct municipal body.</div></div>
+              <div class="tl-item"><div class="tl-dot"></div><div class="tl-title">Inspection & Fix</div><div class="tl-desc">Authorities process the resolution.</div></div>
+              <div class="tl-item"><div class="tl-dot" style="background:var(--teal);"></div><div class="tl-title text-[#00e5cc]">Issue Resolved</div><div class="tl-desc">Citizen notified of completion.</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="fu d1 mb-24 text-center">
+          <div class="section-label label-teal">Civic Impact</div>
+          <h2 class="syne-font font-bold text-2xl md:text-3xl mb-8">Why It Matters</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-card p-6 text-left hover:-translate-y-2 transition">
+              <div class="text-3xl mb-3">⚡</div>
+              <h4 class="syne-font font-bold text-lg text-white mb-2">4× Faster Resolution</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">Direct routing skips bureaucratic bottlenecks, ensuring issues are addressed days faster than traditional systems.</p>
+            </div>
+            <div class="glass-card p-6 text-left hover:-translate-y-2 transition">
+              <div class="text-3xl mb-3">📍</div>
+              <h4 class="syne-font font-bold text-lg text-white mb-2">Smart Location Routing</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">Precision GPS mapping guarantees the exact jurisdiction is notified without manual verification delays.</p>
+            </div>
+            <div class="glass-card p-6 text-left hover:-translate-y-2 transition">
+              <div class="text-3xl mb-3">👥</div>
+              <h4 class="syne-font font-bold text-lg text-white mb-2">Citizen Participation</h4>
+              <p class="text-xs text-slate-400 leading-relaxed">Empowers communities to take charge of their neighborhoods through a unified, transparent platform.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="fu d2 mb-24 overflow-hidden">
+          <div class="section-label label-teal">The Difference</div>
+          <h2 class="syne-font font-bold text-2xl md:text-3xl mb-6">Traditional vs CivicPulse</h2>
+          <div class="glass-card p-0 overflow-x-auto">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th style="width:30%;">Aspect</th>
+                  <th style="width:35%;">Traditional Methods</th>
+                  <th style="width:35%;" class="cp-col">✨ CivicPulse System</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-bold text-white">Reporting</td>
+                  <td class="text-slate-400">Physical visits / Long calls</td>
+                  <td class="cp-col">60-second mobile submission</td>
+                </tr>
+                <tr>
+                  <td class="font-bold text-white">Tracking</td>
+                  <td class="text-slate-400">Opaque / No updates</td>
+                  <td class="cp-col">Live status timeline</td>
+                </tr>
+                <tr>
+                  <td class="font-bold text-white">Response Speed</td>
+                  <td class="text-slate-400">14–21 days average</td>
+                  <td class="cp-col">Actioned within 48 hours</td>
+                </tr>
+                <tr>
+                  <td class="font-bold text-white">Accountability</td>
+                  <td class="text-slate-400">Low visibility</td>
+                  <td class="cp-col">Public resolution metrics</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="fu d3 mb-24 text-center glass-card p-10 bg-gradient-to-b from-[#0b1422] to-[#060c14]">
+          <h2 class="syne-font font-bold text-2xl md:text-3xl mb-6">Trusted by Communities</h2>
+          <div class="flex flex-wrap justify-center gap-8 mb-8">
+            <div class="text-center"><div class="font-bold text-2xl text-[#00e5cc] font-['JetBrains_Mono']">5+</div><div class="text-xs text-slate-400 uppercase font-bold mt-1">Cities Testing</div></div>
+            <div class="text-center"><div class="font-bold text-2xl text-[#00e5cc] font-['JetBrains_Mono']">12K+</div><div class="text-xs text-slate-400 uppercase font-bold mt-1">Issues Reported</div></div>
+            <div class="text-center"><div class="font-bold text-2xl text-[#00e5cc] font-['JetBrains_Mono']">3K+</div><div class="text-xs text-slate-400 uppercase font-bold mt-1">Resolved Cases</div></div>
+          </div>
+          
+          <div class="flex justify-center -space-x-3 mb-4">
+             <div class="w-10 h-10 rounded-full border-2 border-[#060c14] bg-[#40916c] flex items-center justify-center text-xs font-bold z-40">JD</div>
+             <div class="w-10 h-10 rounded-full border-2 border-[#060c14] bg-[#fb923c] flex items-center justify-center text-xs font-bold z-30">AK</div>
+             <div class="w-10 h-10 rounded-full border-2 border-[#060c14] bg-[#a78bfa] flex items-center justify-center text-xs font-bold z-20">SM</div>
+             <div class="w-10 h-10 rounded-full border-2 border-[#060c14] bg-[#00cfff] flex items-center justify-center text-xs font-bold text-black z-10">+99</div>
+          </div>
+          <p class="text-xs text-slate-500 mt-2">Join the growing network of active citizens.</p>
+        </section>
+
+        <section class="fu d4 text-center pb-10">
+          <h2 class="syne-font font-extrabold text-3xl md:text-4xl mb-4">Ready to Make an Impact?</h2>
+          <p class="text-slate-400 max-w-md mx-auto mb-8 text-sm leading-relaxed">Experience the platform live. Open the dashboard to explore features or submit your first civic report today.</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="dashboard.html" class="bg-gradient-to-r from-[#00e5cc] to-[#00cfff] text-[#060c14] px-8 py-3.5 rounded-xl font-bold font-['Syne'] transition-transform hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(0,229,204,0.3)]">🚀 Open Dashboard</a>
+            <a href="report.html" class="bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.1)] text-white px-8 py-3.5 rounded-xl font-bold transition-all active:scale-95">Report an Issue</a>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <nav class="bottom-bar bottom-nav" id="cpBottomNav" role="navigation" aria-label="Bottom navigation">
+      <a href="../index.html" class="tab-item nav-item" data-key="home"><span class="tab-icon">🏠</span><span class="tab-label">Home</span></a>
+      <a href="report.html" class="tab-item nav-item" data-key="report"><span class="tab-icon">🚨</span><span class="tab-label">Report</span></a>
+      <a href="reports.html" class="tab-item nav-item" data-key="reports"><span class="tab-icon">📋</span><span class="tab-label">Track</span></a>
+      <a href="activity.html" class="tab-item nav-item" data-key="activity"><span class="tab-icon">👥</span><span class="tab-label">Community</span></a>
+      <a href="emergency.html" class="tab-item nav-item sos-tab cp-nav-sos" data-key="emergency"><span class="tab-icon">⚡</span><span class="tab-label">SOS</span></a>
+    </nav>
+
+  </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Responsive Canvas Chart Logic
-  function drawChart() {
-    const canvas = document.getElementById('featureChart');
-    if (!canvas) return;
-    
-    // Fit canvas to parent container dynamically
-    const parent = canvas.parentElement;
-    canvas.width = parent.offsetWidth;
-    canvas.height = parent.offsetHeight;
-    
-    const ctx = canvas.getContext('2d');
-    const data = [8, 12, 6, 14, 9, 11, 16];
-    const labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    
-    const w = canvas.width;
-    const h = canvas.height;
-    const max = Math.max(...data);
-    
-    // Calculate bar width based on available space
-    const totalBars = data.length;
-    const padding = 10;
-    const availableWidth = w - (padding * 2);
-    const barWidth = (availableWidth / totalBars) - 8; 
-
-    ctx.clearRect(0, 0, w, h);
-
-    data.forEach((v, i) => {
-      const x = padding + i * (availableWidth / totalBars) + 4;
-      const bh = (v / max) * (h - 25); // Leave space for text
-      const y = h - 20 - bh;
-      
-      const g = ctx.createLinearGradient(0, y, 0, h);
-      g.addColorStop(0, '#40916c');
-      g.addColorStop(1, 'rgba(64,145,108,0.1)');
-      
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      if(ctx.roundRect) {
-        ctx.roundRect(x, y, barWidth, bh, 4);
-      } else {
-        ctx.rect(x, y, barWidth, bh);
-      }
-      ctx.fill();
-      
-      // Draw Labels
-      ctx.fillStyle = 'rgba(148, 163, 184, 0.8)';
-      ctx.font = '600 10px DM Sans';
-      ctx.textAlign = 'center';
-      ctx.fi
-</main>
-</div>
-</div>
-
-<a href="report.html" class="fab-p">
+<a href="report.html" class="fab-p" aria-label="Report a new civic issue">
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
   Report Issue
 </a>
 
+<div id="contactToast" style="position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(6,12,20,0.95); color: #f1f5f9; padding: 12px 24px; border-radius: 30px; border: 1px solid rgba(0,229,204,0.3); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1000; opacity: 0; white-space: nowrap; pointer-events: none;"></div>
+
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shared-ui.js"></script>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
+<script>
+// ── TOAST SYSTEM ──
+function showLocalToast(msg) {
+    const toast = document.getElementById('contactToast');
+    toast.innerHTML = msg;
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    toast.style.opacity = '1';
+    setTimeout(() => {
+        toast.style.transform = 'translateX(-50%) translateY(100px)';
+        toast.style.opacity = '0';
+    }, 3000);
+}
+
+// ── ANIMATED COUNTERS ──
+function animateCounters() {
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const duration = 2000; 
+        const stepTime = Math.abs(Math.floor(duration / target));
+        let current = 0;
+        
+        const increment = target > 1000 ? Math.ceil(target / 50) : 1;
+
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                counter.innerText = target.toLocaleString();
+                clearInterval(timer);
+            } else {
+                counter.innerText = current.toLocaleString();
+            }
+        }, stepTime);
+    });
+}
+
+// ── TRIGGER BAR CHARTS ON LOAD ──
+function animateCharts() {
+    setTimeout(() => {
+        const bars = document.querySelectorAll('#chartArea > div');
+        bars.forEach(bar => {
+            bar.style.height = bar.getAttribute('data-h');
+        });
+    }, 500);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    animateCounters();
+    animateCharts();
+});
+
+// ── REPORT SIMULATION ──
+let simRunning = false;
+function runSimulation() {
+    if(simRunning) return;
+    simRunning = true;
+    
+    const steps = [
+        document.getElementById('sim1'),
+        document.getElementById('sim2'),
+        document.getElementById('sim3'),
+        document.getElementById('sim4')
+    ];
+    
+    steps.forEach(s => { s.className = 'sim-step'; });
+    
+    let current = 0;
+    const interval = setInterval(() => {
+        if(current > 0) {
+            steps[current-1].classList.remove('active');
+            steps[current-1].classList.add('completed');
+        }
+        if(current < steps.length) {
+            steps[current].classList.add('active');
+        } else {
+            clearInterval(interval);
+            setTimeout(() => { simRunning = false; }, 1000);
+        }
+        current++;
+    }, 800);
+}
+
+// ── SOS SIMULATION ──
+function triggerSOSDemo(el) {
+    if(el.classList.contains('active')) return;
+    el.classList.add('active');
+    
+    const badgeArea = document.getElementById('sosBadgeArea');
+    badgeArea.innerHTML = '';
+    
+    const msgs = [
+        '<span class="sos-badge show">🚨 Alert sent to responders</span>',
+        '<span class="sos-badge show">🚔 Police notified</span>',
+        '<span class="sos-badge show">📍 Location shared securely</span>'
+    ];
+    
+    let i = 0;
+    const alertInt = setInterval(() => {
+        if(i < msgs.length) {
+            badgeArea.innerHTML += msgs[i];
+            i++;
+        } else {
+            clearInterval(alertInt);
+            setTimeout(() => {
+                badgeArea.innerHTML = '<span class="text-xs text-slate-500 uppercase font-bold tracking-widest">Click to Simulate</span>';
+                el.classList.remove('active');
+            }, 3000);
+        }
+    }, 600);
+}
+</script>
+
 </body>
 </html>
