@@ -150,9 +150,14 @@ body::before {
 #sosToast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(50px); padding: 14px 24px; border-radius: 30px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s; z-index: 1000; opacity: 0; white-space: nowrap; display: flex; align-items: center; gap: 10px; pointer-events: none; }
 #sosToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* ── MODAL UI FOR RECORDING ── */
-.video-modal-container { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
-.video-modal-container:not(.hidden) { display: flex; }
+/* ── FIX: VIDEO RECORDING MODAL ── */
+.video-modal-container { 
+  display: none; 
+  position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; 
+  flex-direction: column; align-items: center; justify-content: center; 
+  padding: 20px; backdrop-filter: blur(5px); 
+}
+.video-modal-container.show { display: flex; }
 #videoPreview { width: 100%; max-width: 400px; border-radius: 18px; border: 2px solid var(--cyan); background: #000; box-shadow: 0 0 30px rgba(0, 207, 255, 0.15); }
 
 /* ── BOTTOM NAV & FAB (HARDCODED EXACTLY) ── */
@@ -242,7 +247,7 @@ body::before {
         </div>
 
         <div id="instructionText" style="text-align:center;margin-top:28px;">
-          <p class="title-text no-wrap-ellipsis" style="font-family:'Syne',sans-serif;font-weight:800;color:#f1f5f9;margin-bottom:5px;letter-spacing:0.5px;">PRESS AND HOLD TO ACTIVATE</p>
+          <p class="title-text no-wrap-ellipsis" style="font-family:'Syne',sans-serif;font-weight:800;color:#f1f5f9;margin-bottom:5px;letter-spacing:0.5px;">PRESS AND HOLD <br>TO ACTIVATE</p>
           <p style="color:#94a3b8;font-weight:500;">Hold for 1 second to prevent accidental triggers.</p>
         </div>
 
@@ -438,12 +443,14 @@ body::before {
 
 <div id="sosToast"></div>
 
-<div id="videoModal" class="video-modal-container hidden">
-  <button onclick="closeRecording()" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.1); border:none; color:white; width:44px; height:44px; border-radius:50%; font-size:1.5rem; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:1001; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,77,109,0.8)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">✕</button>
+<div id="videoModal" class="video-modal-container">
+  <button onclick="closeRecording()" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.1); border:none; color:white; padding: 8px 16px; border-radius:30px; font-family:'Syne', sans-serif; font-size:1rem; font-weight:bold; cursor:pointer; display:flex; align-items:center; gap:8px; z-index:1001; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,77,109,0.8)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+    ✕ Close
+  </button>
   
   <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
     <span style="font-size:1.2rem; animation: pulse 1.5s infinite;">🔴</span>
-    <h3 style="color:#00cfff; font-family:'Syne', sans-serif; font-weight:800; margin:0; font-size:1.2rem;">Recording...</h3>
+    <h3 style="color:#00cfff; font-family:'Syne', sans-serif; font-weight:800; margin:0; font-size:1.2rem;">Recording Evidence...</h3>
     <span id="recordTimer" style="font-family:'JetBrains Mono', monospace; color:#f1f5f9; margin-left:8px; font-weight:bold; font-size:1.1rem;">00:00</span>
   </div>
   
@@ -675,18 +682,17 @@ async function recordEvidence() {
         const modal = document.getElementById('videoModal');
         const video = document.getElementById('videoPreview');
         video.srcObject = recordStream;
-        modal.classList.remove('hidden');
+        modal.classList.add('show'); 
         
-        // Initialize MediaRecorder
         recordedChunks = [];
         mediaRecorder = new MediaRecorder(recordStream);
+        
         mediaRecorder.ondataavailable = function(e) {
             if (e.data.size > 0) {
                 recordedChunks.push(e.data);
             }
         };
         
-        // Handling the Stop Action
         mediaRecorder.onstop = function() {
             if (recordedChunks.length > 0) {
                 const blob = new Blob(recordedChunks, { type: 'video/webm' });
@@ -698,6 +704,7 @@ async function recordEvidence() {
                 a.download = `civicpulse-evidence-${Date.now()}.webm`;
                 a.click();
                 window.URL.revokeObjectURL(url);
+                a.remove();
                 showSOSToast('Evidence recording saved successfully.', 'success');
             }
             cleanupRecording();
@@ -706,7 +713,6 @@ async function recordEvidence() {
         mediaRecorder.start();
         showSOSToast('Recording audio/video evidence...', 'info');
         
-        // Timer
         recordSeconds = 0;
         document.getElementById('recordTimer').innerText = '00:00';
         recordInterval = setInterval(() => {
@@ -716,7 +722,6 @@ async function recordEvidence() {
             document.getElementById('recordTimer').innerText = `${m}:${s}`;
         }, 1000);
         
-        // 60-second Safety Limit
         maxRecordTimeout = setTimeout(() => {
             if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                 mediaRecorder.stop();
@@ -732,7 +737,7 @@ async function recordEvidence() {
 
 function stopRecording() {
     if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-        mediaRecorder.stop(); // Triggers onstop which saves and cleans up
+        mediaRecorder.stop(); 
     } else {
         cleanupRecording();
     }
@@ -756,14 +761,14 @@ function cleanupRecording() {
         recordStream.getTracks().forEach(track => track.stop());
         recordStream = null;
     }
-    document.getElementById('videoModal').classList.add('hidden');
+    document.getElementById('videoModal').classList.remove('show');
 }
 
 // Close modal on ESC key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         const modal = document.getElementById('videoModal');
-        if (!modal.classList.contains('hidden')) {
+        if (modal.classList.contains('show')) {
             closeRecording();
         }
     }
