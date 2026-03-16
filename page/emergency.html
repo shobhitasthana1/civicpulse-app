@@ -35,12 +35,12 @@ body::before {
 
 /* ── SOS CONTENT TYPOGRAPHY & FIXES (Strictly scoped) ── */
 .page-content {
-  font-size: clamp(14px, 2vw, 16px); /* Responsive body font */
-  padding-bottom: 100px !important; /* Fix button overlap */
+  font-size: clamp(14px, 2vw, 16px); 
+  padding-bottom: 120px !important; 
 }
 
 .page-content h1, .page-content h2, .page-content h3, .page-content h4, .title-text {
-  font-size: clamp(16px, 2.5vw, 20px); /* Responsive title font */
+  font-size: clamp(16px, 2.5vw, 20px); 
 }
 
 .no-wrap-ellipsis {
@@ -58,6 +58,8 @@ body::before {
 .fu { opacity:0; transform:translateY(16px); animation:fu 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; will-change: transform, opacity; }
 @keyframes fu { to { opacity:1; transform:translateY(0); } }
 .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}.d5{animation-delay:.30s}
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.fade-in { animation: fadeIn 0.4s ease forwards; }
 
 /* ── LIVE ALERT BANNER ── */
 .alert-banner {
@@ -73,8 +75,12 @@ body::before {
 .dot-teal { background: #00e5cc; box-shadow: 0 0 8px #00e5cc; animation: pulse 1.5s infinite; }
 
 /* ── SOS BUTTON (RADAR & LONG PRESS) ── */
-.sos-container { padding: 40px 0; display: flex; flex-direction: column; align-items: center; position: relative; }
-.sos-bg-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,77,109,0.15) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+.sos-container { 
+  padding: 20px 0 30px; 
+  margin-top: -10px;
+  display: flex; flex-direction: column; align-items: center; position: relative; 
+}
+.sos-bg-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; height: 320px; background: radial-gradient(circle, rgba(255,77,109,0.25) 0%, transparent 65%); backdrop-filter: blur(2px); pointer-events: none; z-index: 0; }
 .sos-wrap { position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; z-index: 10; }
 
 .sos-btn {
@@ -86,16 +92,17 @@ body::before {
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
   -webkit-tap-highlight-color: transparent; user-select: none;
 }
-.sos-btn:hover { transform: scale(1.03); box-shadow: 0 0 60px rgba(255,77,109,0.6), inset 0 0 20px rgba(255,255,255,0.3); }
-.sos-btn:active, .sos-btn.pressing { transform: scale(0.92); box-shadow: 0 0 20px rgba(255,77,109,0.8); }
+.sos-btn:hover:not(:disabled) { transform: scale(1.03); box-shadow: 0 0 60px rgba(255,77,109,0.6), inset 0 0 20px rgba(255,255,255,0.3); }
+.sos-btn:active:not(:disabled), .sos-btn.pressing { transform: scale(0.92); box-shadow: 0 0 20px rgba(255,77,109,0.8); }
+.sos-btn:disabled { filter: grayscale(50%); cursor: not-allowed; }
 
 /* Progress Ring */
 .progress-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; transform: rotate(-90deg); z-index: 6; }
 .progress-ring__circle { transform-origin: 50% 50%; will-change: stroke-dashoffset; }
 
 /* Radar Pulse Rings */
-.pulse-ring { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 160px; height: 160px; border: 2px solid var(--em); border-radius: 50%; animation: radarPulse 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; opacity: 0; pointer-events: none; will-change: transform, opacity; }
-.ring-1 { animation-delay: 0s; } .ring-2 { animation-delay: 0.4s; } .ring-3 { animation-delay: 0.8s; } .ring-4 { animation-delay: 1.2s; }
+.pulse-ring { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 160px; height: 160px; border: 2px solid var(--em); border-radius: 50%; animation: radarPulse 2.2s cubic-bezier(.25,.8,.25,1) infinite; opacity: 0; pointer-events: none; will-change: transform, opacity; }
+.ring-1 { animation-delay: 0s; } .ring-2 { animation-delay: 0.55s; } .ring-3 { animation-delay: 1.1s; } .ring-4 { animation-delay: 1.65s; }
 @keyframes radarPulse { 0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; border-width: 3px; } 100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; border-width: 1px; } }
 
 /* ── SMART COUNTDOWN & CONFIRMATION ── */
@@ -103,7 +110,7 @@ body::before {
 .cd-num { font-family: 'JetBrains Mono', monospace; font-size: 3.5rem; color: var(--em); font-weight: 800; line-height: 1; margin-bottom: 5px; }
 .cd-msg { color: #f1f5f9; font-family: 'Syne', sans-serif; font-weight: 700; font-size: clamp(14px, 2vw, 16px); letter-spacing: 1px; }
 
-.confirmation-panel { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 18px; padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15); animation: fu 0.4s ease forwards; margin-bottom: 20px; }
+.confirmation-panel { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 18px; padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15); margin-bottom: 20px; }
 .check-pulse { width: 60px; height: 60px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px; color: white; box-shadow: 0 0 20px #10b981; animation: pulse 2s infinite; }
 
 /* ── RESPONSIVE GRIDS (Fixes Card Spacing & Stacking) ── */
@@ -126,7 +133,7 @@ body::before {
 
 /* ── ACTION GRID ── */
 .action-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; margin-bottom: 20px; }
-@media (min-width: 768px) { .action-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 640px) { .action-grid { grid-template-columns: repeat(2, 1fr); } }
 
 .action-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 20px; text-align: left; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, background 0.2s; cursor: pointer; min-height: 100px; display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 16px; width: 100%; min-width: 48px; }
 .action-item:hover { background: rgba(0,229,204,0.05); border-color: rgba(0,229,204,0.3); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,229,204,0.1); }
@@ -143,48 +150,25 @@ body::before {
 #sosToast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(50px); padding: 14px 24px; border-radius: 30px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s; z-index: 1000; opacity: 0; white-space: nowrap; display: flex; align-items: center; gap: 10px; pointer-events: none; }
 #sosToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* ══ REPORT ISSUE FAB BUTTON ══ */
-.fab-p {
-    position: fixed;
-    bottom: calc(62px + env(safe-area-inset-bottom, 0px) + 14px);
-    right: max(14px, env(safe-area-inset-right, 14px));
-    z-index: 45;
-    display: flex; 
-    align-items: center; 
-    gap: 7px;
-    background: linear-gradient(135deg, #00e5cc 0%, #00cfff 100%);
-    color: #060c14;
-    font-family: 'Syne', sans-serif; 
-    font-weight: 800; 
-    font-size: 0.78rem;
-    padding: 0 16px; 
-    height: 46px; 
-    border-radius: 23px; 
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 6px 28px rgba(0, 229, 204, 0.4);
-    animation: fp 3s ease-in-out infinite;
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    text-decoration: none; 
-    white-space: nowrap;
-}
+/* ── MODAL UI FOR RECORDING ── */
+.video-modal-container { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+.video-modal-container:not(.hidden) { display: flex; }
+#videoPreview { width: 100%; max-width: 400px; border-radius: 18px; border: 2px solid var(--cyan); background: #000; box-shadow: 0 0 30px rgba(0, 207, 255, 0.15); }
 
-.fab-p:active { 
-    transform: scale(0.93); 
-}
-
-@media (min-width: 768px) { 
-    .fab-p { bottom: 28px; right: 24px; } 
-}
-
-@keyframes fp { 
-    0%, 100% { box-shadow: 0 6px 28px rgba(0, 229, 204, 0.4); } 
-    50% { box-shadow: 0 6px 40px rgba(0, 229, 204, 0.62); } 
-}
+/* ── BOTTOM NAV & FAB (HARDCODED EXACTLY) ── */
+.bottom-nav { position:fixed; bottom:0; left:0; width:100%; background:rgba(6,12,20,0.9); backdrop-filter:blur(10px); border-top:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-around; align-items:center; padding:10px 0; z-index:50; padding-bottom:calc(10px + env(safe-area-inset-bottom)); }
+.nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; color:#64748b; font-size:0.65rem; font-weight:600; text-decoration:none; transition:color 0.2s; }
+.nav-item.active { color:#00e5cc; }
+.nav-item.sos-tab { color:var(--em); }
+.fab-p { position: fixed; bottom: calc(62px + env(safe-area-inset-bottom, 0px) + 14px); right: max(14px, env(safe-area-inset-right, 14px)); z-index: 45; display: flex; align-items: center; gap: 7px; background: linear-gradient(135deg,#00e5cc 0%,#00cfff 100%); color: #060c14; font-family: 'Syne',sans-serif; font-weight: 800; font-size: 0.78rem; padding: 0 16px; height: 46px; border-radius: 23px; border: none; cursor: pointer; box-shadow: 0 6px 28px rgba(0,229,204,0.4); animation: fp 3s ease-in-out infinite; transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); text-decoration: none; white-space: nowrap; }
+.fab-p:hover { transform: scale(1.05); }
+.fab-p:active { transform: scale(0.93); }
+@keyframes fp { 0%,100%{box-shadow:0 6px 28px rgba(0,229,204,0.4)} 50%{box-shadow:0 6px 40px rgba(0,229,204,0.62)} }
 </style>
 </head>
 
 <body>
+<div id="flashOverlay" style="position: fixed; inset: 0; background: white; z-index: 9999; display: none; opacity: 0; pointer-events: none;"></div>
 <canvas id="bg-canvas"></canvas>
 
 <div class="app-layout">
@@ -227,8 +211,8 @@ body::before {
             
             <div style="background:rgba(0,0,0,0.3); border-radius:10px; padding:12px; border:1px solid rgba(255,255,255,0.05);">
               <div class="status-row">
-                <div style="display:flex; align-items:center;"><span class="status-dot dot-teal"></span> Location Tracking</div>
-                <span class="no-wrap-ellipsis" style="color:#00e5cc; font-weight:bold;">Active GPS Signal</span>
+                <div style="display:flex; align-items:center;"><span class="status-dot dot-teal" id="gpsIndicator"></span> Location Tracking</div>
+                <span class="no-wrap-ellipsis" style="color:#00e5cc; font-weight:bold;" id="gpsStatus">Active GPS Signal</span>
               </div>
               <div class="status-row">
                 <div style="display:flex; align-items:center;"><span class="status-dot dot-green"></span> Network Status</div>
@@ -262,13 +246,13 @@ body::before {
           <p style="color:#94a3b8;font-weight:500;">Hold for 1 second to prevent accidental triggers.</p>
         </div>
 
-        <div id="countdownArea" class="cd-area hidden">
+        <div id="countdownArea" class="cd-area hidden fade-in">
           <div class="cd-num" id="cdNumber">3</div>
           <p class="cd-msg" id="cdMessage">Preparing emergency signal...</p>
           <button onclick="cancelSOS()" style="margin-top:16px;color:#94a3b8;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:8px 24px;border-radius:50px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1px;transition:0.2s; min-height: 48px;" aria-label="Cancel emergency request">Cancel Request</button>
         </div>
 
-        <div id="confirmationPanel" class="confirmation-panel hidden w-full max-w-md mx-auto mt-4">
+        <div id="confirmationPanel" class="confirmation-panel hidden fade-in w-full max-w-md mx-auto mt-4">
           <div class="check-pulse">✓</div>
           <h3 class="title-text" style="font-family:'Syne',sans-serif;font-weight:800;color:#10b981;margin-bottom:8px;">Emergency Signal Sent</h3>
           <p style="color:#e2eaf4;margin-bottom:16px;line-height:1.5;">Police and emergency services have been notified. Your live location is now being actively shared.</p>
@@ -285,15 +269,15 @@ body::before {
         <div class="net-grid">
           <div class="net-item">
             <span class="net-lbl no-wrap-ellipsis">Nearby Volunteers</span>
-            <span class="net-val"><span class="status-dot dot-teal"></span> 37 Active</span>
+            <span class="net-val"><span class="status-dot dot-teal"></span> <span id="volCount">37 Active</span></span>
           </div>
           <div class="net-item">
             <span class="net-lbl no-wrap-ellipsis">Police Stations</span>
-            <span class="net-val"><span class="status-dot dot-teal"></span> 3 within 5km</span>
+            <span class="net-val"><span class="status-dot dot-teal"></span> <span id="polCount">3 within 5km</span></span>
           </div>
           <div class="net-item">
             <span class="net-lbl no-wrap-ellipsis">Hospitals Nearby</span>
-            <span class="net-val"><span class="status-dot dot-teal"></span> 4 within 6km</span>
+            <span class="net-val"><span class="status-dot dot-teal"></span> <span id="hospCount">4 within 6km</span></span>
           </div>
           <div class="net-item">
             <span class="net-lbl no-wrap-ellipsis">Response Estimate</span>
@@ -305,7 +289,7 @@ body::before {
       <section class="fu d4" style="margin-bottom: 20px;">
         <div class="slbl">Direct Helplines</div>
         <div class="helpline-grid">
-          <a href="tel:112" class="qdial-card" aria-label="Call Police Dispatch 112">
+          <a href="tel:112" class="qdial-card" aria-label="Call Police Dispatch 112" onclick="showSOSToast('Dialing Police Dispatch...', 'info')">
             <div class="qdial-icon">🚔</div>
             <div style="flex:1;min-width:0;">
               <div class="title-text no-wrap-ellipsis" style="font-family:'Syne',sans-serif;font-weight:800;color:#f1f5f9;">Police Dispatch</div>
@@ -317,7 +301,7 @@ body::before {
             </div>
           </a>
           
-          <a href="tel:102" class="qdial-card" aria-label="Call Ambulance 102">
+          <a href="tel:102" class="qdial-card" aria-label="Call Ambulance 102" onclick="showSOSToast('Dialing Ambulance...', 'info')">
             <div class="qdial-icon">🚑</div>
             <div style="flex:1;min-width:0;">
               <div class="title-text no-wrap-ellipsis" style="font-family:'Syne',sans-serif;font-weight:800;color:#f1f5f9;">Ambulance</div>
@@ -329,7 +313,7 @@ body::before {
             </div>
           </a>
           
-          <a href="tel:101" class="qdial-card" aria-label="Call Fire Station 101">
+          <a href="tel:101" class="qdial-card" aria-label="Call Fire Station 101" onclick="showSOSToast('Dialing Fire Station...', 'info')">
             <div class="qdial-icon">🚒</div>
             <div style="flex:1;min-width:0;">
               <div class="title-text no-wrap-ellipsis" style="font-family:'Syne',sans-serif;font-weight:800;color:#f1f5f9;">Fire Station</div>
@@ -341,7 +325,7 @@ body::before {
             </div>
           </a>
 
-          <a href="tel:+916388095158" class="qdial-card" style="background:rgba(0,229,204,0.03); border-color:rgba(0,229,204,0.15);" aria-label="Call CivicPulse Team">
+          <a href="tel:+916388095158" class="qdial-card" style="background:rgba(0,229,204,0.03); border-color:rgba(0,229,204,0.15);" aria-label="Call CivicPulse Team" onclick="showSOSToast('Dialing Volunteer Support...', 'info')">
             <div class="qdial-icon" style="background:linear-gradient(135deg, rgba(0,229,204,0.2), rgba(0,207,255,0.1)); border-color:rgba(0,229,204,0.3);">👥</div>
             <div style="flex:1;min-width:0;">
               <div class="title-text no-wrap-ellipsis" style="font-family:'Syne',sans-serif;font-weight:800;color:#00e5cc;">CivicPulse Volunteers</div>
@@ -367,7 +351,7 @@ body::before {
             </div>
           </button>
           
-          <button class="action-item" onclick="showSOSToast('Recording audio/video evidence...', 'info')" aria-label="Record evidence">
+          <button class="action-item" onclick="recordEvidence()" aria-label="Record evidence">
             <div style="font-size:2rem; filter:drop-shadow(0 0 8px rgba(251,146,60,0.4)); flex-shrink: 0;">🎙</div>
             <div style="flex:1; min-width:0;">
               <div class="no-wrap-ellipsis" style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(14px, 2vw, 16px);color:#fb923c;margin-bottom:4px;">Record Evidence</div>
@@ -375,7 +359,7 @@ body::before {
             </div>
           </button>
           
-          <button class="action-item" onclick="showSOSToast('Emergency SMS alert sent to saved contacts.', 'success')" aria-label="Notify family">
+          <button class="action-item" onclick="notifyFamily()" aria-label="Notify family">
             <div style="font-size:2rem; filter:drop-shadow(0 0 8px rgba(167,139,250,0.4)); flex-shrink: 0;">📨</div>
             <div style="flex:1; min-width:0;">
               <div class="no-wrap-ellipsis" style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(14px, 2vw, 16px);color:#a78bfa;margin-bottom:4px;">Notify Family</div>
@@ -383,7 +367,7 @@ body::before {
             </div>
           </button>
           
-          <button class="action-item" onclick="showSOSToast('SOS flashlight pattern activated.', 'warning')" aria-label="Flash signal">
+          <button class="action-item" onclick="toggleFlash()" aria-label="Flash signal">
             <div style="font-size:2rem; filter:drop-shadow(0 0 8px rgba(255,215,0,0.4)); flex-shrink: 0;">🔦</div>
             <div style="flex:1; min-width:0;">
               <div class="no-wrap-ellipsis" style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(14px, 2vw, 16px);color:#f1f5f9;margin-bottom:4px;">Flash Signal</div>
@@ -400,7 +384,7 @@ body::before {
           </button>
           <input type="file" id="camInput" accept="image/*" capture="environment" class="hidden" onchange="handleCameraCapture(this)">
           
-          <div id="camPreviewBox" class="action-item full-width hidden" style="background:rgba(0,0,0,0.5); border-color:rgba(0,207,255,0.4);">
+          <div id="camPreviewBox" class="action-item full-width hidden fade-in" style="background:rgba(0,0,0,0.5); border-color:rgba(0,207,255,0.4);">
              <img id="camPreviewImg" src="" alt="Captured Evidence" style="width:60px; height:60px; object-fit:cover; border-radius:10px; border:2px solid #00cfff; flex-shrink: 0;">
              <div style="flex:1; min-width: 0;">
                 <div class="no-wrap-ellipsis" style="font-weight:bold; color:#00cfff;">Evidence Secured</div>
@@ -426,36 +410,58 @@ body::before {
 
   </div> <nav class="bottom-nav">
     <a href="../index.html" class="nav-item">
-      <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"></path><polyline points=\"9 22 9 12 15 12 15 22\"></polyline></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
       <span>Home</span>
     </a>
+    <a href="report.html" class="nav-item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      <span>Report</span>
+    </a>
     <a href="reports.html" class="nav-item">
-      <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline><line x1=\"16\" y1=\"13\" x2=\"8\" y2=\"13\"></line><line x1=\"16\" y1=\"17\" x2=\"8\" y2=\"17\"></line><polyline points=\"10 9 9 9 8 9\"></polyline></svg>
-      <span>Reports</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      <span>Track</span>
     </a>
     <a href="team.html" class="nav-item">
-      <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2\"></path><circle cx=\"9\" cy=\"7\" r=\"4\"></circle><path d=\"M23 21v-2a4 4 0 0 0-3-3.87\"></path><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"></path></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
       <span>Team</span>
     </a>
-    <a href="profile.html" class="nav-item">
-      <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\"></path><circle cx=\"12\" cy=\"7\" r=\"4\"></circle></svg>
-      <span>Profile</span>
+    <a href="emergency.html" class="nav-item sos-tab active cp-active">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px rgba(255,77,109,0.8));"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      <span>SOS</span>
     </a>
   </nav>
 
-</div>
-
-<a href="report.html" class="fab-p" aria-label="Report a new civic issue">
+</div> <a href="report.html" class="fab-p" aria-label="Report a new civic issue">
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
   Report Issue
 </a>
 
 <div id="sosToast"></div>
 
+<div id="videoModal" class="video-modal-container hidden">
+  <button onclick="closeRecording()" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.1); border:none; color:white; width:44px; height:44px; border-radius:50%; font-size:1.5rem; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:1001; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,77,109,0.8)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">✕</button>
+  
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+    <span style="font-size:1.2rem; animation: pulse 1.5s infinite;">🔴</span>
+    <h3 style="color:#00cfff; font-family:'Syne', sans-serif; font-weight:800; margin:0; font-size:1.2rem;">Recording...</h3>
+    <span id="recordTimer" style="font-family:'JetBrains Mono', monospace; color:#f1f5f9; margin-left:8px; font-weight:bold; font-size:1.1rem;">00:00</span>
+  </div>
+  
+  <video id="videoPreview" autoplay muted playsinline></video>
+  
+  <button onclick="stopRecording()" style="margin-top:24px; background:linear-gradient(135deg, #ff4d6d, #cc0033); color:white; padding:14px 28px; border-radius:30px; font-family:'Syne', sans-serif; font-weight:700; font-size:1rem; border:none; cursor:pointer; min-height:48px; box-shadow:0 4px 20px rgba(255,77,109,0.4); transition: transform 0.2s;" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">Stop & Save</button>
+</div>
+
 <script src="../assets/js/app.js"></script>
 <script src="../assets/js/shared-ui.js"></script>
 
 <script>
+// ── DYNAMIC NETWORK DATA ──
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('volCount').innerText = (30 + Math.floor(Math.random() * 10)) + ' Active';
+    document.getElementById('hospCount').innerText = (3 + Math.floor(Math.random() * 3)) + ' within 6km';
+});
+
 // ── TOAST SYSTEM ──
 function showSOSToast(msg, type = 'info') {
     const toast = document.getElementById('sosToast');
@@ -484,14 +490,15 @@ circle.style.strokeDashoffset = circumference;
 
 let holdTimer;
 let isHolding = false;
-const holdDuration = 1000; // 1 second
+const holdDuration = 1000; 
+window.currentSosId = null;
 
 function startHold(e) {
+    if(sosBtn.disabled) return; 
     if(e.type === 'touchstart') e.preventDefault(); 
     isHolding = true;
     sosBtn.classList.add('pressing');
     
-    // Animate SVG ring precisely mapping to the holdDuration
     circle.style.transition = `stroke-dashoffset ${holdDuration}ms linear`;
     circle.style.strokeDashoffset = 0;
     
@@ -506,7 +513,6 @@ function stopHold(e) {
     clearTimeout(holdTimer);
     sosBtn.classList.remove('pressing');
     
-    // Cancel SVG ring animation
     if(!document.getElementById('sosWrap').classList.contains('hidden')) {
         circle.style.transition = `stroke-dashoffset 0.2s ease-out`;
         circle.style.strokeDashoffset = circumference;
@@ -524,7 +530,10 @@ sosBtn.addEventListener('mouseleave', stopHold);
 let cdTimer = null;
 
 function startEmergencySequence() {
-    isHolding = false; // Lock out further holds
+    isHolding = false; 
+    sosBtn.disabled = true; 
+    document.querySelectorAll('.pulse-ring').forEach(r => r.style.animation = 'none'); 
+
     document.getElementById('sosWrap').classList.add('hidden');
     document.getElementById('instructionText').classList.add('hidden');
     
@@ -552,7 +561,7 @@ function startEmergencySequence() {
         step++;
     }
     
-    updateCountdown(); // Execute step 0 instantly
+    updateCountdown(); 
     cdTimer = setInterval(updateCountdown, 1000);
 }
 
@@ -563,29 +572,29 @@ function cancelSOS() {
     document.getElementById('instructionText').classList.remove('hidden');
     circle.style.transition = `none`;
     circle.style.strokeDashoffset = circumference;
+    sosBtn.disabled = false; 
+    document.querySelectorAll('.pulse-ring').forEach(r => r.style.animation = ''); 
     showSOSToast('Emergency request cancelled.', 'warning');
 }
 
-// ── SOS TRACKING SYSTEM (LOCAL STORAGE) ──
+// ── SOS TRACKING SYSTEM ──
 function showConfirmation() {
     document.getElementById('countdownArea').classList.add('hidden');
     document.getElementById('confirmationPanel').classList.remove('hidden');
     showSOSToast('Emergency dispatched successfully.', 'emergency');
 
-    // Generate Dynamic Tracking ID
-    const dynamicId = 'SOS-CP-' + Math.floor(1000 + Math.random() * 9000);
-    document.getElementById('sosTrackId').textContent = dynamicId;
+    window.currentSosId = 'SOS-CP-' + Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('sosTrackId').textContent = window.currentSosId;
 
-    // Save SOS dispatch to LocalStorage so it syncs with Track Reports page
     const newSOSReport = {
-        id: dynamicId,
-        category: 'Safety', // 'Safety' maps to the 🚨 icon on tracking page
+        id: window.currentSosId,
+        category: 'Safety', 
         location: 'Live GPS Location Shared',
         title: '🚨 EMERGENCY SOS ACTIVATED',
         description: 'User triggered an emergency alert. Live location tracking is active and responders have been notified.',
         priority: 'Emergency',
         date: new Date().toISOString().split('T')[0],
-        status: 'active', // Immediately flagged as active response
+        status: 'active', 
         timestamp: Date.now(),
         isUser: true
     };
@@ -594,7 +603,7 @@ function showConfirmation() {
         let reports = JSON.parse(localStorage.getItem('civicReports')) || [];
         reports.push(newSOSReport);
         localStorage.setItem('civicReports', JSON.stringify(reports));
-        localStorage.setItem('civic_sos_last', JSON.stringify(newSOSReport)); // Saved for direct dashboard access
+        localStorage.setItem('civic_last_sos', JSON.stringify(newSOSReport));
     } catch (e) {
         console.error("Error saving SOS report to localStorage", e);
     }
@@ -602,6 +611,7 @@ function showConfirmation() {
 
 // ── LIVE LOCATION API ──
 let watchId = null;
+let locInterval = null;
 function triggerLiveLocationWatch() {
     if (!navigator.geolocation) {
         showSOSToast('Geolocation not supported by your device.', 'emergency');
@@ -610,30 +620,203 @@ function triggerLiveLocationWatch() {
     
     if (watchId) {
         navigator.geolocation.clearWatch(watchId);
+        clearInterval(locInterval);
         watchId = null;
+        document.getElementById('gpsIndicator').classList.remove('dot-teal');
+        document.getElementById('gpsIndicator').classList.add('dot-green');
+        document.getElementById('gpsStatus').innerText = 'Location Paused';
         showSOSToast('Live location sharing paused.', 'info');
         return;
     }
 
     showSOSToast('Acquiring secure GPS lock...', 'info');
     
-    // Acquire initial location, then watch for updates
     navigator.geolocation.getCurrentPosition(
         (pos) => {
-            showSOSToast(`Location shared successfully. Accuracy: ±${Math.round(pos.coords.accuracy)}m`, 'success');
+            showSOSToast(`Live tracking enabled. Accuracy: ±${Math.round(pos.coords.accuracy)}m`, 'success');
+            document.getElementById('gpsIndicator').classList.add('dot-teal');
+            document.getElementById('gpsIndicator').classList.remove('dot-green');
+            document.getElementById('gpsStatus').innerText = 'Active GPS Signal';
+
             watchId = navigator.geolocation.watchPosition(
                 (livePos) => {
-                    console.log(`Secure Broadcast - Lat: ${livePos.coords.latitude}, Lng: ${livePos.coords.longitude}`);
+                    localStorage.setItem("civic_live_location", JSON.stringify({
+                        lat: livePos.coords.latitude,
+                        lng: livePos.coords.longitude,
+                        time: Date.now()
+                    }));
                 },
                 (err) => console.warn(err),
                 { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
             );
+            
+            locInterval = setInterval(() => {
+                showSOSToast('Live tracking active...', 'info');
+            }, 15000);
         },
         (err) => {
             showSOSToast('Failed to acquire location. Please check permissions.', 'emergency');
         },
         { enableHighAccuracy: true, timeout: 10000 }
     );
+}
+
+// ── FIX: VIDEO RECORDING LOGIC (MediaRecorder API) ──
+let mediaRecorder;
+let recordedChunks = [];
+let recordStream = null;
+let recordInterval = null;
+let recordSeconds = 0;
+let maxRecordTimeout = null;
+
+async function recordEvidence() {
+    try {
+        recordStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        const modal = document.getElementById('videoModal');
+        const video = document.getElementById('videoPreview');
+        video.srcObject = recordStream;
+        modal.classList.remove('hidden');
+        
+        // Initialize MediaRecorder
+        recordedChunks = [];
+        mediaRecorder = new MediaRecorder(recordStream);
+        mediaRecorder.ondataavailable = function(e) {
+            if (e.data.size > 0) {
+                recordedChunks.push(e.data);
+            }
+        };
+        
+        // Handling the Stop Action
+        mediaRecorder.onstop = function() {
+            if (recordedChunks.length > 0) {
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                document.body.appendChild(a);
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `civicpulse-evidence-${Date.now()}.webm`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                showSOSToast('Evidence recording saved successfully.', 'success');
+            }
+            cleanupRecording();
+        };
+        
+        mediaRecorder.start();
+        showSOSToast('Recording audio/video evidence...', 'info');
+        
+        // Timer
+        recordSeconds = 0;
+        document.getElementById('recordTimer').innerText = '00:00';
+        recordInterval = setInterval(() => {
+            recordSeconds++;
+            const m = String(Math.floor(recordSeconds / 60)).padStart(2, '0');
+            const s = String(recordSeconds % 60).padStart(2, '0');
+            document.getElementById('recordTimer').innerText = `${m}:${s}`;
+        }, 1000);
+        
+        // 60-second Safety Limit
+        maxRecordTimeout = setTimeout(() => {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                showSOSToast('Maximum recording length (60s) reached.', 'warning');
+            }
+        }, 60000);
+        
+    } catch(e) {
+        showSOSToast('Camera permission denied. Evidence recording unavailable.', 'error');
+        console.error(e);
+    }
+}
+
+function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop(); // Triggers onstop which saves and cleans up
+    } else {
+        cleanupRecording();
+    }
+}
+
+function closeRecording() {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.onstop = null; // Prevent saving when cancelling
+        mediaRecorder.stop();
+    }
+    cleanupRecording();
+    showSOSToast('Recording cancelled.', 'warning');
+}
+
+function cleanupRecording() {
+    clearInterval(recordInterval);
+    clearTimeout(maxRecordTimeout);
+    const video = document.getElementById('videoPreview');
+    video.srcObject = null;
+    if (recordStream) {
+        recordStream.getTracks().forEach(track => track.stop());
+        recordStream = null;
+    }
+    document.getElementById('videoModal').classList.add('hidden');
+}
+
+// Close modal on ESC key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('videoModal');
+        if (!modal.classList.contains('hidden')) {
+            closeRecording();
+        }
+    }
+});
+
+
+// ── NOTIFY FAMILY ──
+function notifyFamily() {
+    const idToShare = window.currentSosId ? window.currentSosId : "PENDING";
+    const msg = `Emergency Alert! Location shared via CivicPulse. Tracking ID: ${idToShare}`;
+    window.location.href = "sms:?body=" + encodeURIComponent(msg);
+    showSOSToast('Opening SMS app...', 'success');
+}
+
+// ── FLASH SIGNAL ──
+let flashTrack = null;
+let flashInterval = null;
+let isFlashing = false;
+
+async function toggleFlash() {
+    if (isFlashing) {
+         if (flashTrack) flashTrack.applyConstraints({advanced: [{torch: false}]});
+         clearInterval(flashInterval);
+         document.getElementById('flashOverlay').style.display = 'none';
+         isFlashing = false;
+         showSOSToast('Flash signal deactivated.', 'info');
+         return;
+    }
+    isFlashing = true;
+    showSOSToast('SOS flashlight pattern activated.', 'warning');
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        flashTrack = stream.getVideoTracks()[0];
+        const caps = flashTrack.getCapabilities();
+        if (caps.torch) {
+            let torchOn = false;
+            flashInterval = setInterval(() => {
+                torchOn = !torchOn;
+                flashTrack.applyConstraints({advanced: [{torch: torchOn}]});
+            }, 500); 
+        } else {
+            throw new Error("No torch capability");
+        }
+    } catch(e) {
+        // Fallback: screen blink
+        const overlay = document.getElementById('flashOverlay');
+        overlay.style.display = 'block';
+        let on = false;
+        flashInterval = setInterval(() => {
+            on = !on;
+            overlay.style.opacity = on ? '1' : '0';
+        }, 300);
+    }
 }
 
 // ── CAMERA CAPTURE ──
@@ -644,8 +827,15 @@ function handleCameraCapture(input) {
         
         reader.onload = function(e) {
             document.getElementById('camPreviewImg').src = e.target.result;
-            document.getElementById('camPreviewBox').classList.remove('hidden');
-            showSOSToast('Photo evidence secured.', 'success');
+            const previewBox = document.getElementById('camPreviewBox');
+            previewBox.classList.remove('hidden');
+            previewBox.classList.add('fade-in'); 
+            
+            try {
+                localStorage.setItem('civic_evidence_img', e.target.result);
+            } catch(err) {}
+            
+            showSOSToast('Photo evidence secured and saved.', 'success');
         };
         reader.readAsDataURL(file);
     }
