@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#060c14"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>Track Reports — CivicPulse</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/style.css"/>
+<link rel="stylesheet" href="../assets/css/mobile-fix.css"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{font-size:16px;-webkit-text-size-adjust:100%;}
+html,body{width:100%;max-width:100%;overflow-x:hidden;margin:0;padding:0;}
+:root{--teal:#00e5cc;--cyan:#00cfff;--purple:#a78bfa;--orange:#fb923c;--red:#ff4d6d;--bg:#060c14;--card:rgba(11,20,34,0.75);--border:rgba(255,255,255,0.07);--txt1:#f1f5f9;--txt2:#94a3b8;--txt3:#64748b;--sg:16px;--tab-h:62px;}
+body{background:var(--bg);color:var(--txt1);font-family:'DM Sans',sans-serif;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,229,204,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,204,.025) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);-webkit-mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);}
+.app-layout{display:flex;min-height:100vh;position:relative;z-index:1;}
+.main-area{flex:1;display:flex;flex-direction:column;width:100%;min-width:0;overflow-x:hidden;}
+.app-header{position:sticky;top:0;z-index:50;background:rgba(6,12,20,.92);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,.07);padding:0 14px;height:calc(56px + env(safe-area-inset-top,0px));display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:env(safe-area-inset-top,0px);}
+.header-left{display:flex;align-items:center;gap:8px;flex:1;min-width:0;overflow:hidden;max-width:calc(100% - 120px);}
+.header-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.logo-icon{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;background:linear-gradient(135deg,var(--teal),var(--cyan));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;}
+.live-indicator{display:flex;align-items:center;gap:4px;font-size:.6rem;color:var(--teal);font-weight:700;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.live-dot{width:6px;height:6px;background:var(--teal);border-radius:50%;box-shadow:0 0 6px var(--teal);animation:liveblink 1.5s ease-in-out infinite;}
+@keyframes liveblink{0%,100%{opacity:1}50%{opacity:.2}}
+.icon-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;cursor:pointer;color:var(--txt2);flex-shrink:0;position:relative;}
+.notif-badge{position:absolute;top:4px;right:4px;width:6px;height:6px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg);}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--cyan));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.72rem;color:#060c14;flex-shrink:0;overflow:hidden;}
+.hamburger{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;width:22px;height:16px;min-width:22px;max-width:22px;cursor:pointer;background:none;border:none;padding:0;flex-shrink:0;z-index:201;}
+.hamburger span{display:block;width:100%;height:2px;background:#94a3b8;border-radius:2px;}
+.hamburger span:nth-child(2){width:75%;}
+.page-content{flex:1;padding:16px;padding-bottom:calc(var(--tab-h) + env(safe-area-inset-bottom,0px) + 70px);width:100%;max-width:100%;box-sizing:border-box;}
+.slbl{font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:rgba(0,229,204,.65);display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.slbl::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(0,229,204,.2),transparent);}
+.bdg{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:20px;font-size:.6rem;font-weight:600;white-space:nowrap;flex-shrink:0;}
+.bp{background:rgba(251,146,60,.15);color:#fb923c;border:1px solid rgba(251,146,60,.3);}
+.bi{background:rgba(0,207,255,.1);color:#00cfff;border:1px solid rgba(0,207,255,.25);}
+.br{background:rgba(0,229,204,.1);color:#00e5cc;border:1px solid rgba(0,229,204,.25);}
+.bc{background:rgba(255,77,109,.12);color:#ff4d6d;border:1px solid rgba(255,77,109,.25);}
+.fu{opacity:0;transform:translateY(18px);animation:fu .44s ease forwards;}
+@keyframes fu{to{opacity:1;transform:translateY(0)}}
+.d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
+.fab-p{position:fixed;bottom:calc(var(--tab-h) + env(safe-area-inset-bottom,0px) + 14px);right:max(14px,env(safe-area-inset-right,14px));z-index:45;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#00e5cc,#00cfff);color:#060c14;font-family:'Syne',sans-serif;font-weight:800;font-size:.78rem;padding:0 16px;height:46px;border-radius:23px;border:none;cursor:pointer;box-shadow:0 6px 28px rgba(0,229,204,.4);text-decoration:none;white-space:nowrap;}
+.fab-p:active{transform:scale(.93);}
+
+/* Page specific */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 6px;text-align:center;}
+.filter-row{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;scrollbar-width:none;}
+.filter-row::-webkit-scrollbar{display:none;}
+.fchip{padding:6px 14px;border-radius:50px;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--txt2);white-space:nowrap;cursor:pointer;transition:.2s;flex-shrink:0;}
+.fchip.act{background:rgba(0,229,204,.1);border-color:var(--teal);color:var(--teal);}
+.fchip:active{transform:scale(.95);}
+.search-wrap{position:relative;margin-bottom:14px;}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--txt3);}
+.search-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:11px 12px 11px 38px;font-size:.85rem;color:var(--txt1);outline:none;transition:.2s;font-family:'DM Sans',sans-serif;box-sizing:border-box;}
+.search-input:focus{border-color:rgba(0,229,204,.35);background:rgba(0,229,204,.04);}
+.search-input::placeholder{color:var(--txt3);}
+.rrow{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .18s;width:100%;margin-bottom:8px;}
+.rrow:last-child{margin-bottom:0;}
+.rrow.exp{border-color:rgba(0,229,204,.25);}
+.rtop{display:flex;align-items:center;gap:9px;padding:11px;cursor:pointer;}
+.rtop:active{background:rgba(255,255,255,.03);}
+.rtop-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+.rtop-info{flex:1;min-width:0;overflow:hidden;}
+.rtop-title{font-size:.8rem;font-weight:500;color:var(--txt1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rtop-sub{font-size:.6rem;color:var(--txt3);margin-top:1px;}
+.rtop-right{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.rdetail{max-height:0;overflow:hidden;transition:max-height .32s cubic-bezier(.4,0,.2,1),padding .22s;padding:0 11px;}
+.rdetail.open{max-height:180px;padding:0 11px 12px;}
+.rdetail-inner{background:rgba(0,0,0,.25);border-radius:8px;padding:10px 12px;font-size:.72rem;color:#94a3b8;line-height:1.65;}
+.chevron{width:15px;height:15px;flex-shrink:0;color:var(--txt3);transition:transform .28s cubic-bezier(.4,0,.2,1);}
+.rrow.exp .chevron{transform:rotate(180deg);}
+.progress-bar{height:4px;border-radius:4px;background:rgba(255,255,255,.07);overflow:hidden;margin-top:8px;}
+.progress-fill{height:100%;border-radius:4px;transition:width 1s ease;}
+.empty-state{text-align:center;padding:40px 20px;color:var(--txt3);}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="app-layout">
+<div class="main-area">
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-left">
+    <button class="hamburger" aria-label="Open navigation menu" type="button"><span></span><span></span><span></span></button>
+    <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;">
+      <div class="logo-icon"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <span class="logo-text">CivicPulse</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
+    <button class="icon-btn" onclick="showToast('🔔 3 new notifications','info')" type="button" aria-label="Notifications">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge"></span>
+    </button>
+    <div class="avatar" style="overflow:hidden;padding:0;"><img src="../image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" onerror="this.parentElement.textContent='SA';this.remove();"/></div>
+  </div>
+</header>
+
+<!-- CONTENT -->
+<main class="page-content">
+
+  <!-- Title -->
+  <div style="margin-bottom:16px;" class="fu">
+    <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:50px;background:rgba(0,229,204,.08);border:1px solid rgba(0,229,204,.2);font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;color:var(--teal);margin-bottom:10px;">📡 My Reports</div>
+    <h1 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.2rem,4vw,1.7rem);color:var(--txt1);margin-bottom:6px;">Track Your <span style="background:linear-gradient(135deg,#00e5cc,#00cfff,#a78bfa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Reports</span></h1>
+    <p style="font-size:.8rem;color:var(--txt2);">Monitor the status of your submitted civic complaints.</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-grid fu d1">
+    <div class="stat-card"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--txt1);">19</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Total</div></div>
+    <div class="stat-card"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--orange);">7</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Pending</div></div>
+    <div class="stat-card"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--cyan);">5</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Active</div></div>
+    <div class="stat-card"><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--teal);">7</div><div style="font-size:.56rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Resolved</div></div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap fu d2">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="search" class="search-input" placeholder="Search by title, location, ID..." oninput="filterReports(this.value)" autocomplete="off"/>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-row fu d2">
+    <button class="fchip act" onclick="setFilter('all',this)">All</button>
+    <button class="fchip" onclick="setFilter('pending',this)">🟡 Pending</button>
+    <button class="fchip" onclick="setFilter('progress',this)">🔵 Active</button>
+    <button class="fchip" onclick="setFilter('resolved',this)">✅ Resolved</button>
+    <button class="fchip" onclick="setFilter('critical',this)">🔴 Critical</button>
+  </div>
+
+  <!-- Reports list -->
+  <div id="rList" class="fu d3"></div>
+
+</main>
+</div>
+</div>
+
+<!-- FAB -->
+<a href="report.html" class="fab-p">
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+  New Report
+</a>
+
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/shared-ui.js"></script>
+<script>
+const REPORTS=[
+  {id:'CP-2025-0042',icon:'💡',title:'Broken streetlight – Sector 12',loc:'Sector 12, Gomti Nagar',status:'pending',prog:10,date:'2h ago',dept:'Municipal Corp, Zone 3',eta:'24–48 hours'},
+  {id:'CP-2025-0041',icon:'🗑️',title:'Garbage overflow – Market Road',loc:'Market Road, Hazratganj',status:'critical',prog:5,date:'4h ago',dept:'Nagar Nigam Sanitation',eta:'Priority escalated'},
+  {id:'CP-2025-0040',icon:'💧',title:'Water leakage – Civil Lines',loc:'Civil Lines, Lucknow',status:'progress',prog:55,date:'6h ago',dept:'Jal Kal Vibhag, Team B',eta:'Technician ETA: 1.5h'},
+  {id:'CP-2025-0039',icon:'🛣️',title:'Pothole – Ring Road',loc:'Ring Road, Aliganj',status:'resolved',prog:100,date:'1d ago',dept:'PWD',eta:'Patching complete ✓'},
+  {id:'CP-2025-0038',icon:'⚡',title:'Low hanging cable – Park Road',loc:'Park Road, Indira Nagar',status:'critical',prog:20,date:'1d ago',dept:'UPPCL, Maintenance',eta:'Team dispatched'},
+  {id:'CP-2025-0037',icon:'🛣️',title:'Road cave-in near underpass',loc:'Underpass, Chowk',status:'progress',prog:70,date:'2d ago',dept:'PWD + Traffic Dept',eta:'2 days to complete'},
+];
+const SC={
+  pending:{lbl:'Pending',color:'#fb923c',bg:'rgba(251,146,60,.12)',border:'rgba(251,146,60,.25)'},
+  progress:{lbl:'Active',color:'#00cfff',bg:'rgba(0,207,255,.1)',border:'rgba(0,207,255,.25)'},
+  resolved:{lbl:'Resolved',color:'#00e5cc',bg:'rgba(0,229,204,.1)',border:'rgba(0,229,204,.25)'},
+  critical:{lbl:'Critical',color:'#ff4d6d',bg:'rgba(255,77,109,.12)',border:'rgba(255,77,109,.25)'},
+};
+let activeF='all',searchQ='';
+function renderReports(){
+  const list=document.getElementById('rList');
+  const items=REPORTS.filter(r=>(activeF==='all'||r.status===activeF)&&(r.title.toLowerCase().includes(searchQ)||r.loc.toLowerCase().includes(searchQ)||r.id.toLowerCase().includes(searchQ)));
+  if(!items.length){list.innerHTML='<div class="empty-state"><div style="font-size:2.5rem;margin-bottom:10px;opacity:.4;">🔍</div><div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:1rem;color:var(--txt1);margin-bottom:4px;">No reports found</div><p style="font-size:.78rem;">Try adjusting your filters.</p></div>';return;}
+  list.innerHTML=items.map((r,i)=>{
+    const s=SC[r.status];
+    return`<div class="rrow" id="rr${i}" onclick="toggleRpt(${i})">
+      <div class="rtop">
+        <div class="rtop-icon" style="background:rgba(255,255,255,.06);">${r.icon}</div>
+        <div class="rtop-info">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--txt3);font-weight:600;">${r.id}</span>
+            <span style="background:${s.bg};color:${s.color};border:1px solid ${s.border};padding:1px 7px;border-radius:20px;font-size:.56rem;font-weight:700;font-family:'Syne',sans-serif;">${s.lbl}</span>
+          </div>
+          <div class="rtop-title">${r.title}</div>
+          <div class="rtop-sub">📍 ${r.loc} · ${r.date}</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="rdetail" id="rd${i}">
+        <div class="rdetail-inner">
+          <div style="margin-bottom:6px;">🔧 <strong>Assigned:</strong> ${r.dept}</div>
+          <div style="margin-bottom:8px;">🕐 <strong>Status:</strong> ${r.eta}</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${r.prog}%;background:${s.color};box-shadow:0 0 6px ${s.color};"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:.58rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.4px;">Resolution</span><span style="font-size:.58rem;color:${s.color};font-weight:700;">${r.prog}%</span></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleRpt(i){
+  const row=document.getElementById('rr'+i),det=document.getElementById('rd'+i);
+  if(!row||!det)return;
+  const open=row.classList.contains('exp');
+  document.querySelectorAll('.rrow').forEach((r,j)=>{r.classList.remove('exp');const d=document.getElementById('rd'+j);if(d)d.classList.remove('open');});
+  if(!open){row.classList.add('exp');det.classList.add('open');}
+}
+function setFilter(f,btn){activeF=f;document.querySelectorAll('.fchip').forEach(b=>b.classList.remove('act'));btn.classList.add('act');renderReports();}
+function filterReports(v){searchQ=v.toLowerCase();renderReports();}
+renderReports();
+</script>
+<script>if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{});});}</script>
+</body>
+</html>
