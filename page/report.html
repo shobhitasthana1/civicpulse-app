@@ -121,63 +121,109 @@
     textarea.finput { resize: none; overflow: hidden; }
 
     /* Toast overlay */
-    #toast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(6,12,20,0.95); color: #f1f5f9; padding: 12px 24px; border-radius: 30px; border: 1px solid rgba(0,229,204,0.3); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; opacity: 0; white-space: nowrap; }
+    #toast { position: fixed; bottom: 95px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(6,12,20,0.95); color: #f1f5f9; padding: 12px 24px; border-radius: 30px; border: 1px solid rgba(0,229,204,0.3); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; opacity: 0; white-space: nowrap; }
     #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-    /* ══ REPORT ISSUE FAB BUTTON (Exact match from index.html) ══ */
-    .fab-p {
-        position: fixed;
-        bottom: calc(62px + env(safe-area-inset-bottom, 0px) + 14px);
-        right: max(14px, env(safe-area-inset-right, 14px));
-        z-index: 45;
-        display: flex; align-items: center; gap: 7px;
-        background: linear-gradient(135deg,#00e5cc 0%,#00cfff 100%);
-        color: #060c14;
-        font-family: 'Syne',sans-serif; font-weight: 800; font-size: 0.78rem;
-        padding: 0 16px; height: 46px; border-radius: 23px; border: none;
-        cursor: pointer;
-        box-shadow: 0 6px 28px rgba(0,229,204,0.4);
-        animation: fp 3s ease-in-out infinite;
-        transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
-        text-decoration: none; white-space: nowrap;
-    }
-    .fab-p:active { transform: scale(0.93); }
-    @media (min-width: 768px) { .fab-p { bottom: 28px; right: 24px; } }
-    @keyframes fp { 0%,100%{box-shadow:0 6px 28px rgba(0,229,204,0.4)} 50%{box-shadow:0 6px 40px rgba(0,229,204,0.62)} }
 
     /* Checkmark Animation */
     @keyframes scaleIn { 0% { transform: scale(0); opacity: 0;} 100% { transform: scale(1); opacity: 1;} }
     .animate-scale { animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    
+    /* Ensure content avoids bottom navigation */
+    .page-content-padding { padding-bottom: 120px !important; }
 </style>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
+
 <div class="app-layout">
-<div class="main-area">
 
-<header class="app-header">
-  <div class="header-left">
-    <button class="hamburger" aria-label="Open navigation menu" type="button">
-      <span></span><span></span><span></span>
-    </button>
-    <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;">
-      <div class="logo-icon" style="width:26px;height:26px;border-radius:7px;flex-shrink:0;">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
+  <div class="sidebar-overlay cp-sidebar-overlay" id="cpSidebarOverlay"></div>
+  <nav class="sidebar cp-sidebar" id="cpSidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-logo cp-sidebar-header">
+      <div class="logo-icon cp-sidebar-logo">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
       </div>
-      <span class="logo-text" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">CivicPulse</span>
+      <span class="logo-text cp-sidebar-title">CivicPulse</span>
+      <button class="sidebar-close cp-sidebar-close" id="cpSidebarClose" aria-label="Close menu" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
-  </div>
-  <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-    <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
-    <a href="index.html" style="font-size:0.68rem;font-family:'Syne',sans-serif;font-weight:700;color:#64748b;background:rgba(255,255,255,0.05);padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);text-decoration:none;white-space:nowrap;flex-shrink:0; transition: 0.2s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">Cancel</a>
-    <div class="avatar" style="flex-shrink:0;overflow:hidden;padding:0;">
-      <img src="../image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.parentElement.textContent='SA';"/>
+    
+    <div class="cp-nav-section">Navigation</div>
+    
+    <div class="sidebar-nav cp-sidebar-nav">
+      <a href="../index.html" class="nav-item cp-nav-item">
+        <span class="nav-icon cp-nav-icon">🏠</span><span class="nav-label cp-nav-label">Home</span>
+      </a>
+      <a href="report.html" class="nav-item cp-nav-item active cp-active">
+        <span class="nav-icon cp-nav-icon">🚨</span><span class="nav-label cp-nav-label">Report Issue</span>
+      </a>
+      <a href="reports.html" class="nav-item cp-nav-item">
+        <span class="nav-icon cp-nav-icon">📋</span><span class="nav-label cp-nav-label">Track Reports</span>
+      </a>
+      <a href="activity.html" class="nav-item cp-nav-item">
+        <span class="nav-icon cp-nav-icon">👥</span><span class="nav-label cp-nav-label">Community</span>
+      </a>
+      <a href="resources.html" class="nav-item cp-nav-item">
+        <span class="nav-icon cp-nav-icon">🔍</span><span class="nav-label cp-nav-label">Resources</span>
+      </a>
+      <a href="dashboard.html" class="nav-item cp-nav-item">
+        <span class="nav-icon cp-nav-icon">📊</span><span class="nav-label cp-nav-label">Dashboard</span>
+      </a>
+      <a href="contact.html" class="nav-item cp-nav-item">
+        <span class="nav-icon cp-nav-icon">📞</span><span class="nav-label cp-nav-label">Contact</span>
+      </a>
+      <a href="features.html" class="nav-item cp-nav-item">
+        <span class="nav-icon cp-nav-icon">⭐</span><span class="nav-label cp-nav-label">Features</span>
+      </a>
+      <a href="team.html" class="nav-item cp-nav-item">
+        <span class="nav-icon cp-nav-icon">👤</span><span class="nav-label cp-nav-label">Team</span>
+      </a>
+      <div class="cp-nav-divider"></div>
+      <a href="emergency.html" class="nav-item cp-nav-item sos-nav cp-nav-sos">
+        <span class="nav-icon cp-nav-icon">⚡</span><span class="nav-label cp-nav-label">Emergency SOS</span>
+      </a>
     </div>
-  </div>
-</header>
+    
+    <div class="sidebar-footer cp-sidebar-footer">
+      <div class="sidebar-user cp-sidebar-user">
+        <div class="avatar cp-sidebar-avatar" style="padding:0;overflow:hidden;">
+          <img src="../image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.style.display='none';this.parentElement.textContent='SA';"/>
+        </div>
+        <div>
+          <div class="cp-sidebar-username" style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;color:#f1f5f9;">Shobhit Asthana</div>
+          <div class="cp-sidebar-role" style="font-size:0.6rem;color:#64748b;margin-top:1px;">Level 4 · Null Pointer</div>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-<main class="page-content" style="padding-bottom: 90px;">
-<div style="max-width:640px;margin:0 auto;">
+  <div class="main-area">
+
+    <header class="app-header">
+      <div class="header-left">
+        <button class="hamburger" aria-label="Open navigation menu" type="button">
+          <span></span><span></span><span></span>
+        </button>
+        <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;">
+          <div class="logo-icon" style="width:26px;height:26px;border-radius:7px;flex-shrink:0;">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <span class="logo-text" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">CivicPulse</span>
+        </div>
+      </div>
+      <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
+        <a href="../index.html" style="font-size:0.68rem;font-family:'Syne',sans-serif;font-weight:700;color:#64748b;background:rgba(255,255,255,0.05);padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);text-decoration:none;white-space:nowrap;flex-shrink:0; transition: 0.2s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#64748b'">Cancel</a>
+        <div class="avatar" style="flex-shrink:0;overflow:hidden;padding:0;">
+          <img src="../image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.parentElement.textContent='SA';"/>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content page-content-padding">
+      <div style="max-width:640px;margin:0 auto;">
+        
         <div class="fu bg-gradient-to-br from-[#00e5cc]/10 to-transparent border border-[#00e5cc]/20 rounded-2xl p-5 mb-8 relative overflow-hidden">
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#00e5cc]/20 rounded-full blur-2xl"></div>
             <h2 class="syne-font font-bold text-xl mb-1">📝 Make Your City Better</h2>
@@ -300,45 +346,68 @@
             </div>
         </div>
 
-        <div class="fu d4 mt-8 pb-[env(safe-area-inset-bottom)]">
+        <div class="fu d4 mt-8">
             <button class="w-full bg-gradient-to-r from-[#00e5cc] to-[#00cfff] text-black font-black syne-font text-lg py-4 rounded-2xl shadow-[0_10px_30px_rgba(0,229,204,0.3)] active:scale-95 hover:brightness-110 transition-all flex justify-center items-center gap-2" onclick="submitReport()">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
                 Submit Report
             </button>
             <p class="text-center text-[10px] text-slate-500 mt-4">By submitting, you agree to the CivicPulse community guidelines.</p>
         </div>
-    </div>
+      </div>
 
-<div class="hidden fixed inset-0 z-[100] bg-[#060c14]/95 backdrop-blur-md flex items-center justify-center p-5" id="sOv">
-    <div class="bg-[#0b1422] border border-[#00e5cc]/30 rounded-3xl p-8 max-w-[340px] w-full text-center shadow-2xl animate-scale">
-        <div class="w-20 h-20 rounded-full bg-[#00e5cc]/10 border-4 border-[#00e5cc] flex items-center justify-center text-4xl mx-auto mb-4 shadow-[0_0_30px_rgba(0,229,204,0.4)] text-[#00e5cc] animate-bounce">✓</div>
-        <h2 class="syne-font font-bold text-2xl mb-1 text-white">Submitted!</h2>
-        <p class="text-xs text-slate-400 mb-6">Your issue has been securely logged and mapped to the relevant local department.</p>
-        
-        <div class="bg-black/50 border border-white/5 rounded-xl p-4 mb-6 relative group">
-            <p class="text-[10px] text-slate-500 uppercase font-bold mb-1">Tracking ID</p>
-            <div class="flex items-center justify-center gap-2">
-                <p class="mono-font font-bold text-xl text-[#00e5cc]" id="trackId">#CP-0000</p>
-                <button onclick="copyId()" class="text-slate-400 hover:text-[#00e5cc] transition p-1" title="Copy ID">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                </button>
-            </div>
-        </div>
+      <div class="hidden fixed inset-0 z-[100] bg-[#060c14]/95 backdrop-blur-md flex items-center justify-center p-5" id="sOv">
+          <div class="bg-[#0b1422] border border-[#00e5cc]/30 rounded-3xl p-8 max-w-[340px] w-full text-center shadow-2xl animate-scale">
+              <div class="w-20 h-20 rounded-full bg-[#00e5cc]/10 border-4 border-[#00e5cc] flex items-center justify-center text-4xl mx-auto mb-4 shadow-[0_0_30px_rgba(0,229,204,0.4)] text-[#00e5cc] animate-bounce">✓</div>
+              <h2 class="syne-font font-bold text-2xl mb-1 text-white">Submitted!</h2>
+              <p class="text-xs text-slate-400 mb-6">Your issue has been securely logged and mapped to the relevant local department.</p>
+              
+              <div class="bg-black/50 border border-white/5 rounded-xl p-4 mb-6 relative group">
+                  <p class="text-[10px] text-slate-500 uppercase font-bold mb-1">Tracking ID</p>
+                  <div class="flex items-center justify-center gap-2">
+                      <p class="mono-font font-bold text-xl text-[#00e5cc]" id="trackId">#CP-0000</p>
+                      <button onclick="copyId()" class="text-slate-400 hover:text-[#00e5cc] transition p-1" title="Copy ID">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      </button>
+                  </div>
+              </div>
 
-        <div class="flex gap-3 mb-3">
-            <a href="reports.html" class="flex-1 bg-white/5 hover:bg-white/10 transition border border-white/10 text-white font-bold text-xs py-3 rounded-xl">Track Reports</a>
-            <button class="flex-1 bg-[#00e5cc] hover:bg-[#00cfff] transition text-black font-bold text-xs py-3 rounded-xl active:scale-95" onclick="location.reload()">New Report</button>
-        </div>
-        <a href="dashboard.html" class="block w-full text-slate-500 text-xs font-bold hover:text-white transition py-2">Return to Dashboard</a>
-    </div>
-</div>
-</main>
-</div></div><a href="report.html" class="fab-p" onclick="location.reload(); return false;">
+              <div class="flex gap-3 mb-3">
+                  <a href="reports.html" class="flex-1 bg-white/5 hover:bg-white/10 transition border border-white/10 text-white font-bold text-xs py-3 rounded-xl">Track Reports</a>
+                  <button class="flex-1 bg-[#00e5cc] hover:bg-[#00cfff] transition text-black font-bold text-xs py-3 rounded-xl active:scale-95" onclick="location.reload()">New Report</button>
+              </div>
+              <a href="dashboard.html" class="block w-full text-slate-500 text-xs font-bold hover:text-white transition py-2">Return to Dashboard</a>
+          </div>
+      </div>
+
+    </main>
+
+    <nav class="bottom-bar bottom-nav" id="cpBottomNav" role="navigation" aria-label="Bottom navigation">
+      <a href="../index.html" class="tab-item nav-item" data-key="home">
+        <span class="tab-icon">🏠</span><span class="tab-label">Home</span>
+      </a>
+      <a href="report.html" class="tab-item nav-item active cp-active" data-key="report">
+        <span class="tab-icon">🚨</span><span class="tab-label">Report</span>
+      </a>
+      <a href="reports.html" class="tab-item nav-item" data-key="reports">
+        <span class="tab-icon">📋</span><span class="tab-label">Track</span>
+      </a>
+      <a href="activity.html" class="tab-item nav-item" data-key="activity">
+        <span class="tab-icon">👥</span><span class="tab-label">Community</span>
+      </a>
+      <a href="emergency.html" class="tab-item nav-item sos-tab cp-nav-sos" data-key="emergency">
+        <span class="tab-icon">⚡</span><span class="tab-label">SOS</span>
+      </a>
+    </nav>
+
+  </div></div><a href="report.html" class="fab-p" onclick="location.reload(); return false;">
   <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
   Report Issue
 </a>
 
 <div id="toast"></div>
+
+<script src="../assets/js/app.js"></script>
+<script src="../assets/js/shared-ui.js"></script>
 
 <script>
     let selCategory = '';
@@ -425,7 +494,7 @@
         document.getElementById('prevName').textContent = f.name;
         document.getElementById('prevSize').textContent = (f.size / 1024 / 1024).toFixed(2) + ' MB';
         
-        // Generate Base64 for LocalStorage
+        // Generate Base64 for LocalStorage preview
         const reader = new FileReader();
         reader.onload = function(e) {
             uploadedImageBase64 = e.target.result;
@@ -487,7 +556,7 @@
             localStorage.setItem('civicReports', JSON.stringify(reports));
         } catch (e) {
             console.error("Storage Error, saving without image", e);
-            newReport.image = null; // Fallback if 5MB quota exceeded
+            newReport.image = null; // Fallback if local storage quota exceeded by image
             let reports = JSON.parse(localStorage.getItem('civicReports')) || [];
             reports.push(newReport);
             localStorage.setItem('civicReports', JSON.stringify(reports));
