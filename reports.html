@@ -8,6 +8,8 @@
 <title>CivicPulse — Track Reports</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<link rel="stylesheet" href="assets/css/mobile-fix.css"/>
 <style>
     :root {
         --teal: #00e5cc;
@@ -114,26 +116,38 @@
     }
 </style>
 </head>
-<body class="pb-28">
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="app-layout">
+<div class="main-area">
 
-<div class="max-w-3xl mx-auto px-5">
-    
-    <header class="flex justify-between items-center py-5 sticky top-0 bg-[#060c14]/80 backdrop-blur-md z-50 pt-[calc(20px+env(safe-area-inset-top))] border-b border-white/5 mb-6">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-[#00e5cc] flex items-center justify-center text-black">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <span class="syne-font font-bold text-lg">My Reports</span>
-        </div>
-        <div class="flex items-center gap-3">
-            <div class="text-[10px] font-black bg-[#00e5cc]/10 text-[#00e5cc] border border-[#00e5cc]/20 px-2 py-1 rounded-md flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#00e5cc] animate-pulse"></span> LIVE
-            </div>
-            <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-slate-300">SA</div>
-        </div>
-    </header>
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-left">
+    <button class="hamburger" aria-label="Open navigation menu" type="button">
+      <span></span><span></span><span></span>
+    </button>
+    <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;">
+      <div class="logo-icon" style="width:26px;height:26px;border-radius:7px;flex-shrink:0;">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="logo-text" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">CivicPulse</span>
+    </div>
+  </div>
+  <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
+    <button class="icon-btn" style="position:relative;flex-shrink:0;" onclick="showToast('🔔 Notifications','info')" type="button" aria-label="Notifications">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge"></span>
+    </button>
+    <div class="avatar" style="flex-shrink:0;overflow:hidden;padding:0;">
+      <img src="image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.parentElement.textContent='SA';"/>
+    </div>
+  </div>
+</header>
 
-    <main>
+<main class="page-content">
+<div style="max-width:760px;margin:0 auto;">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6 fu">
             <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
                 <div class="syne-font font-bold text-2xl text-white">19</div>
@@ -169,9 +183,15 @@
         <div id="rList" class="flex flex-col gap-3 fu d3">
             </div>
     </main>
-</div>
+</div></div><!-- /max-width -->
+</main>
+</div><!-- /main-area -->
+</div><!-- /app-layout -->
 
-<a href="#" class="fab-p" onclick="alert('Navigating to Report Page...')">
+<script src="assets/js/app.js"></script>
+<script src="assets/js/shared-ui.js"></script>
+
+<a href="report.html" class="fab-p" onclick="alert('Navigating to Report Page...')">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
     New Report
 </a>

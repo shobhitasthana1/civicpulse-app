@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Contact — CivicPulse</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#060c14"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>Contact — CivicPulse</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<link rel="stylesheet" href="assets/css/mobile-fix.css"/>
+<style>
     /* Responsive Variables & Base */
     :root {
       --teal: #0d9488;
@@ -87,30 +92,51 @@
     .mobile-only { display: block; }
     @media (min-width: 768px) { .mobile-only { display: none; } }
   </style>
+<style>
+*, *::before, *::after { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { font-size:16px; -webkit-text-size-adjust:100%; }
+html,body { width:100%; max-width:100%; overflow-x:hidden; margin:0; padding:0; }
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: linear-gradient(rgba(13,148,136,0.025) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(13,148,136,0.025) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);
+}
+</style>
 </head>
-<body class="bg-[#060c14] text-slate-200">
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="app-layout">
+<div class="main-area">
 
-  <nav class="navbar px-6 py-4 flex justify-between items-center border-b border-white/5">
-    <div class="flex items-center gap-2">
-      <div class="bg-teal-600 p-1.5 rounded-lg text-xs font-black">CP</div>
-      <span class="font-bold text-lg">Civic<span class="text-teal-500">Pulse</span></span>
+<header class="app-header">
+  <div class="header-left">
+    <button class="hamburger" aria-label="Open navigation menu" type="button">
+      <span></span><span></span><span></span>
+    </button>
+    <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;">
+      <div class="logo-icon" style="width:26px;height:26px;border-radius:7px;flex-shrink:0;">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="logo-text" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Contact Us</span>
     </div>
-    <div class="hidden md:flex gap-6 text-sm font-medium">
-      <a href="index.html">Home</a>
-      <a href="features.html">Features</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="contact.html" class="text-teal-400">Contact</a>
+  </div>
+  <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
+    <button class="icon-btn" style="position:relative;flex-shrink:0;" type="button" aria-label="Notifications">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge"></span>
+    </button>
+    <div class="avatar" style="flex-shrink:0;overflow:hidden;padding:0;">
+      <img src="image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.parentElement.textContent='SA';"/>
     </div>
-    <button class="md:hidden text-2xl">☰</button>
-  </nav>
+  </div>
+</header>
 
-  <header class="container mx-auto px-6 py-12 text-center">
-    <span class="bg-teal-500/10 text-teal-400 text-[10px] font-bold uppercase tracking-[2px] px-3 py-1 rounded-full border border-teal-500/20">📬 Get in Touch</span>
-    <h1 class="text-4xl md:text-5xl font-extrabold mt-4 mb-4 tracking-tight">We're Here to <span class="text-teal-500">Help</span></h1>
-    <p class="text-slate-400 max-w-xl mx-auto text-sm md:text-base">Have a question, suggestion, or need support? Our team responds within 24 hours.</p>
-  </header>
-
-  <main class="container mx-auto px-6 pb-20">
+<main class="page-content">
+<div style="max-width:960px;margin:0 auto;">
+<main class="container mx-auto px-6 pb-20">
     <div class="contact-grid">
       
       <div class="glass-card">
@@ -167,7 +193,7 @@
               <div class="text-xl bg-teal-500/10 p-2 rounded-lg">📧</div>
               <div>
                 <p class="text-[10px] uppercase font-bold text-slate-500">Email</p>
-                <p class="text-sm font-medium text-teal-400">shobhitasthana123@gmail.com</p>
+                <p class="text-sm font-medium text-teal-400"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d6e75727f7574697c6e69757c737c2c2f2e5d7a707c7471337e7270">[email&#160;protected]</a></p>
               </div>
             </div>
             <div class="flex items-start gap-4">
@@ -216,24 +242,14 @@
     </div>
   </main>
 
-  <footer class="border-t border-white/5 py-12 px-6">
-    <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
-      <div class="col-span-1 md:col-span-2">
-        <span class="font-bold text-lg italic">CivicPulse</span>
-        <p class="text-slate-500 text-xs mt-4 leading-relaxed max-w-xs">Building healthier, more responsive communities through technology.</p>
-      </div>
-      <div class="text-xs flex flex-col gap-3">
-        <p class="font-bold text-slate-300">Platform</p>
-        <a href="#" class="text-slate-500">Dashboard</a>
-        <a href="#" class="text-slate-500">Features</a>
-      </div>
-      <div class="text-xs flex flex-col gap-3">
-        <p class="font-bold text-slate-300">Legal</p>
-        <a href="#" class="text-slate-500">Privacy Policy</a>
-        <a href="#" class="text-slate-500">Terms of Use</a>
-      </div>
-    </div>
-  </footer>
+  
+</div>
+</main>
+</div>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/shared-ui.js"></script>
 
 </body>
 </html>

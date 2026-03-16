@@ -5,302 +5,288 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="theme-color" content="#060c14"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <title>CivicPulse — Team Null Pointer</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<link rel="stylesheet" href="assets/css/mobile-fix.css"/>
 <style>
-    :root {
-        --teal: #00e5cc;
-        --bg-dark: #060c14;
-        --card-bg: rgba(11, 20, 34, 0.75);
-    }
+:root { --teal:#00e5cc; --cyan:#00cfff; --purple:#a78bfa; --orange:#fb923c; --red:#ff4d6d; }
+*, *::before, *::after { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { font-size:16px; -webkit-text-size-adjust:100%; }
+html,body { width:100%; max-width:100%; overflow-x:hidden; margin:0; padding:0; }
 
-    body {
-        background: var(--bg-dark);
-        color: #f1f5f9;
-        font-family: 'DM Sans', sans-serif;
-        margin: 0;
-        overflow-x: hidden;
-    }
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: linear-gradient(rgba(0,229,204,0.025) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(0,229,204,0.025) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0%,black 30%,transparent 80%);
+}
 
-    /* Grid Background */
-    body::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        z-index: -1;
-        background-image: linear-gradient(rgba(0, 229, 204, 0.025) 1px, transparent 1px),
-                          linear-gradient(90deg, rgba(0, 229, 204, 0.025) 1px, transparent 1px);
-        background-size: 40px 40px;
-        mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 80%);
-    }
+.syne-font { font-family:'Syne',sans-serif; }
+.slbl { font-family:'Syne',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:rgba(0,229,204,0.65); display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+.slbl::after { content:''; flex:1; height:1px; background:linear-gradient(to right,rgba(0,229,204,0.2),transparent); }
+.fu { opacity:0; transform:translateY(16px); animation:fu .4s ease forwards; }
+@keyframes fu { to { opacity:1; transform:translateY(0); } }
+.d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}.d4{animation-delay:.24s}
 
-    .syne-font { font-family: 'Syne', sans-serif; }
+/* Member card */
+.mcard {
+  background:rgba(11,20,34,0.75); border:1px solid rgba(255,255,255,0.08);
+  border-radius:22px; padding:24px; position:relative; overflow:hidden;
+}
 
-    /* Animation Utilities */
-    .fu { opacity: 0; transform: translateY(16px); animation: fu 0.4s ease forwards; }
-    @keyframes fu { to { opacity: 1; transform: translateY(0); } }
-    .d1{animation-delay: 0.05s} .d2{animation-delay: 0.1s} .d3{animation-delay: 0.15s} .d4{animation-delay: 0.2s}
+/* Avatar ring */
+.av-ring {
+  position:absolute; inset:-3px; border-radius:50%;
+  background:conic-gradient(#00e5cc,#00cfff,#a78bfa,#00e5cc);
+  animation:spin-ring 4s linear infinite;
+}
+@keyframes spin-ring { to { transform:rotate(360deg); } }
 
-    /* Section Labels */
-    .slbl {
-        font-family: 'Syne', sans-serif;
-        font-size: 0.65rem;
-        font-weight: 800;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        color: var(--teal);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 16px;
-    }
-    .slbl::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(0, 229, 204, 0.2), transparent); }
+/* Glass card */
+.glass-card {
+  background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px; backdrop-filter:blur(12px);
+}
 
-    /* Avatar Ring Animation */
-    .av-ring {
-        position: absolute;
-        inset: -4px;
-        border-radius: 50%;
-        background: conic-gradient(#00e5cc, #00cfff, #a78bfa, #00e5cc);
-        animation: spin-ring 4s linear infinite;
-    }
-    @keyframes spin-ring { to { transform: rotate(360deg); } }
-    
-    .crown { animation: float 3s ease-in-out infinite; }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-
-    /* Glass Cards */
-    .mcard {
-        background: var(--card-bg);
-        border: 1px solid rgba(255, 255, 255, 0.07);
-        border-radius: 24px;
-        padding: 24px;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.2s;
-        backdrop-filter: blur(12px);
-    }
-    @media(hover:hover) { .mcard:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); } }
-
-    /* Action Buttons */
-    .btn-contact {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        width: 100%;
-        padding: 12px;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        font-family: 'Syne', sans-serif;
-        font-weight: 700;
-        font-size: 0.8rem;
-        transition: all 0.2s;
-        -webkit-tap-highlight-color: transparent;
-    }
-    .btn-contact:active { transform: scale(0.96); }
-
-    /* Toast overlay (Simulated) */
-    #toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(50px); background: #333; color: white; padding: 12px 24px; border-radius: 30px; font-size: 14px; transition: 0.3s; z-index: 1000; opacity: 0; pointer-events: none; }
-    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+/* Contact button */
+.btn-contact {
+  width:100%; display:flex; align-items:center; justify-content:center; gap:8px;
+  padding:12px; border-radius:14px; background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1); color:#94a3b8;
+  font-family:'Syne',sans-serif; font-weight:700; font-size:0.82rem;
+  cursor:pointer; transition:all .2s; text-decoration:none;
+}
+.btn-contact:active { transform:scale(0.96); }
 </style>
 </head>
-<body class="pb-16">
 
-<div class="max-w-3xl mx-auto px-5">
-    
-    <header class="flex justify-between items-center py-5 sticky top-0 bg-[#060c14]/80 backdrop-blur-md z-50 pt-[calc(20px+env(safe-area-inset-top))] border-b border-white/5 mb-6">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-[#00e5cc] flex items-center justify-center text-black">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            </div>
-            <span class="syne-font font-bold text-lg">Our Team</span>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="app-layout">
+<div class="main-area">
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-left">
+    <button class="hamburger" aria-label="Open navigation menu" type="button">
+      <span></span><span></span><span></span>
+    </button>
+    <div style="display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;">
+      <div class="logo-icon" style="width:26px;height:26px;border-radius:7px;flex-shrink:0;">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="#060c14"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="#060c14" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="logo-text" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">CivicPulse</span>
+    </div>
+  </div>
+  <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <div class="live-indicator"><span class="live-dot"></span>LIVE</div>
+    <button class="icon-btn" style="position:relative;flex-shrink:0;" onclick="showToast('🔔 Notifications','info')" type="button" aria-label="Notifications">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge"></span>
+    </button>
+    <div class="avatar" style="flex-shrink:0;overflow:hidden;padding:0;">
+      <img src="image/shobhit.png" alt="SA" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;" onerror="this.parentElement.textContent='SA';"/>
+    </div>
+  </div>
+</header>
+
+<!-- PAGE CONTENT -->
+<main class="page-content">
+
+  <!-- HERO BANNER -->
+  <div class="fu" style="background:linear-gradient(135deg,rgba(147,51,234,0.1),rgba(0,207,255,0.07));border:1px solid rgba(147,51,234,0.2);border-radius:22px;padding:28px 24px;text-align:center;position:relative;overflow:hidden;margin-bottom:24px;">
+    <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(147,51,234,0.2),transparent 70%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:-20px;left:-20px;width:90px;height:90px;background:radial-gradient(circle,rgba(0,207,255,0.15),transparent 70%);pointer-events:none;"></div>
+    <div style="position:relative;z-index:1;">
+      <div style="font-size:2.5rem;margin-bottom:8px;">⚡</div>
+      <h1 style="font-family:'Syne',sans-serif;font-weight:900;font-size:clamp(1.6rem,5vw,2.2rem);background:linear-gradient(135deg,#a78bfa,#00cfff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;">Null Pointer</h1>
+      <p style="font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;color:#64748b;font-weight:700;margin-bottom:16px;">Hackathon 2025 · CivicPulse</p>
+      <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:8px;">
+        <span style="background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);color:#a78bfa;padding:4px 12px;border-radius:50px;font-size:0.65rem;font-weight:700;">🏆 Hackathon</span>
+        <span style="background:rgba(0,229,204,0.1);border:1px solid rgba(0,229,204,0.3);color:#00e5cc;padding:4px 12px;border-radius:50px;font-size:0.65rem;font-weight:700;">Civic Tech</span>
+        <span style="background:rgba(0,207,255,0.1);border:1px solid rgba(0,207,255,0.3);color:#00cfff;padding:4px 12px;border-radius:50px;font-size:0.65rem;font-weight:700;">3 Members</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADER CARD -->
+  <div class="mcard fu d1" style="border-top:2px solid rgba(0,229,204,0.4);margin-bottom:16px;">
+    <div style="position:absolute;top:-30px;right:-30px;width:130px;height:130px;background:radial-gradient(circle,rgba(0,229,204,0.08),transparent 70%);pointer-events:none;"></div>
+    <span style="position:absolute;top:14px;right:16px;font-size:1.5rem;">👑</span>
+
+    <div style="text-align:center;position:relative;z-index:1;margin-bottom:20px;">
+      <div style="position:relative;width:76px;height:76px;margin:0 auto 14px;">
+        <div class="av-ring"></div>
+        <div style="position:relative;z-index:1;width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#00e5cc,#00cfff);border:3px solid #060c14;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:900;font-size:1.4rem;color:#060c14;">SA</div>
+      </div>
+      <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:#f1f5f9;margin-bottom:4px;">Shobhit Asthana</h2>
+      <p style="font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:#00e5cc;font-weight:700;margin-bottom:12px;">Team Leader</p>
+      <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:6px;">
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:3px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">Frontend Dev</span>
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:3px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">UI/UX</span>
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:3px 10px;border-radius:8px;font-size:0.62rem;font-weight:700;">Tailwind CSS</span>
+      </div>
+    </div>
+
+    <div style="height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,0.1),transparent);margin-bottom:16px;"></div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;text-align:center;">
+      <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:10px 4px;border:1px solid rgba(255,255,255,0.05);">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#00e5cc;">19</div>
+        <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Reports</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:10px 4px;border:1px solid rgba(255,255,255,0.05);">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#f1f5f9;">340</div>
+        <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Points</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.2);border-radius:12px;padding:10px 4px;border:1px solid rgba(255,255,255,0.05);">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:#f59e0b;">#1</div>
+        <div style="font-size:0.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Rank</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;font-size:0.62rem;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:6px;">
+        <span>Community Impact</span>
+        <span style="color:#00e5cc;">68% to Lv 5</span>
+      </div>
+      <div style="height:5px;background:rgba(255,255,255,0.07);border-radius:5px;overflow:hidden;">
+        <div id="leaderBar" style="height:100%;background:linear-gradient(90deg,#00e5cc,#00cfff);border-radius:5px;width:0;transition:width 1s ease;box-shadow:0 0 8px rgba(0,229,204,0.5);"></div>
+      </div>
+    </div>
+
+    <a href="tel:+916388095158" class="btn-contact" style="display:flex;" onclick="showToast('📞 Calling Shobhit...','info')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+      +91 63880 95158
+    </a>
+  </div>
+
+  <!-- MEMBER CARDS GRID -->
+  <div style="display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:20px;" class="fu d2">
+
+    <!-- Anmol -->
+    <div class="mcard" style="border-top:2px solid rgba(167,139,250,0.4);">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,rgba(167,139,250,0.08),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;position:relative;z-index:1;">
+        <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#7c3aed);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff;flex-shrink:0;box-shadow:0 0 14px rgba(167,139,250,0.3);">AD</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:#f1f5f9;">Anmol Dwivedi</div>
+          <p style="font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#a78bfa;font-weight:700;margin:2px 0 6px;">Backend Developer</p>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:2px 8px;border-radius:6px;font-size:0.6rem;font-weight:700;">APIs</span>
+            <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:2px 8px;border-radius:6px;font-size:0.6rem;font-weight:700;">Database</span>
+          </div>
         </div>
-        <a href="dashboard.html" class="text-xs font-bold text-slate-400 bg-white/5 px-3 py-1.5 rounded-full border border-white/10 hover:text-white transition">Dashboard</a>
-    </header>
-
-    <main>
-        <div class="fu bg-gradient-to-br from-purple-500/10 to-[#00cfff]/10 border border-purple-500/20 rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden mb-8">
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-[#00cfff]/20 rounded-full blur-3xl"></div>
-            
-            <div class="relative z-10">
-                <div class="text-4xl mb-2">⚡</div>
-                <h1 class="syne-font font-black text-3xl sm:text-4xl bg-gradient-to-r from-purple-400 to-[#00cfff] text-transparent bg-clip-text mb-2">Null Pointer</h1>
-                <p class="text-[11px] uppercase tracking-widest text-slate-400 font-bold mb-4">Hackathon 2025 · CivicPulse</p>
-                
-                <div class="flex justify-center flex-wrap gap-2 mb-5">
-                    <span class="bg-purple-500/10 border border-purple-500/30 text-purple-300 px-3 py-1 rounded-full text-[10px] font-bold">🏆 Hackathon</span>
-                    <span class="bg-[#00e5cc]/10 border border-[#00e5cc]/30 text-[#00e5cc] px-3 py-1 rounded-full text-[10px] font-bold">Civic Tech</span>
-                    <span class="bg-blue-500/10 border border-blue-500/30 text-blue-300 px-3 py-1 rounded-full text-[10px] font-bold">3 Members</span>
-                </div>
-                <p class="text-sm text-slate-400 max-w-md mx-auto leading-relaxed">Empowering citizens to report, track, and resolve civic issues — making cities smarter, one issue at a time.</p>
-            </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;text-align:center;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#a78bfa;">8</div>
+          <div style="font-size:0.56rem;color:#64748b;text-transform:uppercase;">Reports</div>
         </div>
-
-        <div class="fu d1 mb-4">
-            <div class="mcard border-t-2 border-t-[#00e5cc]/50">
-                <div class="absolute -top-10 -right-10 w-48 h-48 bg-[#00e5cc]/10 rounded-full blur-2xl"></div>
-                <span class="crown absolute top-4 right-4 text-2xl">👑</span>
-                
-                <div class="text-center relative z-10 mb-6">
-                    <div class="relative w-20 h-20 mx-auto mb-4">
-                        <div class="av-ring"></div>
-                        <div class="relative z-10 w-full h-full rounded-full bg-gradient-to-br from-[#00e5cc] to-[#00cfff] border-4 border-[#060c14] flex items-center justify-center syne-font font-black text-2xl text-[#060c14]">SA</div>
-                    </div>
-                    <h2 class="syne-font font-bold text-xl text-white mb-1">Shobhit Asthana</h2>
-                    <p class="text-[10px] uppercase font-bold text-[#00e5cc] tracking-widest mb-3">Team Leader</p>
-                    
-                    <div class="flex flex-wrap justify-center gap-1.5">
-                        <span class="bg-white/5 border border-white/10 text-slate-400 px-2.5 py-1 rounded-full text-[10px] font-bold">Frontend Dev</span>
-                        <span class="bg-white/5 border border-white/10 text-slate-400 px-2.5 py-1 rounded-full text-[10px] font-bold">UI/UX</span>
-                        <span class="bg-white/5 border border-white/10 text-slate-400 px-2.5 py-1 rounded-full text-[10px] font-bold">Tailwind CSS</span>
-                    </div>
-                </div>
-
-                <div class="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-5"></div>
-                
-                <div class="grid grid-cols-3 gap-2 mb-6 text-center">
-                    <div class="bg-black/20 rounded-xl py-3 border border-white/5">
-                        <div class="syne-font font-black text-lg text-[#00e5cc]">19</div>
-                        <div class="text-[9px] text-slate-500 uppercase font-bold mt-1">Reports</div>
-                    </div>
-                    <div class="bg-black/20 rounded-xl py-3 border border-white/5">
-                        <div class="syne-font font-black text-lg text-white">340</div>
-                        <div class="text-[9px] text-slate-500 uppercase font-bold mt-1">Points</div>
-                    </div>
-                    <div class="bg-black/20 rounded-xl py-3 border border-white/5">
-                        <div class="syne-font font-black text-lg text-amber-500">#1</div>
-                        <div class="text-[9px] text-slate-500 uppercase font-bold mt-1">Rank</div>
-                    </div>
-                </div>
-
-                <div class="mb-5">
-                    <div class="flex justify-between text-[10px] font-bold uppercase text-slate-400 mb-2">
-                        <span>Community Impact</span>
-                        <span class="text-[#00e5cc]">68% to Lv 5</span>
-                    </div>
-                    <div class="h-1.5 bg-white/5 rounded-full overflow-hidden">
-                        <div id="leaderBar" class="h-full bg-gradient-to-r from-[#00e5cc] to-[#00cfff] shadow-[0_0_10px_#00e5cc] w-0 transition-all duration-1000 ease-out"></div>
-                    </div>
-                </div>
-
-                <button class="btn-contact hover:bg-[#00e5cc]/10 hover:border-[#00e5cc]/30 hover:text-[#00e5cc]" onclick="showToast('📞 Calling Shobhit...')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-                    +91 63880 95158
-                </button>
-            </div>
+        <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#f1f5f9;">180</div>
+          <div style="font-size:0.56rem;color:#64748b;text-transform:uppercase;">Points</div>
         </div>
+      </div>
+      <a href="tel:+917518812885" class="btn-contact" style="display:flex;" onclick="showToast('📞 Calling Anmol...','info')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+        +91 75188 12885
+      </a>
+    </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 fu d2 mb-8">
-            
-            <div class="mcard border-t-2 border-t-purple-500/50">
-                <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
-                <div class="flex items-center gap-4 mb-4 relative z-10">
-                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center syne-font font-black text-xl text-white shadow-[0_0_15px_rgba(167,139,250,0.4)] flex-shrink-0">AD</div>
-                    <div>
-                        <h3 class="syne-font font-bold text-base text-white">Anmol Dwivedi</h3>
-                        <p class="text-[9px] uppercase font-bold text-purple-400 tracking-widest mb-1">Backend</p>
-                        <div class="flex gap-1 flex-wrap">
-                            <span class="bg-white/5 border border-white/10 text-slate-400 px-2 py-0.5 rounded-full text-[9px] font-bold">APIs</span>
-                            <span class="bg-white/5 border border-white/10 text-slate-400 px-2 py-0.5 rounded-full text-[9px] font-bold">Database</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2 mb-4 text-center">
-                    <div class="bg-black/20 rounded-xl py-2 border border-white/5"><div class="syne-font font-black text-purple-400">8</div><div class="text-[8px] text-slate-500 uppercase font-bold">Reports</div></div>
-                    <div class="bg-black/20 rounded-xl py-2 border border-white/5"><div class="syne-font font-black text-white">180</div><div class="text-[8px] text-slate-500 uppercase font-bold">Points</div></div>
-                </div>
-                <button class="btn-contact hover:bg-purple-500/10 hover:border-purple-500/30 hover:text-purple-400" onclick="showToast('📞 Calling Anmol...')">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-                    +91 75188 12885
-                </button>
-            </div>
-
-            <div class="mcard border-t-2 border-t-amber-500/50">
-                <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl"></div>
-                <div class="flex items-center gap-4 mb-4 relative z-10">
-                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center syne-font font-black text-xl text-[#060c14] shadow-[0_0_15px_rgba(245,158,11,0.4)] flex-shrink-0">AS</div>
-                    <div>
-                        <h3 class="syne-font font-bold text-base text-white">Amber Savita</h3>
-                        <p class="text-[9px] uppercase font-bold text-amber-400 tracking-widest mb-1">Research</p>
-                        <div class="flex gap-1 flex-wrap">
-                            <span class="bg-white/5 border border-white/10 text-slate-400 px-2 py-0.5 rounded-full text-[9px] font-bold">Outreach</span>
-                            <span class="bg-white/5 border border-white/10 text-slate-400 px-2 py-0.5 rounded-full text-[9px] font-bold">Testing</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2 mb-4 text-center">
-                    <div class="bg-black/20 rounded-xl py-2 border border-white/5"><div class="syne-font font-black text-amber-400">6</div><div class="text-[8px] text-slate-500 uppercase font-bold">Reports</div></div>
-                    <div class="bg-black/20 rounded-xl py-2 border border-white/5"><div class="syne-font font-black text-white">140</div><div class="text-[8px] text-slate-500 uppercase font-bold">Points</div></div>
-                </div>
-                <button class="btn-contact hover:bg-amber-500/10 hover:border-amber-500/30 hover:text-amber-400" onclick="showToast('📞 Calling Amber...')">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-                    +91 83039 95618
-                </button>
-            </div>
+    <!-- Amber -->
+    <div class="mcard" style="border-top:2px solid rgba(251,146,60,0.4);">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,rgba(251,146,60,0.08),transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;position:relative;z-index:1;">
+        <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#fb923c,#f59e0b);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#060c14;flex-shrink:0;box-shadow:0 0 14px rgba(251,146,60,0.3);">AS</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:#f1f5f9;">Amber Savita</div>
+          <p style="font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:#fb923c;font-weight:700;margin:2px 0 6px;">Research & Outreach</p>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:2px 8px;border-radius:6px;font-size:0.6rem;font-weight:700;">Outreach</span>
+            <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;padding:2px 8px;border-radius:6px;font-size:0.6rem;font-weight:700;">Testing</span>
+          </div>
         </div>
-
-        <div class="fu d3 mb-8">
-            <h3 class="slbl">Tech Stack</h3>
-            <div class="glass-card p-5">
-                <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="bg-white/5 border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-bold">🌐 HTML5</span>
-                    <span class="bg-white/5 border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-bold">🎨 Tailwind CSS</span>
-                    <span class="bg-white/5 border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-bold">⚡ JavaScript</span>
-                    <span class="bg-white/5 border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-bold">📱 Mobile-First</span>
-                    <span class="bg-white/5 border border-white/10 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-bold">🔮 Glassmorphism</span>
-                </div>
-                <div class="h-px bg-white/10 w-full my-4"></div>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    CivicPulse is built with pure HTML/CSS/JS — zero heavy dependencies, zero build tools. Fully responsive from 320px phones to 4K desktops.
-                </p>
-            </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;text-align:center;">
+        <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fb923c;">6</div>
+          <div style="font-size:0.56rem;color:#64748b;text-transform:uppercase;">Reports</div>
         </div>
-
-        <div class="fu d4">
-            <h3 class="slbl">Project Overview</h3>
-            <div class="glass-card p-5 space-y-4">
-                <div class="flex gap-4 items-start">
-                    <span class="text-xl">🎯</span>
-                    <div>
-                        <h4 class="syne-font font-bold text-sm text-slate-200 mb-1">Mission</h4>
-                        <p class="text-xs text-slate-400 leading-relaxed">Bridge the gap between citizens and civic authorities through technology, making issue reporting fast, transparent, and effective.</p>
-                    </div>
-                </div>
-                <div class="h-px bg-white/5 w-full"></div>
-                <div class="flex gap-4 items-start">
-                    <span class="text-xl">🏆</span>
-                    <div>
-                        <h4 class="syne-font font-bold text-sm text-slate-200 mb-1">Hackathon Goal</h4>
-                        <p class="text-xs text-slate-400 leading-relaxed">Build a production-grade civic technology app in 24 hours that could realistically be deployed to serve citizens.</p>
-                    </div>
-                </div>
-            </div>
+        <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:9px 4px;border:1px solid rgba(255,255,255,0.05);">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#f1f5f9;">140</div>
+          <div style="font-size:0.56rem;color:#64748b;text-transform:uppercase;">Points</div>
         </div>
-    </main>
+      </div>
+      <a href="tel:+918303995618" class="btn-contact" style="display:flex;" onclick="showToast('📞 Calling Amber...','info')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
+        +91 83039 95618
+      </a>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="fu d3" style="margin-bottom:16px;">
+    <div class="slbl">Tech Stack</div>
+    <div class="glass-card" style="padding:18px;">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">🌐 HTML5</span>
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">🎨 Tailwind CSS</span>
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">⚡ JavaScript</span>
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">📱 PWA</span>
+        <span style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f1f5f9;padding:6px 14px;border-radius:10px;font-size:0.75rem;font-weight:700;">🔮 Glassmorphism</span>
+      </div>
+      <div style="height:1px;background:rgba(255,255,255,0.07);margin-bottom:12px;"></div>
+      <p style="font-size:0.78rem;color:#64748b;line-height:1.6;">Built with pure HTML/CSS/JS — zero heavy dependencies. Fully responsive from 320px phones to 4K desktops. Deployed as a Trusted Web Activity Android app.</p>
+    </div>
+  </div>
+
+  <!-- PROJECT -->
+  <div class="fu d4">
+    <div class="slbl">Project Overview</div>
+    <div class="glass-card" style="padding:18px;">
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;">
+        <span style="font-size:1.4rem;flex-shrink:0;">🎯</span>
+        <div>
+          <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:#f1f5f9;margin-bottom:4px;">Mission</h4>
+          <p style="font-size:0.75rem;color:#64748b;line-height:1.6;">Bridge the gap between citizens and civic authorities through technology, making issue reporting fast, transparent, and effective.</p>
+        </div>
+      </div>
+      <div style="height:1px;background:rgba(255,255,255,0.07);margin-bottom:14px;"></div>
+      <div style="display:flex;gap:14px;align-items:flex-start;">
+        <span style="font-size:1.4rem;flex-shrink:0;">🏆</span>
+        <div>
+          <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:#f1f5f9;margin-bottom:4px;">Hackathon Goal</h4>
+          <p style="font-size:0.75rem;color:#64748b;line-height:1.6;">Build a production-grade civic technology app that could realistically be deployed to serve real citizens in Lucknow and beyond.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
 </div>
 
-<div id="toast"></div>
+<!-- FAB -->
+<a href="report.html" class="fab-p">
+  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+  Report Issue
+</a>
 
+<script src="assets/js/app.js"></script>
+<script src="assets/js/shared-ui.js"></script>
 <script>
-    // Simulate Toast
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.innerText = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
-    }
-
-    // Animate leader impact bar on load
-    window.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            const bar = document.getElementById('leaderBar');
-            if (bar) bar.style.width = '68%';
-        }, 500);
-    });
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const bar = document.getElementById('leaderBar');
+    if (bar) bar.style.width = '68%';
+  }, 500);
+});
 </script>
 </body>
 </html>
